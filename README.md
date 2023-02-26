@@ -16,6 +16,18 @@ If you haven't experienced a flipped classroom before, there's something really 
 
 So if you're teaching Econometrics and you're interested in using the Tidyverse and using a flipped classroom, go ahead and fork this repo and use my materials. If you like it, you can show me your appreciation by sending me pull requests whenever you change something for the better. I'd like to *collaboratively develop* this course because I think that's the best way it can continue to grow.
 
+## Student Testimonials
+
+*She made sure that almost every time we were learning something, we were engaging with it actively. When learning to code, she gives us interactive assignments... The fastest and best way I've ever learned to code. Every class period, we collaborate with a small group of students on problem sets that are very challenging, but with enough support from the professor, possible to do, and very growthful/educational.*
+
+*It was honestly one of the best-taught courses I have taken in a long time at the UO.*
+
+*I really appreciated the support from the instructor throughout the course, as well as the effort you could tell she put into organizing the class. Although we only had a month to complete a 10 week term's worth of work, I never felt rushed or left behind as we covered new and complex topics each day... In building the course, she provided students with countless opportunities for interactive and involved learning, while also leaving room for us to work through fresh material at our own pace, through the koans and lecture material. I can be certain I have a much stronger foundation in both statistics and R than I did a month ago.*
+
+*She clearly puts deep consideration into the organization and structure of the course, and in making every part of it challenging, yet digestible and ineractive. She is also very supportive, giving guidance on how to do certain problems but always making sure you're still doing and understanding the work. Finally, she's very good at making these complicated and confusing subjects understandable, through clear and organized lessons with lots of examples.*
+
+*This was the most engaged I've been with a class in a while. Thank you!*
+
 ## List of Contributors
 
 Colleen O'Briant (just me right now!)
