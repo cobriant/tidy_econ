@@ -2,6 +2,8 @@
 
 *A Flipped Classroom Experience*
 
+Published here: https://colleen.quarto.pub/the-tidy-econometrics-workbook/
+
 ## Overview
 
 This repository contains all of the public course materials for EC421 *Intro to Econometrics*, which I taught at the University of Oregon as a PhD student four times between Summer 2021 and Fall 2022. I did a few things that are a little out of the ordinary, which I think helped create a really engaging and fun class:
@@ -58,13 +60,13 @@ I've taught this course in person and then also over Zoom (synchronously). I use
 
 Here are some areas of weakness: contributions here would be profoundly appreciated.
 
-- As mentioned before, how do you use TA's to support a class larger than 30?
+- As mentioned before, how do you use TAs to support a class larger than 30?
 - Transform the workbook from casual lecture notes into a professional-feeling, super clear textbook (inspiration from [Patrick Henry Winston](https://www.youtube.com/watch?v=Unzc731iCUY)). 
   - Start each chapter with an empowerment promise: "by the end of this chapter, you will be able to do XXX." Also include a slogan, symbol, and story:
   - For each chapter, identify a slogan: "the key to understanding this topic is XXX".
   - For each chapter, create a symbol: a visual way to remember the concept.
   - For each chapter, include a story: who developed these ideas and how? Why did they decide to work on the problem? The details really sell it!
-- I'm conflicted about the videos I've included. I think videos can be really useful, but I don't think I'm very good at making them. And it's incredibly time consuming! My thinking is that material should be presented to maximize clarity: if it's a story, write it in a paragraph so you can get the words right. If it's a complicated math proof, write it in LaTeX. If it's an example that you want students to try for themselves, that's where a video can come in handy: emphasize that they should pause the video to give it a shot, or even better, embed a quiz in the video so they have to pause and try it themselves.
+- I'm conflicted about the videos I've included. I think videos can be really useful, but I don't think I'm very good at making them. And it's incredibly time consuming! My thinking is that material should be presented to maximize clarity: if it's a story, write it in a paragraph so you can get the words right. If it's a complicated math proof, write it in LaTeX. If it's an example that you want students to try for themselves, that's where a video can come in handy: emphasize that they should pause the video to give it a shot, or even better, embed a quiz in the video so they have to pause and try it themselves. In any case, I think the videos could be redone.
 - Chapter 7 on Time Series is too dense. Break this up into two chapters.
 - Koan 12 may be too confusing: I think this needs a rewrite.
 - Automatic grading for the koans: they have tests, but the tests can be a little fragile. A more robust way to automatically grade the koans would save you a lot of time while teaching the course.
