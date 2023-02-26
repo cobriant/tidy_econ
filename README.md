@@ -82,4 +82,4 @@ Here are some areas of weakness: contributions here would be profoundly apprecia
 - Chapter 7 on Time Series is too dense. Break this up into two chapters.
 - Koan 12 may be too confusing: I think this needs a rewrite.
 - Automatic grading for the koans: they have tests, but the tests can be a little fragile. A more robust way to automatically grade the koans would save you a lot of time while teaching the course.
-- A robust way to grade the classwork would also be time well spent.
+- A robust way to automatically grade the classwork would also be time well spent.
