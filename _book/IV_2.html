@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Econometrics with the Tidyverse - 10&nbsp; IV for Simultaneous Equations</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./diff_in_diff.html" rel="next">
+<link href="./instrumental_vars.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">IV for Simultaneous Equations</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Econometrics with the Tidyverse</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./least_squares.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Least Squares</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./exogeneity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Exogeneity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_inference.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./consistency.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Consistency</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./specification.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Model Specification</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./heteroskedasticity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Heteroskedasticity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./time_series.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Time Series</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./stationarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Stationarity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./instrumental_vars.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Instrumental Variables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./IV_2.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">IV for Simultaneous Equations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./diff_in_diff.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differences-in-differences</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classwork.html" class="sidebar-item-text sidebar-link">Classwork</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./koans.html" class="sidebar-item-text sidebar-link">Koans</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math.html" class="sidebar-item-text sidebar-link">Math Rules and Formulas</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">10.1</span> Introduction</a></li>
+  <li><a href="#biases-weve-studied-thus-far" id="toc-biases-weve-studied-thus-far" class="nav-link" data-scroll-target="#biases-weve-studied-thus-far"> <span class="header-section-number">10.2</span> Biases We’ve Studied Thus Far</a></li>
+  <li><a href="#iv-to-the-rescue" id="toc-iv-to-the-rescue" class="nav-link" data-scroll-target="#iv-to-the-rescue"> <span class="header-section-number">10.3</span> IV to the Rescue</a></li>
+  <li><a href="#example-1-market-for-coffee" id="toc-example-1-market-for-coffee" class="nav-link" data-scroll-target="#example-1-market-for-coffee"> <span class="header-section-number">10.4</span> Example 1: Market for Coffee</a></li>
+  <li><a href="#example-2-market-for-airline-tickets" id="toc-example-2-market-for-airline-tickets" class="nav-link" data-scroll-target="#example-2-market-for-airline-tickets"> <span class="header-section-number">10.5</span> Example 2: Market for Airline Tickets</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"> <span class="header-section-number">10.6</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">IV for Simultaneous Equations</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">10.1</span> Introduction</h2>
+<p>In your Principles of Micro or Macro classes, you probably learned about the “Marshallian Cross” model of the determination of market prices. The demand curve slopes down and the supply curve slopes up, and the equilibrium price and quantity exchanged are at the intersection of those two curves. So if you had data on prices and quantities exchanged and you ran a regression like this one: <code>lm(q ~ p)</code>, would you be estimating the supply curve or the demand curve? The answer is neither, because of <em>simultaneous equation bias</em>.</p>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=612daf82-e099-4e18-aa5b-af5300669b13&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+</section>
+<section id="biases-weve-studied-thus-far" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="biases-weve-studied-thus-far"><span class="header-section-number">10.2</span> Biases We’ve Studied Thus Far</h2>
+<p>Simultaneous equation bias is something new, bus it’s still based on a failure of exogeneity. Recall, these are the biases we’ve learned about thus far:</p>
+<ol type="1">
+<li><p>Omitted variable bias. Selection bias is a type of OVB where the omitted variable is someone’s propensity to select in to treatment. OVB may bias an estimate up or down depending on the relationships between x and o, as well as y and o.</p></li>
+<li><p>Measurement error. When X is measured with error, we’ll estimate an effect of X on Y that is <em>attenuated</em> (closer to 0 than the true value).</p></li>
+<li><p>Lagged dependent variable models: <code>lm(y ~ lag(y))</code>. When <span class="math inline">\(u_t\)</span> is autocorrelated, we also get inconsistency for this model.</p></li>
+</ol>
+<p>The root issue for all these cases is that exogeneity was violated: <span class="math inline">\(E[u_i | X] \neq 0\)</span>. The same is true for the new source of bias for this chapter:</p>
+<ol start="4" type="1">
+<li>Simultaneity Bias: when data is generated by the interaction of two or more equations simultaneously.</li>
+</ol>
+<p>To see how exogeneity would be violated in the market described in the video above, suppose we’re trying to estimate the demand curve <span class="math inline">\(q_i^d = \alpha_0 + \alpha_1 p_i + u_i\)</span> where <span class="math inline">\(u_i\)</span> refers to demand shifters like advertising. Exogeneity means:</p>
+<p><span class="math inline">\(E[u_i | P] = 0\)</span></p>
+<p>That is, if you were told that in one location, the price was high, and in the other location, the price was low, <em>you would have no idea</em> which location may have had the advertising campaign. This is not a valid assumption, because advertising and price tend to be closely linked through many different channels: this is the simultaneity.</p>
+</section>
+<section id="iv-to-the-rescue" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="iv-to-the-rescue"><span class="header-section-number">10.3</span> IV to the Rescue</h2>
+<p>In the previous chapter, we learned how an exogeneous instrument Z can help us estimate the causal effect of X on Y even when the data generating process suffers from OVB.</p>
+<p>In the same way, an exogenous instrument Z can help us estimate the slope of the supply (or demand) curve even when the DGP is from two simultaneous equations.</p>
+</section>
+<section id="example-1-market-for-coffee" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="example-1-market-for-coffee"><span class="header-section-number">10.4</span> Example 1: Market for Coffee</h2>
+<p>In this example, we’ll use exogenous supply shocks <span class="math inline">\(w_i\)</span>: <strong>weather shocks in Brazil</strong> as an instrument for the <strong>price of coffee</strong> to estimate the slope of the demand curve <span class="math inline">\(\alpha_1\)</span>. Basically we can see equilibrium P and Q for many supply curves but only one demand curve, and use that to find the slope of the demand curve.</p>
+<p><span class="math display">\[q_i^d = \alpha_0 + \alpha_1 p_t + u_t\]</span></p>
+<p>Where <span class="math inline">\(u_t\)</span> are demand shifters like advertising campaigns or changes in the price of substitutes or complements.</p>
+<p>To check to make sure that <strong>weather shocks in Brazil</strong> is a valid instrument:</p>
+<ol type="1">
+<li><p>Is it relevant? Do weather shocks in Brazil effect the price of coffee? Yes.</p></li>
+<li><p>Is it exogenous (<span class="math inline">\(E[u_t | W] = 0\)</span>)? If you were told that in one time period, the weather was bad in Brazil, and in another, the weather was good. Does that give you any clue about which time period tea might have a higher or lower price? It shouldn’t, so I’d say yes, W is exogenous.</p></li>
+<li><p>Is it excludable? Or do weather shocks in Brazil effect the quantity demanded through any other channel than through changes in the price for coffee? W is excludable.</p></li>
+</ol>
+<p>We’d then estimate the first stage, and get the fitted values: <code>fitted.values(lm(p ~ w))</code>. This is the exogenous variation in price that comes just from weather shocks in Brazil.</p>
+<p>Then we run the second stage: <code>q ~ fitted.values(lm(p ~ w))</code> to see how exogenous supply shocks seem to effect the quantity exchanged. The data here are from the <em>supply</em> curve being shifted up and down based on weather in Brazil, but the demand curve stays stationary. So in the second stage, we can trace out <span class="math inline">\(\alpha_1\)</span> the slope of the demand curve.</p>
+<p><img src="images/tracedemand.png" class="img-fluid"></p>
+</section>
+<section id="example-2-market-for-airline-tickets" class="level2" data-number="10.5">
+<h2 data-number="10.5" class="anchored" data-anchor-id="example-2-market-for-airline-tickets"><span class="header-section-number">10.5</span> Example 2: Market for Airline Tickets</h2>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=564f24d4-6301-4f1f-bb5a-af54004d99bd&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=3f5a9edf-b0b4-4a8e-8de3-af54004dd404&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=3cb45dc8-9e4d-4e92-91a3-af54004e7636&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=0b733ad4-2abb-4213-b91f-af54004ed0b1&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+</section>
+<section id="references" class="level2" data-number="10.6">
+<h2 data-number="10.6" class="anchored" data-anchor-id="references"><span class="header-section-number">10.6</span> References</h2>
+<p><span class="citation" data-cites="dougherty2016">Dougherty (<a href="references.html#ref-dougherty2016" role="doc-biblioref">2016</a>)</span> <em>Chapter 9: Simultaneous Equations Estimation</em></p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-dougherty2016" class="csl-entry" role="doc-biblioentry">
+Dougherty, C. 2016. <em>Introduction to Econometrics</em>. Oxford University Press. <a href="https://books.google.com/books?id=Q5cMEAAAQBAJ">https://books.google.com/books?id=Q5cMEAAAQBAJ</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./instrumental_vars.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Instrumental Variables</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./diff_in_diff.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differences-in-differences</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

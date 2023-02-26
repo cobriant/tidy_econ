@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Colleen O’Briant">
+<meta name="dcterms.date" content="2022-08-14">
+
+<title>Econometrics with the Tidyverse</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./least_squares.html" rel="next">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Econometrics with the Tidyverse</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Econometrics with the Tidyverse</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link active">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./least_squares.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Least Squares</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./exogeneity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Exogeneity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_inference.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./consistency.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Consistency</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./specification.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Model Specification</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./heteroskedasticity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Heteroskedasticity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./time_series.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Time Series</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./stationarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Stationarity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./instrumental_vars.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Instrumental Variables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./IV_2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">IV for Simultaneous Equations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./diff_in_diff.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differences-in-differences</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classwork.html" class="sidebar-item-text sidebar-link">Classwork</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./koans.html" class="sidebar-item-text sidebar-link">Koans</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math.html" class="sidebar-item-text sidebar-link">Math Rules and Formulas</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#course-materials" id="toc-course-materials" class="nav-link" data-scroll-target="#course-materials">Course Materials</a></li>
+  <li><a href="#course-schedule" id="toc-course-schedule" class="nav-link" data-scroll-target="#course-schedule">Course Schedule</a></li>
+  <li><a href="#programming-philosophy" id="toc-programming-philosophy" class="nav-link" data-scroll-target="#programming-philosophy">Programming Philosophy</a>
+  <ul class="collapse">
+  <li><a href="#declarative-vs-imperative-programming" id="toc-declarative-vs-imperative-programming" class="nav-link" data-scroll-target="#declarative-vs-imperative-programming">Declarative vs Imperative Programming</a></li>
+  <li><a href="#things-to-avoid-when-programming-declaratively-in-the-tidyverse" id="toc-things-to-avoid-when-programming-declaratively-in-the-tidyverse" class="nav-link" data-scroll-target="#things-to-avoid-when-programming-declaratively-in-the-tidyverse">Things to Avoid when Programming Declaratively in the Tidyverse</a></li>
+  <li><a href="#your-approach" id="toc-your-approach" class="nav-link" data-scroll-target="#your-approach">Your Approach</a></li>
+  <li><a href="#what-is-good-code" id="toc-what-is-good-code" class="nav-link" data-scroll-target="#what-is-good-code">What is “Good Code”?</a></li>
+  </ul></li>
+  <li><a href="#setting-up-your-workspace" id="toc-setting-up-your-workspace" class="nav-link" data-scroll-target="#setting-up-your-workspace">Setting up your workspace</a>
+  <ul class="collapse">
+  <li><a href="#install-r-and-rstudio" id="toc-install-r-and-rstudio" class="nav-link" data-scroll-target="#install-r-and-rstudio">Install R and RStudio</a></li>
+  <li><a href="#get-acquainted-with-the-rstudio-ide" id="toc-get-acquainted-with-the-rstudio-ide" class="nav-link" data-scroll-target="#get-acquainted-with-the-rstudio-ide">Get Acquainted with the RStudio IDE</a></li>
+  <li><a href="#install-the-tidyverse" id="toc-install-the-tidyverse" class="nav-link" data-scroll-target="#install-the-tidyverse">Install the Tidyverse</a></li>
+  <li><a href="#install-gapminder" id="toc-install-gapminder" class="nav-link" data-scroll-target="#install-gapminder">Install gapminder</a></li>
+  <li><a href="#install-a-few-packages-well-use-for-plots" id="toc-install-a-few-packages-well-use-for-plots" class="nav-link" data-scroll-target="#install-a-few-packages-well-use-for-plots">Install a few Packages we’ll use for Plots</a></li>
+  <li><a href="#install-qelp" id="toc-install-qelp" class="nav-link" data-scroll-target="#install-qelp">Install <code>qelp</code></a></li>
+  <li><a href="#install-the-tidyverse-koans" id="toc-install-the-tidyverse-koans" class="nav-link" data-scroll-target="#install-the-tidyverse-koans">Install the Tidyverse Koans</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Econometrics with the Tidyverse</h1>
+<p class="subtitle lead">A Flipped Classroom Experience</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Colleen O’Briant </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 14, 2022</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="images/tidyverse_hex.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption"><a href="https://github.com/rstudio/hex-stickers"></a></figcaption><p></p>
+</figure>
+</div>
+<section id="introduction" class="level2 unnumbered">
+<h2 class="unnumbered anchored" data-anchor-id="introduction">Introduction</h2>
+<p>Welcome to <em>Econometrics with the Tidyverse</em>! I’m so happy you’re here!</p>
+<p><strong>Who am I?</strong> My name is Colleen O’Briant. I’m an Economics PhD student at the University of Oregon. My research is on developing the Econometrics of machine learning and AI algorithms. I’m also very passionate about teaching, especially teaching this course.</p>
+<p><strong>Who you might be:</strong> You might be a student in an Econometrics class. I’ll assume you have some familiarity with topics in economics, calculus, probability, and statistics. You don’t need to be a PhD student. You also don’t need to know how to program: I’ll teach you, starting from zero.</p>
+<p>By the end of this course, you will have excellent command over R (especially the Tidyverse ecosystem). You’ll also solidify your understanding of statitics. And most importantly, you’ll be able to think like an applied economist: to evaluate when a regression might be able to answer your research question, and when to expect biased or inconsistent results.</p>
+<p><strong>Programming Goals:</strong> The course will teach you how to write programs in R to solve your problems, with a focus on clarity and readability. You will learn to program in a functional, declarative style, and to think about using layers of abstraction to develop simple solutions to complicated problems.</p>
+<p><strong>Econometrics Goals:</strong></p>
+<ul>
+<li>The basics of deriving the least-squares estimators for a simple regression (Chapter 1)</li>
+<li>How the crucial assumption of exogeneity affects the estimators (Chapter 2)</li>
+<li>How exogeneity allows estimators to have a causal interpretation (Chapter 3)</li>
+<li>The property of consistency and how it can be used to sign the bias of estimators suffering from omitted variable bias (Chapter 4)</li>
+<li>Different model specifications and their interpretations (Chapter 5)</li>
+<li>Heteroskedasticity and how it can be caused by a misspecified model (Chapter 6)</li>
+<li>Topics in Time series models (Chapters 7 and 8)</li>
+<li>Strategies for causal inference when exogeneity cannot be assumed, including instrumental variables and the differences-in-differences estimator (Chapters 9, 10, 11)</li>
+</ul>
+</section>
+<section id="course-materials" class="level2">
+<h2 class="anchored" data-anchor-id="course-materials">Course Materials</h2>
+<p><strong>The chapters of this workbook</strong>: introduce you to the econometrics topics, give you some examples and quiz questions in videos, and point you toward references for further reading.</p>
+<p><strong>Koans</strong>: short programming exercises to learn the tidyverse. There are 20 of them in total, which you’ll complete over the course of the term as homework. Once you’ve downloaded the project from github, there’s a way to check that your answers are correct.</p>
+<p><strong>Classwork</strong>: will be completed in class in small groups. The classwork alternates between analytic exercises (math proofs and discussion questions) and programming exercises (an applied econometrics project using the tidyverse).</p>
+</section>
+<section id="course-schedule" class="level1">
+<h1>Course Schedule</h1>
+<p>Classwork for the week is always due on Fridays at 5pm. Homework is always due before the next class period.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Date</th>
+<th>Classwork</th>
+<th>Homework</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>W 9/28</td>
+<td>Syllabus</td>
+<td><a href="./least_squares.html">CH1: Least Squares</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>M 10/3</td>
+<td><a href="classwork.html#cw1">CW1: Deriving OLS Estimators (analytical)</a></td>
+<td><a href="koans.html#vectors-tibbles-and-pipes">Koans 1-3</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>W 10/5</td>
+<td><a href="classwork.html#cw2">CW2: lm and qplot (R)</a></td>
+<td><a href="koans.html#dplyr">Koans 4-7</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>M 10/10</td>
+<td><a href="classwork.html#cw3">CW3: dplyr murder mystery (R)</a></td>
+<td><a href="exogeneity.html">CH2: Exogeneity</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>W 10/12</td>
+<td><a href="classwork.html#cw4">CW4: hypothesis testing (analytical)</a></td>
+<td><a href="causal_inference.html">CH3: Causal Inference</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>M 10/17</td>
+<td><a href="classwork.html#cw5">CW5: causal inference (analytical)</a></td>
+<td><a href="koans.html#ggplot2">Koans 8-10</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>W 10/19</td>
+<td><a href="classwork.html#cw6">CW6: causal inference (R)</a></td>
+<td><a href="consistency.html">CH4: Consistency</a> and <a href="specification.html">CH5: Model Specification</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>M 10/24</td>
+<td><a href="classwork.html#cw7">CW7: consistency (analytical)</a></td>
+<td><a href="heteroskedasticity.html">Ch 6: Heteroskedasticity</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>W 10/26</td>
+<td><a href="classwork.html#cw8">CW8: heteroskedasticity (analytical)</a></td>
+<td><a href="koans.html#lm-and-statistical-distributions">Koans 11-14</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>M 10/31</td>
+<td><a href="classwork.html#cw9">CW9: heteroskedasticity (R)</a></td>
+<td>practice midterm</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>W 11/2</td>
+<td><strong>Midterm Exam</strong></td>
+<td><a href="koans.html#map">Koans 15-16</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>M 11/7</td>
+<td><a href="classwork.html#cw10">CW10: simulation (R)</a></td>
+<td><a href="time_series.html">CH7: Time Series</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>W 11/9</td>
+<td><a href="classwork.html#cw11">CW11: dynamics (analytical)</a></td>
+<td><a href="koans.html#lags-and-first-differences">Koans 17-18</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>M 11/14</td>
+<td><a href="classwork.html#cw12">CW12: dynamics (R)</a></td>
+<td><a href="stationarity.html">CH8: Stationarity</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>W 11/16</td>
+<td><a href="classwork.html#cw13">CW13: time trends (analytical)</a></td>
+<td><a href="koans.html#reduce-and-accumulate">Koans 19-20</a></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>M 11/21</td>
+<td><a href="classwork.html#cw14">CW14: random walks (half analytical, half R)</a></td>
+<td><a href="instrumental_vars.html">CH9: IV for causal inference</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>W 11/23</td>
+<td><a href="classwork.html#cw15">CW15: IV (analtyical)</a></td>
+<td>CH10: IV for simultaneous equations</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>M 11/28</td>
+<td><a href="classwork.html#cw16">CW16: IV (R)</a></td>
+<td><a href="diff_in_diff.html">CH11: Diff-in-diff</a></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>W 11/30</td>
+<td><a href="classwork.html#cw17">CW17: Practice Final (anayltical)</a></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>R 12/8</td>
+<td><strong>Final Exam</strong></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="programming-philosophy" class="level1">
+<h1>Programming Philosophy</h1>
+<p>We learn to program (same as we learn anything) by forming a mental model of how the framework works, and then trying to use the framework to solve our own problems (practicing syntax). Sadly, there are lots of ways you can go wrong here: wrong syntax is pretty obvious because you’ll get errors, but wrong mental models can stick around for a lifetime and they make programming a real uphill battle.</p>
+<p>I’ve spent a lot of time over the past 3 years (and I’ve taken a lot of time from the smartest programmers and R people I know) to get this part of the course right. Hopefully you’ll find that solving problems using the tidyverse is simple, easy, and natural. But if you skim through the koans and do them as fast as possible, things will not work out! Remember, the koans aren’t busywork to be done for speed. They will help you build your mental model and learn the syntax, but only if you take your time, read them carefully, and reflect.</p>
+<section id="declarative-vs-imperative-programming" class="level2">
+<h2 class="anchored" data-anchor-id="declarative-vs-imperative-programming">Declarative vs Imperative Programming</h2>
+<p>One wrong way of programming in the tidyverse is to mix paradigms (declarative and imperative). The tidyverse is declarative. But you’ll see a lot of R code online that’s imperative, which is written in base R. Mixing the two paradigms makes for confusing, complicated code.</p>
+<p>Declarative vs imperative: what’s the difference? Imperative programming is relatively low-level: you think in terms of manipulating values using for loops and if statements. Declarative programming is programming at a higher abstraction level: you make use of handy functions (AKA abstractions) to manipulate large swaths of data at one time instead of going value-by-value.</p>
+<p>A good metaphor for the difference between imperative and declarative programming is this: suppose I’m trying to help you drive from your house to school. Imperative programming is when I send you turn-by-turn directions, and declarative programming is when I tell you to just put “University of Oregon” into your GPS. With declarative programming, I can declare <em>what I want you to do</em> without telling you exactly <em>how I want you to do it</em> like with imperative programming. Telling you to put “University of Oregon” into your GPS has advantages over giving you turn-by-turn directions: the GPS may have information about traffic and road closures that I’m not aware of. And the declarative approach is much easier for me: I could help the whole class get from their houses to the university by telling everyone to put “University of Oregon” into their GPS’s, while sending each person their own set of turn-by-turn instructions would be a lot more work.</p>
+<p>Likewise, when you use the tidyverse’s abstractions like <code>filter()</code>, <code>mutate()</code>, <code>map()</code>, <code>reduce()</code>, and all of ggplot2’s great plotting functions, you’re taking advantage of the fact that the engineers who built those functions know tricks in R that you may not be aware of to make things run smoothly. And when you’re programming declaratively, you can continue thinking about your problem at a high level instead of getting weighed down by nitty-gritty details. When it comes to data analysis, declarative programming has a lot of huge benefits.</p>
+<p>But under the hood, all these great tidyverse functions are just a few for loops and if statements. Imperative programming certainly has its time and place, and that time and place is when your problems include implementing an <em>algorithm</em> by hand. If you’re interested, I highly recommend <a href="https://projecteuler.net/about">Project Euler</a> for teaching yourself imperative programming. But imperative programming is not something you’ll need in this workbook. You may have mixed declarative with imperative programming in previous classes, but we’ll stay strictly in the declarative territory in this class.</p>
+</section>
+<section id="things-to-avoid-when-programming-declaratively-in-the-tidyverse" class="level2">
+<h2 class="anchored" data-anchor-id="things-to-avoid-when-programming-declaratively-in-the-tidyverse">Things to Avoid when Programming Declaratively in the Tidyverse</h2>
+<p>Use these only when you’re programming imperatively in base R:</p>
+<ul>
+<li>for loops (we’ll use <code>map()</code> instead)</li>
+<li>if statements (we’ll use the vectorized function from dplyr <code>if_else()</code>)</li>
+<li><code>matrix()</code> (our 2d data structure of choice is the <code>tibble()</code>)</li>
+<li><code>$</code> syntax for extracting a column vector from a tibble. We avoid this because our workflow goes like this: vectors go into tibbles and we do data analysis on <em>tibbles</em>. Going from tibbles to vectors (what <code>$</code> lets you do) is the reverse of what we need, so we avoid it in this class. It just causes unnecessary headaches!</li>
+</ul>
+<p>One more thing: I often see students using assignment <code>&lt;-</code> wayyyy too much. If you’re creating a variable for something, and you only use that thing one other time, and naming that thing doesn’t help the readability of your code, why are you creating that variable? If you let your default be “no assignment” instead of “always assignment”, then your code will be much prettier and your global environment will stay clean, which prevents lots of confusion.</p>
+</section>
+<section id="your-approach" class="level2">
+<h2 class="anchored" data-anchor-id="your-approach">Your Approach</h2>
+<p>When you’re stuck on a hard problem, here are the steps I recommend:</p>
+<ol type="1">
+<li><p>Get crystal clear about the problem you’re trying to solve. Write out what you <em>have</em> versus what you <em>want</em>.</p></li>
+<li><p>Break the problem into small steps and make a plan about how you’re going to do each step.</p></li>
+<li><p>Not sure about how to do a certain step? <em>Don’t</em> just guess wildly and stop googling every problem you’re stuck on. And <strong>get the hell off of stack overflow!</strong> The solutions on that site are usually written imperatively in base R, they sometimes pre-date the tidyverse, and even if they work, they won’t help your understanding. Instead, get in the habit of reading the help docs for functions. I’ve created a package called <code>qelp</code> (quick help) which is just beginner friendly help docs for almost all the functions you’ll need in this class.</p></li>
+</ol>
+</section>
+<section id="what-is-good-code" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-good-code">What is “Good Code”?</h2>
+<p>What are we trying to do here?</p>
+<p>First, come to terms with the fact that there’s no such thing as good code. All code is bad code, and it’s OK! You can’t be a perfectionist with this stuff.</p>
+<p>But <em>really bad</em> code is code that is unnecessarily complicated. If you want examples, just check out stackoverflow! We should always be striving to write simple, elegant solutions because those are easy for others to read and understand, easy for <em>ourselves</em> to read and understand, they’re easy for a data engineer at your future company to optimize, and when something is broken, it’s easy to debug.</p>
+<p>Let’s not get ahead of ourselves though! Good code, first and foremost, solves the problem at hand! If your solution works, you can always just leave it there. That is sometimes the best thing you can do for your sanity.</p>
+<ul>
+<li>Good code…
+<ul>
+<li>Solves the problem.</li>
+<li>Solves the problem in the simplest way.</li>
+<li>Solves the problem in the simplest way, that’s also clear and readable for others.</li>
+<li>Solves the problem in the simplest way, that’s also clear and readable for others, with comments that tell readers why you’re doing what you’re doing.</li>
+</ul></li>
+</ul>
+</section>
+</section>
+<section id="setting-up-your-workspace" class="level1">
+<h1>Setting up your workspace</h1>
+<section id="install-r-and-rstudio" class="level2">
+<h2 class="anchored" data-anchor-id="install-r-and-rstudio">Install R and RStudio</h2>
+<p>Follow the instructions <a href="https://www.youtube.com/watch?v=TFGYlKvQEQ4&amp;t=14s">here</a> if you don’t have R or RStudio downloaded. Select the CRAN mirror nearest to you (probably Oregon State University). If you have a new apple silicon macbook, make sure to download the version of R that says “Apple silicon arm64 build”.</p>
+<p>An alternative: R and RStudio are both already installed on <a href="https://library.uoregon.edu/library-technology-services/public-info/a-software">all academic workstations</a> at UO. The downside is the limited hours, especially on weekends.</p>
+</section>
+<section id="get-acquainted-with-the-rstudio-ide" class="level2">
+<h2 class="anchored" data-anchor-id="get-acquainted-with-the-rstudio-ide">Get Acquainted with the RStudio IDE</h2>
+<p>Watch this <a href="https://www.rstudio.com/products/rstudio/?wvideo=520zbd3tij">video from RStudio</a> to learn a little about the RStudio IDE. Don’t get overwhelmed, we’ll only use a small subset of the things in there and you’ll learn very quickly what’s useful to you.</p>
+</section>
+<section id="install-the-tidyverse" class="level2">
+<h2 class="anchored" data-anchor-id="install-the-tidyverse">Install the Tidyverse</h2>
+<p>Run these lines of code in your console to make sure you have the tidyverse installed and attached to your current session.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>, <span class="at">dependencies =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="install-gapminder" class="level2">
+<h2 class="anchored" data-anchor-id="install-gapminder">Install gapminder</h2>
+<p>You’ll use this package a lot in the koans.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"gapminder"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gapminder)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="install-a-few-packages-well-use-for-plots" class="level2">
+<h2 class="anchored" data-anchor-id="install-a-few-packages-well-use-for-plots">Install a few Packages we’ll use for Plots</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"gganimate"</span>, <span class="at">dependencies =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"hexbin"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="install-qelp" class="level2">
+<h2 class="anchored" data-anchor-id="install-qelp">Install <code>qelp</code></h2>
+<p><code>qelp</code> (quick help) is an alternative set of beginner friendly help docs I created (with contributions from previous EC421 students) for commonly used functions in R and the tidyverse. Once you have the package installed, you can access the help docs from inside RStudio.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">install.packages</span>(<span class="st">"Rcpp"</span>, <span class="at">dependencies =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">install.packages</span>(<span class="st">"devtools"</span>, <span class="at">dependencies =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">library</span>(devtools)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">install_github</span>(<span class="st">"cobriant/qelp"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>?qelp<span class="sc">::</span>install.packages</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If everything went right, the help docs I wrote on the function <code>install.packages</code> should pop up in the lower right hand pane. Whenever you want to read the qelp docs on a function, you type <code>?</code>, <code>qelp</code>, two colons <code>::</code> which say “I want the help docs on this function which is from the package qelp”, and then the name of the function you’re wondering about.</p>
+</section>
+<section id="install-the-tidyverse-koans" class="level2">
+<h2 class="anchored" data-anchor-id="install-the-tidyverse-koans">Install the Tidyverse Koans</h2>
+<p>Visit the <a href="https://github.com/cobriant/tidyverse_koans">koans on github</a>.</p>
+<p>Click on the green button that says <code>Code</code> and then hit <code>Download ZIP</code>.</p>
+<p>Find the file (probably in your downloads folder). On Macs, opening the file will unzip it. On Windows, you’ll right-click and hit “extract”. Then navigate to the new folder named <code>tidyverse_koans-main</code> and double click on the R project <code>tidyversekoans.Rproj</code>. RStudio should open. If it doesn’t, open RStudio and go to <code>File &gt; Open Project</code> and then find <code>tidyversekoans.Rproj</code>.</p>
+<p>In RStudio, go to the lower righthand panel and hit the folder <code>R</code>. This takes you to a list of 20 exercises (koans) you’ll complete as homework over the course of the quarter. The first 3 (<code>K01_vector</code>, <code>K02_tibble</code>, and <code>K03_pipe</code>) will be due before class on Wednesday (July 20).</p>
+<p>Open the first koan: <code>K01_vector.R</code>. Before you start, modify 2 keybindings:</p>
+<p>First, make it so that you can hit <code>Cmd/Ctrl Shift K</code> to compile a notebook:</p>
+<p><code>Macs: Tools &gt; Modify keyboard shortcuts &gt; filter for Compile a Notebook &gt; Cmd Shift K</code></p>
+<p><code>Windows: Tools &gt; &gt; Modify keyboard shortcuts &gt; filter for Compile a Notebook &gt; Ctrl Shift K</code></p>
+<p>Second, make it so that you can hit <code>Cmd/Ctrl Shift T</code> to run the test for only the active koan instead of all the koans:</p>
+<p><code>Macs: Tools &gt; Modify keyboard shortcuts &gt; Run a test file &gt; Cmd Shift T</code></p>
+<p><code>Windows: Tools &gt; Modify keyboard shortcuts &gt; Run a test file &gt; Ctrl Shift T</code></p>
+<p>Now hit <code>Cmd/Ctrl Shift T</code> (Cmd Shift T on a mac; Ctrl Shift T on windows). You’ve just tested the first koan. You should see:</p>
+<p><code>[ FAIL 0 | WARN 0 | SKIP 9 | PASS 0 ]</code></p>
+<p>What does this mean? If there are errors in your R script, the test will not complete. Since it completed, you know there are no errors. Since <code>FAIL</code> is 0, you also haven’t failed any of the questions yet. But <code>PASS</code> is also 0, so you haven’t passed the questions either. Since they’re blank right now, the test will skip them. That’s why <code>SKIP</code> is 9.</p>
+<p>The tests are meant to help you figure out whether you’re on the right track, but they’re not perfect: if you keep failing the tests but you think your answer is correct, don’t spend too much time worrying about it. The tests are sometimes a little fragile… They’re a work in progress!</p>
+<p>Go ahead and start working on the koans and learning about the tidyverse! There’s no need to wait until they’re due to start the koans. I find that the students who end up becoming the strongest programmers spend a lot of time making sure their koans are well done.</p>
+<p>When you’re finished with a koan, make sure to run the tests one last time (<code>Ctrl/Cmd Shift T</code>) and then publish an html verson of the document (<code>Ctrl/Cmd Shift K</code>, and if that doesn’t do anything, change the keybinding for <code>File &gt; Compile Report</code> to be <code>Ctrl/Cmd Shift K</code>). You’ll upload the html version to Canvas for me to grade.</p>
+<p>One last thing: whenever you want to work on the koans, make sure you open RStudio by opening the <code>tidyverse_koans-main</code> project, not just the individ ual koan file. If you open the koans in a session that’s not associated with the <code>tidyverse_koans-main</code> project, the tests will fail to run. You can always see which project your current session is being associated with by looking at the upper right hand corner of RStudio: if you’re in the <code>tidyverse_koans-main</code> project, you’ll see <code>tidyverse_koans-main</code> up there. That’s good. If you’re in no project at all, you’ll see <code>Project: (None)</code> up there. That’s not good, especially if you want the tests to run. If you see <code>Project: (None)</code>, just click that text and you’ll be able to switch over to the <code>tidyverse_koans-main</code> project.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./least_squares.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Least Squares</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

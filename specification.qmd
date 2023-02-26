@@ -1,0 +1,99 @@
+# Model Specification
+
+When you're reading papers in applied economics, you'll often see models with transformations of variables (squared, interacted with other variables, logs of variables). This chapter offers some explanation about why you'll see those things. All of these models can be estimated using OLS because while they're not necessarily linear in variables, they're linear in the parameters $\beta$.
+
+Models that are linear in parameters (and can be estimated with OLS):
+
+\begin{align} 
+y_i &= \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + u_i \\
+y_i &= \beta_0 + \beta_1 x_{i} + \beta_2 x_{i}^2 + u_i \\
+y_i &= \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \beta_3 x_{1i} x_{2i} + u_i \\
+log(y_i) &= \beta_0 + \beta_1 log(x_{i}) + u_i \\
+log(y_i) &= \beta_0 + \beta_1 x_{i} + u_i
+\end{align}
+
+And an example of a model that's not linear in parameters (and can't be estimated with OLS, because $\beta_1$ and $\beta_2$ can't be separately identified here):
+
+$$y_i = \beta_0 + \beta_1 \beta_2 x_{i} + u_i$$
+
+## Linear
+
+$y_i = \beta_0 + \beta_1 x_i + u_i$
+
+- Intercept: $\beta_0 = E[y | x = 0]$.
+- Slope: $\beta_1$ is the expected change in y given an increase in x of one unit.
+
+For example:
+
+$weight_i = -80 + 40 height_i + u_i$
+
+If $weight_i$ is measured in lbs and $height_i$ is measured in feet, then we'd interpret -80 as: "Someone 0 feet tall is expected to weigh -80 lbs". And we'd interpret 40 as "If you're told that a person is 1 foot taller than average, you'd expect them to be 40 lbs heavier than average".
+
+## Squared terms
+
+$y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + u_i$
+
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=766c86ba-a020-4da1-9b96-af0e01598739&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&start=0&interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+## Interactions
+
+An interaction is two variables multiplied. They would usually appear in the model alone as well:
+
+$y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \beta_3 x_{1i} x_{2i} + u_i$
+
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=266ece9c-66c2-4612-a0b6-af0e016c7b2b&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&start=0&interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+## Log-linear
+
+$log(y_i) = \beta_0 + \beta_1 x_i + u_i$
+
+The formula for exponential growth or decay:
+
+$y = (initial \ amount) \ e^{rt}$
+
+Where $r$ is the rate of change and $t$ is the time (perhaps measured in hours, days, months, etc). The interpretation is that when t increases by 1, $y$ increases by r%.
+
+Let's take the log of both sides. Recalling that $log(a b) = log(a) + log(b)$, and $log(a^b) = b \ log(a)$:
+
+$log(y) = log(initial \ amount) + r t log(e)$
+
+And since $log(e) = 1$:
+
+$log(y) = log(initial \ amount) + r t$
+
+If we let $\beta_0 = log(initial \ amount)$, $r = \beta_1$, and $t = x$, then we get the log-linear simple regression:
+
+$log(y_i) = \beta_0 + \beta_1 x_i + u_i$
+
+And since $r = \beta_1$, the interpretation of $\beta_1$ is the same as the interpretation for $r$: when t increases by 1, $y$ increases by r%.
+
+## Log-log
+
+$log(y_i) = \beta_0 + \beta_1 log(x_i) + u_i$
+
+Consider a constant elasticity demand curve, where the elasticity $\varepsilon$ is the percent change in $Q_d$ corresponding to a 1 percent change in price:
+
+$$Q_d = \beta_0 P^{\beta_1}$${#eq-1}
+
+
+Which parameter represents the elasticity $\varepsilon$?
+
+\begin{align*}
+\varepsilon &= \frac{\% \Delta Q_d}{\% \Delta P} \\
+  &= \frac{\frac{\partial Q}{Q}}{\frac{\partial P}{P}} \\
+  &= \frac{\partial Q}{\partial P} \frac{P}{Q} \\
+  &= \frac{\partial (\beta_0 P^{\beta_1})}{\partial P} \frac{P}{Q} \\
+  &= \beta_0 \beta_1 P^{\beta_1 - 1} \frac{P}{Q} \\
+  &= \beta_0 \beta_1 P^{\beta_1 - 1} \frac{P}{\beta_0 P^{\beta_1}} \\
+  &= \beta_1
+\end{align*}
+
+So if we take logs of both sides of @eq-1 and change Q to y and P to x:
+
+$$log(y) = log(\beta_0) + \beta_1 log(x)$$
+
+Then we can estimate this model using OLS because it's linear in parameters. $\beta_1$ has the same interpretation as an elasticity: it's the expected percent change in $y$ corresponding to a 1 percent change in $x$. So if we estimate the model and get:
+
+$$log(y) = .25 + .72 log(x)$$
+
+We'd say that a 1 percent increase in x is associated with a .72 percent increase in y.

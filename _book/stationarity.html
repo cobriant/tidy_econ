@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Econometrics with the Tidyverse - 8&nbsp; Stationarity</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./instrumental_vars.html" rel="next">
+<link href="./time_series.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Stationarity</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Econometrics with the Tidyverse</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./least_squares.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Least Squares</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./exogeneity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Exogeneity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_inference.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./consistency.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Consistency</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./specification.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Model Specification</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./heteroskedasticity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Heteroskedasticity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./time_series.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Time Series</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./stationarity.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Stationarity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./instrumental_vars.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Instrumental Variables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./IV_2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">IV for Simultaneous Equations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./diff_in_diff.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differences-in-differences</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classwork.html" class="sidebar-item-text sidebar-link">Classwork</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./koans.html" class="sidebar-item-text sidebar-link">Koans</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math.html" class="sidebar-item-text sidebar-link">Math Rules and Formulas</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"> <span class="header-section-number">8.1</span> Overview</a></li>
+  <li><a href="#reduce.x-.f-and-accumulate.x-.f" id="toc-reduce.x-.f-and-accumulate.x-.f" class="nav-link" data-scroll-target="#reduce.x-.f-and-accumulate.x-.f"> <span class="header-section-number">8.2</span> <code>reduce(.x, .f)</code> and <code>accumulate(.x, .f)</code></a>
+  <ul class="collapse">
+  <li><a href="#f-can-be-named-anonymous-or-a-formula" id="toc-f-can-be-named-anonymous-or-a-formula" class="nav-link" data-scroll-target="#f-can-be-named-anonymous-or-a-formula"> <span class="header-section-number">8.2.1</span> .f can be named, anonymous, or a formula</a></li>
+  <li><a href="#sum-is-a-reduced" id="toc-sum-is-a-reduced" class="nav-link" data-scroll-target="#sum-is-a-reduced"> <span class="header-section-number">8.2.2</span> sum is a reduced <code>+</code></a></li>
+  <li><a href="#accumulate.x-.f" id="toc-accumulate.x-.f" class="nav-link" data-scroll-target="#accumulate.x-.f"> <span class="header-section-number">8.2.3</span> <code>accumulate(.x, .f)</code></a></li>
+  </ul></li>
+  <li><a href="#stationarity" id="toc-stationarity" class="nav-link" data-scroll-target="#stationarity"> <span class="header-section-number">8.3</span> Stationarity</a>
+  <ul class="collapse">
+  <li><a href="#first-difference-a-random-walk-to-recover-u" id="toc-first-difference-a-random-walk-to-recover-u" class="nav-link" data-scroll-target="#first-difference-a-random-walk-to-recover-u"> <span class="header-section-number">8.3.1</span> first difference a random walk to recover u</a></li>
+  <li><a href="#conditions-for-stationarity" id="toc-conditions-for-stationarity" class="nav-link" data-scroll-target="#conditions-for-stationarity"> <span class="header-section-number">8.3.2</span> 3 conditions for stationarity</a></li>
+  </ul></li>
+  <li><a href="#spurious-regressions" id="toc-spurious-regressions" class="nav-link" data-scroll-target="#spurious-regressions"> <span class="header-section-number">8.4</span> Spurious regressions</a>
+  <ul class="collapse">
+  <li><a href="#time-trends" id="toc-time-trends" class="nav-link" data-scroll-target="#time-trends"> <span class="header-section-number">8.4.1</span> Time Trends</a></li>
+  <li><a href="#random-walks" id="toc-random-walks" class="nav-link" data-scroll-target="#random-walks"> <span class="header-section-number">8.4.2</span> Random Walks</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"> <span class="header-section-number">8.5</span> Exercises</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"> <span class="header-section-number">8.6</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Stationarity</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="overview" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">8.1</span> Overview</h2>
+<p>What to expect in this chapter:</p>
+<ul>
+<li>In <a href="#reduce.x-.f-and-accumulate.x-.f">8.2</a> we’ll learn two functions from the tidyverse <code>reduce(.x, .f)</code> and <code>accumulate(.x, .f)</code>. We’ll use these functions to generate autocorrelated data for time series simulations.</li>
+<li>Section <a href="#stationarity">8.3</a> explains how to generate a random walk and the 3 conditions for a time series to be stationary.</li>
+<li>In <a href="#spurious-regressions">8.4</a> we’ll explore some examples about how running regressions using nonstationary processes can result in spurious (nonsense) regressions.</li>
+</ul>
+<p style="background-color:#dbdbdb; border-width:3px; border-style:solid; border-color:#dbdbdb; padding: 1em;">
+Definition. <strong>Random Walk</strong>: a time series process <span class="math inline">\(y_t\)</span> where <span class="math display">\[y_t = y_{t-1} + \varepsilon_t\]</span> Where <span class="math inline">\(\varepsilon_t\)</span> is iid mean zero.
+</p>
+<p style="background-color:#dbdbdb; border-width:3px; border-style:solid; border-color:#dbdbdb; padding: 1em;">
+Definition. <strong>Stationarity</strong>: If a time series process meets all three of these conditions, you can say it is stationary. If it violates any, you can say it is <strong>nonstationary</strong>. <br> 1) The expected value of the process is independent of time: <span class="math inline">\(E[y_t] = E[y_{t - k}]\)</span> for all <span class="math inline">\(k\)</span>. <br> 2) The variance of the process is independent of time: <span class="math inline">\(Var(y_t) = Var(y_{t-k})\)</span> for all <span class="math inline">\(k\)</span>. <br> 3) The series may be autocorrelated, but the nature of the autocorrelation can’t be changing over time: <span class="math inline">\(Cov(y_t, y_{t-k}) = Cov(y_s, y_{s-k})\)</span> for all <span class="math inline">\(t\)</span>, <span class="math inline">\(s\)</span>, and <span class="math inline">\(k\)</span>.
+</p>
+</section>
+<section id="reduce.x-.f-and-accumulate.x-.f" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="reduce.x-.f-and-accumulate.x-.f"><span class="header-section-number">8.2</span> <code>reduce(.x, .f)</code> and <code>accumulate(.x, .f)</code></h2>
+<p>The last two tidyverse functions we’ll learn in this class are <code>reduce()</code> and <code>accumulate()</code>. They’re from the same family of functions as <code>map()</code>: notice they take the same arguments, a vector <code>.x</code> to iterate over and a function <code>.f</code> to apply. The way that they apply the <code>.f</code> is a little different though.</p>
+<p><img src="images/reduce.png" class="img-fluid"></p>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=c7c4c729-77cd-466c-a493-af030174579d&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<section id="f-can-be-named-anonymous-or-a-formula" class="level3" data-number="8.2.1">
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="f-can-be-named-anonymous-or-a-formula"><span class="header-section-number">8.2.1</span> .f can be named, anonymous, or a formula</h3>
+<p>Just like with <code>map()</code>, the <code>.f</code> in <code>reduce</code> can be a named function:</p>
+<p><code>reduce(.x, intersect)</code></p>
+<p>Or a (2-argument) formula:</p>
+<p><code>reduce(.x, ~ intersect(.x, .y))</code></p>
+<p>Or a (2-argument) anonymous function:</p>
+<p><code>reduce(.x, function(x, y) {intersect(x, y)})</code></p>
+</section>
+<section id="sum-is-a-reduced" class="level3" data-number="8.2.2">
+<h3 data-number="8.2.2" class="anchored" data-anchor-id="sum-is-a-reduced"><span class="header-section-number">8.2.2</span> sum is a reduced <code>+</code></h3>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=ad4df3ba-12fd-4e74-9506-af03017d52b0&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+</section>
+<section id="accumulate.x-.f" class="level3" data-number="8.2.3">
+<h3 data-number="8.2.3" class="anchored" data-anchor-id="accumulate.x-.f"><span class="header-section-number">8.2.3</span> <code>accumulate(.x, .f)</code></h3>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=504f2df2-067f-41fb-a88d-af03017f5a5d&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+</section>
+</section>
+<section id="stationarity" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="stationarity"><span class="header-section-number">8.3</span> Stationarity</h2>
+<p>How does <code>reduce()</code> and <code>accumulate()</code> help us with time series econometrics? We can use <code>accumulate()</code> to generate an autocorrelated series to do monte carlo simulations.</p>
+<p>For example, if you wanted to generate data from a process like this:</p>
+<p><span class="math display">\[y_t = y_{t-1} + u_t\]</span></p>
+<p>Where <span class="math inline">\(u_t\)</span> is iid <span class="math inline">\(N(0, \sigma^2)\)</span>, you can use <code>accumulate()</code> to do that. By the way, this process is defined as a <strong>random walk</strong>, and it’s how we’d model series driven by speculation like stock prices or housing prices. In markets where speculation is a major driver, the best guess you can make about the price of a stock tomorrow is its price today (if you had a better guess, you could make lots of money, but the point is, no one can consistently). That’s what a random walk is: notice <span class="math inline">\(E[y_{t+1} | y_t] = E[y_t + u_{t+1} | y_t] = y_t\)</span> since we assume <span class="math inline">\(u_t\)</span> has mean 0.</p>
+<p>To generate data from a random walk, maybe you’d try this (but you’d get an error):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">u =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">100</span>),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">lag</span>(y) <span class="sc">+</span> u</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Error in lag(y) : object 'y' not found</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The error message says “object ‘y’ not found” because it can’t evaluate <code>lag(y)</code> until y exists. What can you do instead?</p>
+<p>Take <code>u = c(1, -1, 0, 1, 1)</code> and let <span class="math inline">\(y_1 = u_1 = 1\)</span>.</p>
+<p>What is <span class="math inline">\(y_2\)</span> if <span class="math inline">\(y_t = y_{t-1} + u_t\)</span>?</p>
+<p><span class="math display">\[y_2 = y_1 + u_2 = u_1 + u_2 = 1 - 1 = 0\]</span></p>
+<p>How about <span class="math inline">\(y_3\)</span>, <span class="math inline">\(y_4\)</span>, and <span class="math inline">\(y_5\)</span>?</p>
+<p><span class="math display">\[y_3 = y_2 + u_3 = u_1 + u_2 + u_3 = 1 - 1 + 0 = 0\]</span></p>
+<p><span class="math display">\[y_4 = y_3 + u_4 = u_1 + u_2 + u_3 + u_4 = 1 - 1 + 0 + 1 = 1\]</span></p>
+<p><span class="math display">\[y_4 = y_4 + u_5 = u_1 + u_2 + u_3 + u_4 + u_5 = 1 - 1 + 0 + 1 + 1 = 2\]</span></p>
+<p>So we should get <span class="math inline">\(y = c(1, 0, 0, 1, 2)\)</span>, but the more important thing to notice here is that for a random walk, <span class="math inline">\(y_t = \sum_t u_t\)</span>: a random walk is an accumulated sum!</p>
+<p>The correct way to generate a random walk in the tidyverse is to accumulate a sum of u’s:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">u =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">10</span>),</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">accumulate</span>(u, <span class="st">`</span><span class="at">+</span><span class="st">`</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 2
+         u       y
+     &lt;dbl&gt;   &lt;dbl&gt;
+ 1  0.877  0.877  
+ 2 -0.0656 0.811  
+ 3  2.21   3.02   
+ 4  0.726  3.75   
+ 5  0.236  3.98   
+ 6 -1.26   2.72   
+ 7 -1.86   0.860  
+ 8 -0.416  0.444  
+ 9 -0.441  0.00336
+10  2.14   2.15   </code></pre>
+</div>
+</div>
+<section id="first-difference-a-random-walk-to-recover-u" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="first-difference-a-random-walk-to-recover-u"><span class="header-section-number">8.3.1</span> first difference a random walk to recover u</h3>
+<p>Notice what happens when we take the first difference of a random walk:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">u =</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">10</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">accumulate</span>(u, <span class="st">`</span><span class="at">+</span><span class="st">`</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y_diff =</span> y <span class="sc">-</span> <span class="fu">lag</span>(y)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+         u     y  y_diff
+     &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+ 1  0.332  0.332 NA     
+ 2  1.01   1.34   1.01  
+ 3  0.259  1.60   0.259 
+ 4 -0.292  1.31  -0.292 
+ 5 -0.856  0.450 -0.856 
+ 6  0.169  0.619  0.169 
+ 7  0.577  1.20   0.577 
+ 8  0.0738 1.27   0.0738
+ 9 -0.104  1.17  -0.104 
+10  0.189  1.36   0.189 </code></pre>
+</div>
+</div>
+<p>Notice that <code>y_diff</code> is identical to <code>u</code> (except <code>u[1]</code> can’t be identified)! Why?</p>
+<p><span class="math inline">\(y_t = y_{t-1} + u_t\)</span></p>
+<p>Subtract <span class="math inline">\(y_{t-1}\)</span> from both sides and you get that the first difference is equal to u:</p>
+<p><span class="math inline">\(y_t - y_{t-1} = u_t\)</span></p>
+</section>
+<section id="conditions-for-stationarity" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="conditions-for-stationarity"><span class="header-section-number">8.3.2</span> 3 conditions for stationarity</h3>
+<p>There are 3 conditions for a process to be stationary:</p>
+<ol type="1">
+<li><strong>The expected value of the process is independent of time: <span class="math inline">\(E[y_t] = E[y_{t - k}]\)</span> for all <span class="math inline">\(k\)</span>.</strong></li>
+</ol>
+<p>If the time series process has a time trend, it will violate this condition. Example where <span class="math inline">\(y_t = 5 + .05 t + u_t\)</span>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">t =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="dv">5</span> <span class="sc">+</span> .<span class="dv">05</span> <span class="sc">*</span> t <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">100</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> t, <span class="at">y =</span> y)) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Nonstationary: Positive Time Trend"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="stationarity_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ol start="2" type="1">
+<li><strong>The variance of the process is independent of time: <span class="math inline">\(Var(y_t) = Var(y_{t-k})\)</span> for all <span class="math inline">\(k\)</span>.</strong></li>
+</ol>
+<p>This is the condition that makes random walks nonstationary. To see this, let’s see 10 random walks in one plot:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># t is 1:50 repeated 10 times, one for each random walk.</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">t =</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">50</span>, <span class="at">times =</span> <span class="dv">10</span>),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># y is 10 random walks. I wanted to repeat the process 10 times so</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># I put it into a map() call. The thing I wanted to repeat 10 times</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># was an accumulated sum of random normals (a random walk).</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># map() outputs a list of length 10 where each element is a random</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># walk of length 50. I used unlist() to drop the structure and make</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># y a vector of length 500.</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="cf">function</span>(...) <span class="fu">accumulate</span>(<span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">50</span>), <span class="st">`</span><span class="at">+</span><span class="st">`</span>)) <span class="sc">%&gt;%</span> <span class="fu">unlist</span>(),</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># To differentiate the 10 random walks, I need to label them. rep()</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># with an "each" argument will repeat "series 1" 50 times, then</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># "series 2" 50 times, etc.</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">label =</span> <span class="fu">rep</span>(<span class="fu">paste0</span>(<span class="st">"series "</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>), <span class="at">each =</span> <span class="dv">50</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> t)) <span class="sc">+</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y =</span> y, <span class="at">color =</span> label)) <span class="sc">+</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Nonstationary: Variance Increases with Time"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="stationarity_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Notice that all the random walks start near 0 at t = 1, but then start (randomly walking) out and may end up very negative or very positive by t = 50. You’ll prove the the variance of a random walk increases with time more rigorously in classwork 14.</p>
+<ol start="3" type="1">
+<li><strong>The series may be autocorrelated, but the nature of the autocorrelation can’t be changing over time: <span class="math inline">\(Cov(y_t, y_{t-k}) = Cov(y_s, y_{s-k})\)</span> for all <span class="math inline">\(t\)</span>, <span class="math inline">\(s\)</span>, and <span class="math inline">\(k\)</span>.</strong></li>
+</ol>
+<p>If a series violates any of these 3 conditions for stationarity, it is called a <strong>nonstationary process</strong> and if you put it into a regression, you can often get spurious (nonsense) results. In general when it’s possible, economists transform series that they think are nonstationary into stationary series before running regressions with them.</p>
+</section>
+</section>
+<section id="spurious-regressions" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="spurious-regressions"><span class="header-section-number">8.4</span> Spurious regressions</h2>
+<p>Take a look at this website for some examples of <a href="https://www.tylervigen.com/spurious-correlations">spurious correlations</a>:</p>
+
+
+<center>
+<iframe src="https://www.tylervigen.com/spurious-correlations" width="750" height="400">
+</iframe>
+</center>
+
+
+<p>It’s absolutely true that US spending on science correlates strongly with suicides by hanging, strangulation, and suffocation. But the relationship is obviously not causal. These two processes may both just have an upward time trend (they’re nonstationary).</p>
+<p>Scrolling down, the number of films Nicolas Cage appeared in correlates strongly with the number of people who drowned by falling into a pool. But we probably don’t think there’s any kind of causal relationship there. And neither series seem to have time trends. But both trends seem to be autocorrelated, and they may even be random walks, which would make them nonstationary.</p>
+<section id="time-trends" class="level3" data-number="8.4.1">
+<h3 data-number="8.4.1" class="anchored" data-anchor-id="time-trends"><span class="header-section-number">8.4.1</span> Time Trends</h3>
+<p>Let <span class="math inline">\(x_t\)</span> and <span class="math inline">\(y_t\)</span> be two variables that are totally unrelated, except that they both have time trends.</p>
+<p>If you fit the model: <span class="math display">\[y_t = \beta_0 + \beta_1 x_t + u_t\]</span></p>
+<p>You’ll likely be able to reject the null hypothesis that <span class="math inline">\(\beta_1 = 0\)</span>. Why? Omitted variable bias, where <span class="math inline">\(t\)</span> is the omitted variable.</p>
+<p>If the true DGP processes for x and y are:</p>
+<p><span class="math display">\[y_t = \alpha_0 + \alpha_1 t + w_t\]</span></p>
+<p><span class="math display">\[x_t = \gamma_0 + \gamma_1 t + v_t\]</span></p>
+<p>Where <span class="math inline">\(w_t\)</span> and <span class="math inline">\(v_t\)</span> are both iid <span class="math inline">\(N(0, \sigma^2)\)</span>, and you fit <span class="math display">\[y_t = \beta_0 + \beta_1 x_t + u_t\]</span></p>
+<p><img src="images/time_trends.jpg" class="img-fluid"></p>
+<p>Omitting <span class="math inline">\(t\)</span> means <span class="math inline">\(t\)</span> gets absorbed into <span class="math inline">\(u_t\)</span>, and since <span class="math inline">\(t\)</span> covaries with <span class="math inline">\(x_t\)</span> through <span class="math inline">\(\gamma_1\)</span> and <span class="math inline">\(y_t\)</span> through <span class="math inline">\(\alpha_1\)</span>, <span class="math inline">\(\hat{\beta_1}\)</span> will be biased and inconsistent, and the sign of the bias will be the same sign as <span class="math inline">\(\alpha_1 \gamma_1\)</span>.</p>
+<p>That is, if both <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> have positive time trends, it will look like and increase in <span class="math inline">\(x\)</span> causes an increase in <span class="math inline">\(y\)</span>. The same is true if both <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> have negative time trends. If <span class="math inline">\(x\)</span> has a positive time trend and <span class="math inline">\(y\)</span> has a negative time trend (or the other way around), <span class="math inline">\(\hat{\beta_1}\)</span> will be negative: it will look like increases in <span class="math inline">\(x\)</span> cause decreases in <span class="math inline">\(y\)</span>. But of course all these results would be spurious (nonsense) because there’s no real relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, it’s just that both have time trends.</p>
+</section>
+<section id="random-walks" class="level3" data-number="8.4.2">
+<h3 data-number="8.4.2" class="anchored" data-anchor-id="random-walks"><span class="header-section-number">8.4.2</span> Random Walks</h3>
+<p>If <span class="math inline">\(x_t\)</span> and <span class="math inline">\(y_t\)</span> are two unrelated random walks:</p>
+<p><span class="math display">\[x_t = x_{t-1} + v_t\]</span></p>
+<p><span class="math display">\[y_t = y_{t-1} + w_t\]</span></p>
+<p>Where <span class="math inline">\(v_t\)</span> and <span class="math inline">\(w_t\)</span> are iid mean 0.</p>
+<p>As you’ll show in classwork 14, <span class="math inline">\(Var(x_t) = t Var(v_t)\)</span> and <span class="math inline">\(Var(y_t) = t Var(w_t)\)</span>. Random walks are nonstationary because their variances are not independent of time. And when we fit the model:</p>
+<p><span class="math display">\[y_t = \beta_0 + \beta_1 x_t + u_t\]</span></p>
+<p><span class="math inline">\(y_{t-1} + w_t\)</span> gets absorbed into <span class="math inline">\(u_t\)</span>. Since <span class="math inline">\(y_t\)</span> is a random walk, <span class="math inline">\(y_{t-1}\)</span> is also a random walk, and <span class="math inline">\(u_t\)</span> will become highly autocorrelated. Recall the consequences of <span class="math inline">\(u_t\)</span> being autocorrelated:</p>
+<ol type="1">
+<li>OLS estimates remain unbiased, but</li>
+<li>Conventional standard errors will be incorrect, and</li>
+<li>OLS isn’t BLUE because FGLS is more efficient.</li>
+</ol>
+<p>The first two consequences are the ones to focus on here: <span class="math inline">\(\hat{\beta_1}\)</span> is unbiased, so its distribution will be centered on 0, but because of consequence 2, conventional standard errors will be wrong (and in this case, they will be way too small). As a result, you’ll incorrectly reject the null that <span class="math inline">\(\hat{\beta_1} = 0\)</span> about 3/4 of the time. This is a very famous result from <a href="https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.353.2946&amp;rep=rep1&amp;type=pdf">Granger and Newbold (1974)</a> which you’ll replicate in classwork 14.</p>
+<p>How do you transform a random walk into a stationary series? You can <a href="#first-difference-a-random-walk-to-recover-u">take the first difference</a>.</p>
+</section>
+</section>
+<section id="exercises" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="exercises"><span class="header-section-number">8.5</span> Exercises</h2>
+<p>Classwork 13: Time Trends</p>
+<p>Koans 19-20: reduce and accumulate</p>
+<p>Classwork 14: random walks</p>
+</section>
+<section id="references" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="references"><span class="header-section-number">8.6</span> References</h2>
+<p><span class="citation" data-cites="dougherty2016">Dougherty (<a href="references.html#ref-dougherty2016" role="doc-biblioref">2016</a>)</span> Chapter 13: Introduction to Nonstationary Time Series</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-dougherty2016" class="csl-entry" role="doc-biblioentry">
+Dougherty, C. 2016. <em>Introduction to Econometrics</em>. Oxford University Press. <a href="https://books.google.com/books?id=Q5cMEAAAQBAJ">https://books.google.com/books?id=Q5cMEAAAQBAJ</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./time_series.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Time Series</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./instrumental_vars.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Instrumental Variables</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

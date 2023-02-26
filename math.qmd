@@ -1,0 +1,100 @@
+# Math Rules and Formulas {.unnumbered}
+
+For your convenience, listed below are all the math rules we'll use in this course.
+
+## Summation Rules
+
+Let x and y be vectors of length n.
+
+1. Summation definition: $\sum_{i = 1}^{n} x_i \equiv x_1 + x_2 + ... + x_n$
+
+2. The sum of x + y is the same as the sum of x + the sum of y: $\sum_i (x_i + y_i) = \sum_i x_i + \sum_i y_i$
+
+3. For any constant c, the sum of c * x is the same as c times the sum of x. $\sum_i c x_i = c \sum_i x_i$
+
+4. In general, the sum of x times y is not equal to the sum of x times the sum of y: $\sum_i x_i  y_i \neq \sum_i x_i  \sum_i y_i$
+
+## Variance and Covariance
+
+### Sample variance:
+  
+  $$sVar(x) \equiv \frac{\sum_i (x_i - \bar{x})^2}{n - 1}$$
+  
+  The sample variance measures: on average, how far away is each observation from the mean? By squaring the deviance from the mean, it gets rid of negative numbers and makes it so that a few large deviances translate to a much larger variance than many small deviances. Dividing by n - 1 instead of n is called "Bessel's Correction": since the mean $\bar{x}$ was calculated by looking at the same sample data, the deviances from $\bar{x}$ in the sample will be smaller than if we knew and instead used the true expectation of the random variable x. So to estimate the population variance given a sample, we make the number a little bigger by dividing by n - 1 instead of n.
+
+### Sample covariance of two variables x and y:
+
+  $$sCov(x, y) \equiv \frac{\sum_i (x_i - \bar{x})(y_i - \bar{y})}{n - 1}$$
+
+  Notice that this implies that the sample covariance of x with itself is the same as the sample variance of x: $sCov(x, x) = sVar(x)$.
+
+### Population Variance
+
+On average, what is the square deviance of X from its mean? $Var(X) \equiv E[(X - E[X])^2]$
+
+### Population Covariance
+
+$Cov(X, Y) \equiv E[(X - E[X])(Y - E[Y])]$
+
+### Correlation
+
+Correlation is a function of covariance:
+
+$Correlation(X, Y) = \frac{Cov(X, Y)}{\sqrt{Var(X)} \sqrt{Var(Y)}}$
+
+If two random variables have 0 covariance, they will have 0 correlation.
+
+### Variance Rules
+  - The variance of a constant is zero: $Var(c) = 0$
+  - The variance of a constant times a random variable: $Var(cX) = c^2 Var(X)$
+  - The variance of a constant plus a random variable: $Var(c + X) = Var(X)$
+  - The variance of the sum of two random variables: $Var(X + Y) = Var(X) + Var(Y) + 2 Cov(X, Y)$
+
+### Covariance Rules
+  - The covariance of a random variable with a constant is 0: $Cov(X, c) = 0$
+  - The covariance of a random variable with itself is its variance: $Cov(X, X) = Var(X)$
+  - You can bring constants outside of the covariance: $Cov(X, c Y) = c Cov(X, Y)$
+  - If Z is a third random variable: $Cov(X, Y + Z) = Cov(X, Y) + Cov(X, Z)$
+
+## $plim$ rules
+
+Let $c$ be a constant. Let $x_n$ and $y_n$ be sequences of random variables where $plim(x_n) = x$ and $plim(y_n) = y$. That is, for large x, the probability density function of $x_n$ collapses to a spike on the value x and the same for $y_n$ and y. Then:
+
+1) The probability limit of a constant is the constant: $plim(c) = c$
+2) $plim(x_n + y_n) = x + y$
+3) $plim(x_n y_n) = x y$
+4) $plim(\frac{x_n}{y_n}) = \frac{x}{y}$
+5) $plim(g(x_n, y_n)) = g(x, y)$ for any function g.
+
+## Expectations
+
+Let A and B be random variables, and let c be a constant.
+
+1) $E[A + B] = E[A] + E[B]$
+
+2) In general, $E[A B] \neq E[A] E[B]$
+
+3) Constants can pass outside of an expectation: $E[c A] = c E[A]$
+
+And continuing from 3), since $E[A]$ is a constant, $E[B \ E[A]] = E[A] E[B]$.
+
+### Conditional Expectations
+
+If the conditional expectation of something is a constant, then the unconditional expectation is that same constant:
+
+If $E[A | B] = c$, then $E[A] = c$.
+
+Why? The **law of iterated expectations:**
+
+\begin{align*}
+E[A] &= E \left [ E[A | B] \right ] \\
+&= E[c] \\
+&= c
+\end{align*}
+
+## Log rules
+
+1. $log_e(e) = 1$
+2. $log(a b) = log(a) + log(b)$
+3. $log(\frac{a}{b}) = log(a) - log(b)$
+4. $log(a^b) = b \ log(a)$

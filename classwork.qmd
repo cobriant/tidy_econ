@@ -1,0 +1,303 @@
+# Classwork {.unnumbered}
+
+## CW1
+
+### Deriving OLS Estimators (analytical)
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/Classwork1.pdf" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+## CW2
+
+### lm and qplot (R)
+
+[Download the R Script here](classwork/Classwork2.R)
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/Classwork2.html" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+## CW3
+
+### dplyr murder mystery (R)
+
+[Download the R Script here](classwork/CW3.R)
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/CW3.html" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+## CW4
+
+### hypothesis testing (analytical)
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/CW4.pdf" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+## CW5
+
+### causal inference (analytical)
+
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/CW5.pdf" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+## CW6
+
+### causal inference (R)
+
+[Download the R Script here](classwork/CW6.R)
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/CW6.html" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+## CW7
+
+### consistency (analytical)
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/CW7.pdf" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+
+## CW8
+
+### heteroskedasticity (analytical)
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/CW8.pdf" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+## Practice Midterm
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/practice_midterm.pdf" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+## CW9
+
+### heteroskedasticity (R)
+
+[Download the R Script here](classwork/Classwork9.R)
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/Classwork9.html" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+## CW10
+
+### simulation (R)
+
+[Download the R Script here](classwork/Classwork10.R)
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/Classwork10.html" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+## CW11
+
+### dynamics (analytical)
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/Classwork11.pdf" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+## CW12
+
+### dynamics (R)
+
+[Download the R Script here](classwork/Classwork12.R)
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/Classwork12.html" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+## CW13
+
+### time trends (analytical)
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/Classwork13.pdf" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+## CW14
+
+### random walks (half analytical, half R)
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/Classwork14.pdf" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+## CW15
+
+### IV (analtyical)
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/Classwork15.pdf" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+## CW16
+
+### IV (R)
+
+[Download the R Script here](classwork/Classwork16.R)
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/Classwork16.html" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>
+
+## CW17
+
+### Practice Final (analytical)
+
+<html>  
+<body>
+    <center>
+        <iframe src=
+"classwork/practice_final.pdf" 
+                width="750" 
+                height="400">
+        </iframe>
+    </center>
+</body>
+</html>

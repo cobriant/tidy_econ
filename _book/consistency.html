@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Econometrics with the Tidyverse - 4&nbsp; Consistency</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./specification.html" rel="next">
+<link href="./causal_inference.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Consistency</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Econometrics with the Tidyverse</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./least_squares.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Least Squares</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./exogeneity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Exogeneity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_inference.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./consistency.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Consistency</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./specification.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Model Specification</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./heteroskedasticity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Heteroskedasticity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./time_series.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Time Series</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./stationarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Stationarity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./instrumental_vars.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Instrumental Variables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./IV_2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">IV for Simultaneous Equations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./diff_in_diff.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differences-in-differences</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classwork.html" class="sidebar-item-text sidebar-link">Classwork</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./koans.html" class="sidebar-item-text sidebar-link">Koans</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math.html" class="sidebar-item-text sidebar-link">Math Rules and Formulas</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"> <span class="header-section-number">4.1</span> Overview</a></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation"> <span class="header-section-number">4.2</span> Motivation</a></li>
+  <li><a href="#bias-versus-consistency" id="toc-bias-versus-consistency" class="nav-link" data-scroll-target="#bias-versus-consistency"> <span class="header-section-number">4.3</span> Bias versus Consistency</a></li>
+  <li><a href="#proof-hatbeta_1-is-consistent-if-covx-u-0" id="toc-proof-hatbeta_1-is-consistent-if-covx-u-0" class="nav-link" data-scroll-target="#proof-hatbeta_1-is-consistent-if-covx-u-0"> <span class="header-section-number">4.4</span> Proof: <span class="math inline">\(\hat{\beta_1}\)</span> is consistent if <span class="math inline">\(Cov(x, u) = 0\)</span></a>
+  <ul class="collapse">
+  <li><a href="#plim-rules" id="toc-plim-rules" class="nav-link" data-scroll-target="#plim-rules"> <span class="header-section-number">4.4.1</span> <span class="math inline">\(plim\)</span> rules</a></li>
+  <li><a href="#proof" id="toc-proof" class="nav-link" data-scroll-target="#proof"> <span class="header-section-number">4.4.2</span> Proof</a></li>
+  </ul></li>
+  <li><a href="#covx_i-u_i-neq-0-under-omitted-variable-bias" id="toc-covx_i-u_i-neq-0-under-omitted-variable-bias" class="nav-link" data-scroll-target="#covx_i-u_i-neq-0-under-omitted-variable-bias"> <span class="header-section-number">4.5</span> <span class="math inline">\(Cov(x_i, u_i) \neq 0\)</span> under omitted variable bias</a></li>
+  <li><a href="#signing-the-bias" id="toc-signing-the-bias" class="nav-link" data-scroll-target="#signing-the-bias"> <span class="header-section-number">4.6</span> Signing the bias</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"> <span class="header-section-number">4.7</span> Exercises</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"> <span class="header-section-number">4.8</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Consistency</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="overview" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">4.1</span> Overview</h2>
+<p>What to expect in this chapter:</p>
+<ul>
+<li>Section <a href="#motivation">4.2</a> builds some motivation for when you’d need to use the concept of consistency.</li>
+</ul>
+<p style="background-color:#dbdbdb; border-width:3px; border-style:solid; border-color:#dbdbdb; padding: 1em;">
+Definition. An estimator <span class="math inline">\(\hat{\beta_1}\)</span> is <strong>consistent</strong> if <span class="math inline">\(plim(\hat{\beta_1}) = \beta_1\)</span>. That is, <span class="math inline">\(\hat{\beta_1}\)</span> is consistent if it converges in probability to the true value <span class="math inline">\(\beta_1\)</span> as <span class="math inline">\(n\)</span>, the number of data points, goes to infinity.
+</p>
+<ul>
+<li><p>In section <a href="#bias-versus-consistency">4.3</a>, I discuss the differences between the concepts of biasedness and consistency.</p></li>
+<li><p>In section <a href="#proof-hatbeta_1-is-consistent-if-covx-u-0">4.4</a>, I provide some rules for the plim operator and I prove that <span class="math inline">\(\hat{\beta_1}\)</span> is consistent when <span class="math inline">\(Cov(x_i, u_i) = 0\)</span>.</p></li>
+</ul>
+<p style="background-color:#dbdbdb; border-width:3px; border-style:solid; border-color:#dbdbdb; padding: 1em;">
+Definition: Probability Limit <strong>plim</strong>. For a sequence of random variables <span class="math inline">\(x_n\)</span> and some value <span class="math inline">\(x\)</span>, <span class="math inline">\(plim(x_n) = x\)</span> if, as <span class="math inline">\(n\)</span> goes to infinity, the probability distribution of <span class="math inline">\(x_n\)</span> collapses to a spike on the value <span class="math inline">\(x\)</span>.
+</p>
+<ul>
+<li><p>Section <a href="#covx_i-u_i-neq-0-under-omitted-variable-bias">4.5</a> explains how the key consistency assumption of 0 covariance between x and u does not hold under omitted variable bias.</p></li>
+<li><p>Finally in <a href="#signing-the-bias">4.6</a>, I show how the discussion of consistency also gives us the tools to sign the bias under omitted variable bias.</p></li>
+</ul>
+</section>
+<section id="motivation" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="motivation"><span class="header-section-number">4.2</span> Motivation</h2>
+<p>Let’s fast forward a few years. You’re at your future job in a brand new data science department at a fast growing company. You’re in a meeting and you decide to bring up some concerns you have about selection bias in a model you’re developing. Your coworker is dismissive though: they say, “don’t worry about selection bias, we’ll just get twice the amount of data! How much data do you want? 4 times the amount of data? 10 times?”</p>
+<p>You’ll have to remember back to econometrics: does selection bias disappear when we let <span class="math inline">\(n\)</span> go to infinity? That is, under selection bias, is OLS consistent? That is the research question for today. <em>(spoiler: the answer is no: no amount of data will help if there is selection bias or omitted variable bias. The only solution is to use causal inference techniques like an RCT, instrumental variables (Ch 9), of differences-in-differences (Ch 10).)</em></p>
+</section>
+<section id="bias-versus-consistency" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="bias-versus-consistency"><span class="header-section-number">4.3</span> Bias versus Consistency</h2>
+<p>Recall that <span class="math inline">\(\hat{\beta_1}\)</span> is <strong>unbiased</strong> iff <span class="math inline">\(E[\hat{\beta_1}] = \beta_1\)</span>, and that the key assumption for unbiasedness is exogeneity: <span class="math inline">\(E[u_i | X] = 0\)</span>.</p>
+<p>For <span class="math inline">\(\hat{\beta_1}\)</span> to be <strong>consistent</strong> however, we need <span class="math inline">\(plim(\hat{\beta_1}) = \beta_1\)</span>. That is, as the number of data points <span class="math inline">\(n\)</span> goes to infinity, the probability density function for <span class="math inline">\(\hat{\beta_1}\)</span> must collapse to a spike on the true value <span class="math inline">\(\beta_1\)</span> for <span class="math inline">\(\hat{\beta_1}\)</span> to be consistent. “Collapse to a spike” more formally means that <span class="math inline">\(Var(\hat{\beta_1})\)</span> goes to 0 as n goes to infinity <em>and</em> if <span class="math inline">\(\hat{\beta_1}\)</span> is biased, its bias goes to 0 as n goes to infinity. I’ll show at the end of the chapter that the key assumption required for <span class="math inline">\(\hat{\beta_1}\)</span> to be consistent is that <span class="math inline">\(Cov(x, u) = 0\)</span>.</p>
+<blockquote class="blockquote">
+<p>Bias versus Consistency</p>
+</blockquote>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=2bde1986-2d8f-407c-9afa-aef700081079&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<blockquote class="blockquote">
+<p>Estimators that are consistent and inconsistent; biased and unbiased</p>
+</blockquote>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=ece19fdd-ff67-4568-9ff8-aef7000810ab&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<blockquote class="blockquote">
+<p>Quiz: bias and consistency</p>
+</blockquote>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=9a184013-2f38-4c2f-b510-aef7000810ec&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+</section>
+<section id="proof-hatbeta_1-is-consistent-if-covx-u-0" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="proof-hatbeta_1-is-consistent-if-covx-u-0"><span class="header-section-number">4.4</span> Proof: <span class="math inline">\(\hat{\beta_1}\)</span> is consistent if <span class="math inline">\(Cov(x, u) = 0\)</span></h2>
+<p>Consistency is defined as <span class="math inline">\(plim(\hat{\beta_1}) = 0\)</span>, so to do this proof, first we need some rules about probability limits <span class="math inline">\(plim\)</span>.</p>
+<section id="plim-rules" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="plim-rules"><span class="header-section-number">4.4.1</span> <span class="math inline">\(plim\)</span> rules</h3>
+<p>Let <span class="math inline">\(c\)</span> be a constant. Let <span class="math inline">\(x_n\)</span> and <span class="math inline">\(y_n\)</span> be sequences of random variables where <span class="math inline">\(plim(x_n) = x\)</span> and <span class="math inline">\(plim(y_n) = y\)</span>. That is, for large x, the probability density function of <span class="math inline">\(x_n\)</span> collapses to a spike on the value x and the same for <span class="math inline">\(y_n\)</span> and y. Then:</p>
+<ol type="1">
+<li>The probability limit of a constant is the constant: <span class="math inline">\(plim(c) = c\)</span></li>
+<li><span class="math inline">\(plim(x_n + y_n) = x + y\)</span></li>
+<li><span class="math inline">\(plim(x_n y_n) = x y\)</span></li>
+<li><span class="math inline">\(plim(\frac{x_n}{y_n}) = \frac{x}{y}\)</span></li>
+<li><span class="math inline">\(plim(g(x_n, y_n)) = g(x, y)\)</span> for any function g.</li>
+</ol>
+</section>
+<section id="proof" class="level3" data-number="4.4.2">
+<h3 data-number="4.4.2" class="anchored" data-anchor-id="proof"><span class="header-section-number">4.4.2</span> Proof</h3>
+<p>We’d like to show that <span class="math inline">\(plim(\hat{\beta_1}) = \beta_1\)</span> if <span class="math inline">\(Cov(x, u) = 0\)</span>.</p>
+<p>I’ll start with this formula for <span class="math inline">\(\hat{\beta_1}\)</span>, where <span class="math inline">\(sCov\)</span> and <span class="math inline">\(sVar\)</span> refer to the sample covariance and sample variance:</p>
+<p><span class="math display">\[\hat{\beta_1} = \frac{sCov(x_i, y_i)}{sVar(x_i)}\]</span></p>
+<p>If <span class="math inline">\(y_i = \beta_0 + \beta_1 x_i + u_i\)</span>, we can substitute in for <span class="math inline">\(y_i\)</span>:</p>
+<p><span class="math display">\[\hat{\beta_1} = \frac{sCov(x_i, \beta_0 + \beta_1 x_i + u_i)}{sVar(x_i)}\]</span></p>
+<p>And use some <a href="math.html#covariance-rules">covariance rules</a> to simplify:</p>
+<p><span class="math display">\[\hat{\beta_1} = \beta_1 + \frac{sCov(x_i, u_i)}{sVar(x_i)}\]</span></p>
+<p>Take the probability limit of both sides and recognize that the probability limit of a constant is the constant:</p>
+<p><span class="math display">\[plim(\hat{\beta_1}) = \beta_1 + plim \left ( \frac{sCov(x_i, u_i)}{sVar(x_i)} \right )\]</span></p>
+<p>Since <span class="math inline">\(plim(\frac{x_n}{y_n}) = \frac{x}{y}\)</span>:</p>
+<p><span class="math display">\[plim(\hat{\beta_1}) = \beta_1 + \frac{plim(sCov(x_i, u_i))}{plim(sVar(x_i))}\]</span></p>
+<p>As n increases, a sample variance collapses to the population variance, and the same for covariance:</p>
+<p><span class="math display">\[plim(\hat{\beta_1}) = \beta_1 + \frac{Cov(x_i, u_i)}{Var(x_i)}\]</span></p>
+<p>So for <span class="math inline">\(plim(\hat{\beta_1})\)</span> to be equal to <span class="math inline">\(\beta_1\)</span>, we just need <span class="math inline">\(Cov(x_i, u_i)\)</span> to be 0.</p>
+</section>
+</section>
+<section id="covx_i-u_i-neq-0-under-omitted-variable-bias" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="covx_i-u_i-neq-0-under-omitted-variable-bias"><span class="header-section-number">4.5</span> <span class="math inline">\(Cov(x_i, u_i) \neq 0\)</span> under omitted variable bias</h2>
+<p>Suppose the true data generating process is this:</p>
+<p><span class="math display">\[wage_i = \alpha_0 + \alpha_1 education_i + \alpha_2 ability_i + v_i\]</span></p>
+<p>But we have to omit <span class="math inline">\(ability\)</span>, so we fit this model instead:</p>
+<p><span class="math display">\[wage_i = \beta_0 + \beta_1 education_i + u_i\]</span></p>
+<p>Then u absorbs v and <span class="math inline">\(\alpha_2 ability_i\)</span>, so that <span class="math inline">\(u_i = \alpha_2 ability_i + v_i\)</span>. So:</p>
+<p><span class="math display">\[\hat{\beta_1} = \beta_1 + \frac{sCov(education_i, u_i)}{sVar(education_i)}\]</span></p>
+<p>And taking probability limits of both sides while substituting in for <span class="math inline">\(u_i\)</span>:</p>
+<p><span class="math display">\[plim(\hat{\beta_1}) = \beta_1 + \frac{Cov(education_i, \alpha_2 ability_i + v_i)}{sVar(education_i)}\]</span></p>
+<p><span class="math display">\[\begin{align*}
+plim(\hat{\beta_1}) = \beta_1 + \frac{\alpha_2 Cov(education_i, ability_i) + Cov(education_i, v_i)}{Var(education_i)}
+\end{align*}\]</span></p>
+<p>Assuming <span class="math inline">\(Cov(education_i, v_i) = 0\)</span>:</p>
+<p><span id="eq-ovb"><span class="math display">\[
+plim(\hat{\beta_1}) = \beta_1 + \frac{\alpha_2 Cov(education_i, ability_i)}{Var(education_i)}
+\tag{4.1}\]</span></span></p>
+<p>Compare this to the omitted variable bias diagram:</p>
+<p><img src="images/03_image1.jpg" class="img-fluid"></p>
+<p>In the last chapter we learned that if you can draw both lines going out from u (if you can tell stories about why x and u are likely related <em>and</em> why u and y are likely related), then u confounds the relationship you’re trying to detect between x and y, and <span class="math inline">\(\hat{\beta_1}\)</span> is likely biased.</p>
+<p>Now I’ve added one more detail to the diagram: we can label those lines. Specifically, the relationship between x and u is <span class="math inline">\(Cov(x_i, u_i)\)</span> and the relationship between y and u is <span class="math inline">\(\alpha_2\)</span> from <a href="#eq-ovb">Equation&nbsp;<span>4.1</span></a>. And if both <span class="math inline">\(Cov(x_i, u_i)\)</span> and <span class="math inline">\(\alpha_2\)</span> are nonzero, both the diagram and <a href="#eq-ovb">Equation&nbsp;<span>4.1</span></a> verify that <span class="math inline">\(\hat{\beta_1}\)</span> will be biased.</p>
+</section>
+<section id="signing-the-bias" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="signing-the-bias"><span class="header-section-number">4.6</span> Signing the bias</h2>
+<p>Labeling the lines in the diagram above does one more thing for us: it lets us sign the bias.</p>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=f6c671b8-0335-4efe-870b-aef800013cb8&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=3ab3b6c9-87ab-4f8b-8338-aef800013c7e&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+</section>
+<section id="exercises" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="exercises"><span class="header-section-number">4.7</span> Exercises</h2>
+<p><a href="classwork.html#cw7-consistency-analytical">Classwork 7: Consistency</a></p>
+</section>
+<section id="references" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="references"><span class="header-section-number">4.8</span> References</h2>
+<p><span class="citation" data-cites="dougherty2016">Dougherty (<a href="references.html#ref-dougherty2016" role="doc-biblioref">2016</a>)</span> pages 68-75</p>
+<p><span class="citation" data-cites="rubin2022">Rubin (<a href="references.html#ref-rubin2022" role="doc-biblioref">2022</a>)</span></p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-dougherty2016" class="csl-entry" role="doc-biblioentry">
+Dougherty, C. 2016. <em>Introduction to Econometrics</em>. Oxford University Press. <a href="https://books.google.com/books?id=Q5cMEAAAQBAJ">https://books.google.com/books?id=Q5cMEAAAQBAJ</a>.
+</div>
+<div id="ref-rubin2022" class="csl-entry" role="doc-biblioentry">
+Rubin, Ed. 2022. <span>“Economics 421: Introduction to Econometrics.”</span> Github. <a href="https://github.com/edrubin/EC421W22">https://github.com/edrubin/EC421W22</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./causal_inference.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal Inference</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./specification.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Model Specification</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

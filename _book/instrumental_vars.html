@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Econometrics with the Tidyverse - 9&nbsp; Instrumental Variables</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./IV_2.html" rel="next">
+<link href="./stationarity.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Instrumental Variables</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Econometrics with the Tidyverse</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./least_squares.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Least Squares</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./exogeneity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Exogeneity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_inference.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./consistency.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Consistency</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./specification.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Model Specification</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./heteroskedasticity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Heteroskedasticity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./time_series.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Time Series</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./stationarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Stationarity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./instrumental_vars.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Instrumental Variables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./IV_2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">IV for Simultaneous Equations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./diff_in_diff.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differences-in-differences</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classwork.html" class="sidebar-item-text sidebar-link">Classwork</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./koans.html" class="sidebar-item-text sidebar-link">Koans</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math.html" class="sidebar-item-text sidebar-link">Math Rules and Formulas</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">9.1</span> Introduction</a></li>
+  <li><a href="#instrument-validity" id="toc-instrument-validity" class="nav-link" data-scroll-target="#instrument-validity"> <span class="header-section-number">9.2</span> Instrument Validity</a></li>
+  <li><a href="#two-stage-least-squares-2sls" id="toc-two-stage-least-squares-2sls" class="nav-link" data-scroll-target="#two-stage-least-squares-2sls"> <span class="header-section-number">9.3</span> Two Stage Least Squares (2SLS)</a>
+  <ul class="collapse">
+  <li><a href="#first-stage" id="toc-first-stage" class="nav-link" data-scroll-target="#first-stage"> <span class="header-section-number">9.3.1</span> First Stage</a></li>
+  <li><a href="#second-stage" id="toc-second-stage" class="nav-link" data-scroll-target="#second-stage"> <span class="header-section-number">9.3.2</span> Second Stage</a></li>
+  </ul></li>
+  <li><a href="#consistency-of-the-iv-estimator" id="toc-consistency-of-the-iv-estimator" class="nav-link" data-scroll-target="#consistency-of-the-iv-estimator"> <span class="header-section-number">9.4</span> Consistency of the IV Estimator</a></li>
+  <li><a href="#iv-examples" id="toc-iv-examples" class="nav-link" data-scroll-target="#iv-examples"> <span class="header-section-number">9.5</span> IV Examples</a>
+  <ul class="collapse">
+  <li><a href="#effect-of-private-school-on-earnings-using-a-lottery-instrument" id="toc-effect-of-private-school-on-earnings-using-a-lottery-instrument" class="nav-link" data-scroll-target="#effect-of-private-school-on-earnings-using-a-lottery-instrument"> <span class="header-section-number">9.5.1</span> Effect of Private School on Earnings using a Lottery Instrument</a></li>
+  <li><a href="#effect-of-friends-of-the-opposite-sex-on-high-school-gpa" id="toc-effect-of-friends-of-the-opposite-sex-on-high-school-gpa" class="nav-link" data-scroll-target="#effect-of-friends-of-the-opposite-sex-on-high-school-gpa"> <span class="header-section-number">9.5.2</span> Effect of Friends of the Opposite Sex on High School GPA</a></li>
+  <li><a href="#effect-of-military-service-on-earnings" id="toc-effect-of-military-service-on-earnings" class="nav-link" data-scroll-target="#effect-of-military-service-on-earnings"> <span class="header-section-number">9.5.3</span> Effect of Military Service on Earnings</a></li>
+  <li><a href="#effect-of-meth-on-foster-care-admissions" id="toc-effect-of-meth-on-foster-care-admissions" class="nav-link" data-scroll-target="#effect-of-meth-on-foster-care-admissions"> <span class="header-section-number">9.5.4</span> Effect of Meth on Foster Care Admissions</a></li>
+  </ul></li>
+  <li><a href="#bonus-iv-estimates-the-late-not-the-ate" id="toc-bonus-iv-estimates-the-late-not-the-ate" class="nav-link" data-scroll-target="#bonus-iv-estimates-the-late-not-the-ate"> <span class="header-section-number">9.6</span> Bonus: IV estimates the LATE, not the ATE</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"> <span class="header-section-number">9.7</span> Exercises</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"> <span class="header-section-number">9.8</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Instrumental Variables</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">9.1</span> Introduction</h2>
+<p>Recall back to chapter 3: Causal Inference. In that chapter we learned that if our explanatory variables are <strong>exogenous</strong>, then OLS provides unbiased estimates of the causal effect of X on Y.</p>
+<p>But if X is <strong>endogenous</strong> (the opposite of exogenous), OLS will be biased. We learned that our options in that case include running an RCT: randomize X and observe differences in Y. But the ideal RCT is often unethical, it might take years or even decades, and it might be way too expensive:</p>
+<ul>
+<li>Randomizing education level and observing earnings down the road</li>
+<li>Randomizing whether someone can migrate to a different city and observing earnings after some time</li>
+<li>Randomizing how many friends of the opposite sex a high schooler can have and observing their GPA after a year or two</li>
+</ul>
+<p>In this chapter, we’ll learn about a possible alternative to the ideal experiment called <strong>instrumental variables</strong>. You’ll learn in this chapter that if a valid instrument Z exists for the endogenous variable X, then we can make an unbiased and consistent estimate of the causal relationship between X and Y using a method called two-stage least squares (2SLS).</p>
+</section>
+<section id="instrument-validity" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="instrument-validity"><span class="header-section-number">9.2</span> Instrument Validity</h2>
+<p>There are three conditions for an instrument <span class="math inline">\(Z\)</span> to be valid:</p>
+<ol type="1">
+<li><p><span class="math inline">\(z_i\)</span> is exogenous: <span class="math inline">\(E[u_i | Z] = 0\)</span></p></li>
+<li><p><span class="math inline">\(z_i\)</span> is relevant: <span class="math inline">\(z_i\)</span> has a causal effect on <span class="math inline">\(x_i\)</span></p></li>
+<li><p><span class="math inline">\(z_i\)</span> is excludable: <span class="math inline">\(z_i\)</span> effects <span class="math inline">\(y_i\)</span> only through how it effects <span class="math inline">\(x_i\)</span></p></li>
+</ol>
+<p>A valid instrument <span class="math inline">\(z_i\)</span> isolates some of the good, exogenous variation in <span class="math inline">\(x_i\)</span>, and lets us ignore the bad, endogenous variation in <span class="math inline">\(x_i\)</span> that leads to omitted variable bias.</p>
+<p>For example, the bad, endogenous variation in <span class="math inline">\(education\)</span> is the fact that there are high (low) ability people who get more (less) education and go on to get high (low) paying jobs. The good, exogenous variation in education would be the extra education a person gets by pure chance: maybe they happen to live near a university so they are more likely to go to college. Or perhaps the person got more education than a similar person because, while they both dropped out of school when they turned 16, the first person was born in a month that meant they had completed 10.7 years of education where the second person had only completed 10.2 years.</p>
+<p><a href="https://davidcard.berkeley.edu/papers/geo_var_schooling.pdf">Whether someone lives near a university</a> could be used as an instrument for education to understand the causal effect of education on earnings. So could <a href="https://www.jstor.org/stable/2937954">birth month among 16 year old high school dropouts</a>.</p>
+<p>A valid instrument lets us isolate the good, exogenous variation in <span class="math inline">\(education\)</span> that comes from the people who, by pure chance, got a little more or a little less education.</p>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=cbc93f42-17b5-40e5-82c4-af520058c8a7&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+</section>
+<section id="two-stage-least-squares-2sls" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="two-stage-least-squares-2sls"><span class="header-section-number">9.3</span> Two Stage Least Squares (2SLS)</h2>
+<p>To find an IV estimate, we use a method called two-stage least squares (2SLS). It has two stages. The first one checks the relevance of the instrument Z and finds the exogenous variation in X. The second one finds the effect of the exogenous variation in X on the outcome variable Y.</p>
+<section id="first-stage" class="level3" data-number="9.3.1">
+<h3 data-number="9.3.1" class="anchored" data-anchor-id="first-stage"><span class="header-section-number">9.3.1</span> First Stage</h3>
+<p>In the first stage, we’ll use OLS to estimate this model:</p>
+<p><span class="math display">\[x_i = \gamma_0 + \gamma_1 z_i + v_i\]</span></p>
+<p>Note that if <span class="math inline">\(\hat{\gamma_1}\)</span> is not statistically different from 0, then Z doesn’t effect X strongly enough: it fails the <strong>relevance</strong> assumption and Z is not a valid instrument for X.</p>
+<p>But if <span class="math inline">\(\hat{\gamma_1}\)</span> is statistically different from 0, we’ll get the <strong>fitted values</strong> from this first stage regression, which we can think of as the good, exogenous variation in X.</p>
+<p><span class="math display">\[x_i = x_i^{exog} + x_i^{endog}\]</span></p>
+<p>Where <span class="math inline">\(x_i^{exog} = \hat{x_i} = \hat{\gamma_0} + \hat{\gamma_1} z_i\)</span></p>
+<p>And <span class="math inline">\(x_i^{endog} = v_i\)</span>.</p>
+</section>
+<section id="second-stage" class="level3" data-number="9.3.2">
+<h3 data-number="9.3.2" class="anchored" data-anchor-id="second-stage"><span class="header-section-number">9.3.2</span> Second Stage</h3>
+<p>Then in the second stage, we’ll take the fitted values <span class="math inline">\(\hat{x_i}\)</span> from the first stage and we’ll use OLS to fit this model:</p>
+<p><span class="math display">\[y_i = \beta_0 + \beta_1 \hat{x_i} + w_i\]</span></p>
+<p>And <span class="math inline">\(\hat{\beta_1}\)</span> is our estimate of the causal effect of X on Y.</p>
+</section>
+</section>
+<section id="consistency-of-the-iv-estimator" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="consistency-of-the-iv-estimator"><span class="header-section-number">9.4</span> Consistency of the IV Estimator</h2>
+<p>Recall that the OLS estimate of <span class="math inline">\(\hat{\beta_1}\)</span> is the sample covariance of x and y divided by the sample variance of x:</p>
+<p><span class="math display">\[\hat{\beta_1}^{OLS} = \frac{sCov(x_i, y_i)}{sVar(x_i)}\]</span></p>
+<p>So it should follow that, from the second stage, <span class="math inline">\(\hat{\beta_1}^{IV} = \frac{sCov(\hat{x_i}, y_i)}{sVar(\hat{x_i})}\)</span>.</p>
+<p>And taking probability limits:</p>
+<p><span id="eq-1"><span class="math display">\[plim(\hat{\beta_1}^{IV}) = \frac{Cov(\hat{x_i}, y_i)}{Var(\hat{x_i})} \tag{9.1}\]</span></span></p>
+<p style="background-color:#a7c7c5; border-width:3px; border-style:solid; border-color:#a7c7c5; padding: 1em;">
+<strong>Classwork #15.1:</strong> Using <a href="#eq-1">Equation&nbsp;<span>9.1</span></a> and the fact that <span class="math inline">\(\hat{x_i} = \gamma_0 + \gamma_1 z_i\)</span>, show that <span class="math inline">\(plim(\hat{\beta_1}^{IV}) = \frac{Cov(z_i, y_i)}{\gamma_1 Var(z_i)}\)</span>.
+</p>
+<p style="background-color:#a7c7c5; border-width:3px; border-style:solid; border-color:#a7c7c5; padding: 1em;">
+<strong>Classwork #15.2:</strong> Next show that: <span class="math inline">\(plim(\hat{\beta_1}^{IV}) = \beta_1 + \frac{Cov(z_i, u_i)}{Cov(z_i, x_i)}\)</span>. It may be helpful to use the formula derived in the previous problem, the fact that <span class="math inline">\(y_i = \beta_0 + \beta_1 x_i + u_i\)</span> (as long as the exclusion restriction holds, <span class="math inline">\(y_i\)</span> is not directly a function of <span class="math inline">\(z_i\)</span>), and this formula for <span class="math inline">\(\gamma_1\)</span> from the first stage: <span class="math inline">\(\gamma_1 = \frac{Cov(x_i, z_i)}{Var(z_i)}\)</span>.
+</p>
+<p style="background-color:#a7c7c5; border-width:3px; border-style:solid; border-color:#a7c7c5; padding: 1em;">
+<strong>Classwork #15.3:</strong> Using the formula derived above: <span class="math inline">\(plim(\hat{\beta_1}^{IV}) = \beta_1 + \frac{Cov(z_i, u_i)}{Cov(z_i, x_i)}\)</span>, argue why the conditions for an instrument Z to be valid are the same as the conditions for <span class="math inline">\(\hat{\beta_1}^{IV}\)</span> to be consistent. We’ve used the exclusion restriction condition in the previous problem, but you should talk about the other two here.
+</p>
+</section>
+<section id="iv-examples" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="iv-examples"><span class="header-section-number">9.5</span> IV Examples</h2>
+<section id="effect-of-private-school-on-earnings-using-a-lottery-instrument" class="level3" data-number="9.5.1">
+<h3 data-number="9.5.1" class="anchored" data-anchor-id="effect-of-private-school-on-earnings-using-a-lottery-instrument"><span class="header-section-number">9.5.1</span> Effect of Private School on Earnings using a Lottery Instrument</h3>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=8ee4cb9b-6534-4fb5-b0f9-af53000e4919&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<blockquote class="blockquote">
+<p>Note: If you’re also doing the extra credit workbook on DDC, you may be wondering at this point why, in the first stage, we’re using a linear probability model when we could be using the much superior/internally consistent logit or probit. The answer, in short: econometricians have termed this approach the “forbidden regression” because it seems like a good idea, but it’s not actually correct and can yield biased results. “The reason it doesn’t work has to do with the fact that in a nonlinear regression, each variable’s effect depends on the values of the other variables. So while the instrument Z and the second-stage error term u are unrelated, the fitted values <span class="math inline">\(\hat{X}\)</span> no longer get to borrow that nice unrelatedness from Z.” – <span class="citation" data-cites="effectbook">Huntington-Klein (<a href="references.html#ref-effectbook" role="doc-biblioref">2021</a>)</span></p>
+</blockquote>
+</section>
+<section id="effect-of-friends-of-the-opposite-sex-on-high-school-gpa" class="level3" data-number="9.5.2">
+<h3 data-number="9.5.2" class="anchored" data-anchor-id="effect-of-friends-of-the-opposite-sex-on-high-school-gpa"><span class="header-section-number">9.5.2</span> Effect of Friends of the Opposite Sex on High School GPA</h3>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=b3132264-7035-42ce-9757-af5300267ee0&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<p><span class="citation" data-cites="hill2015">Hill (<a href="references.html#ref-hill2015" role="doc-biblioref">2015</a>)</span> <em>The Girl Next Door: The Effect of Opposite Gender Friends on High School Achievement.</em></p>
+</section>
+<section id="effect-of-military-service-on-earnings" class="level3" data-number="9.5.3">
+<h3 data-number="9.5.3" class="anchored" data-anchor-id="effect-of-military-service-on-earnings"><span class="header-section-number">9.5.3</span> Effect of Military Service on Earnings</h3>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=80596296-84cd-4ff9-9cff-af530026f1cd&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+</section>
+<section id="effect-of-meth-on-foster-care-admissions" class="level3" data-number="9.5.4">
+<h3 data-number="9.5.4" class="anchored" data-anchor-id="effect-of-meth-on-foster-care-admissions"><span class="header-section-number">9.5.4</span> Effect of Meth on Foster Care Admissions</h3>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=3c4aa4f2-15d1-45bd-890a-af520058c8f3&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<p>More details about this study <a href="https://mixtape.scunning.com/07-instrumental_variables#parental-methamphetamine-abuse-and-foster-care">here.</a></p>
+</section>
+</section>
+<section id="bonus-iv-estimates-the-late-not-the-ate" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="bonus-iv-estimates-the-late-not-the-ate"><span class="header-section-number">9.6</span> Bonus: IV estimates the LATE, not the ATE</h2>
+<p>In this bonus video, I work out a numerical example about the puzzle presented in the previous video: how IV estimates the causal effect for the complier subpopulation only: the <em>local</em> average treatment effect (LATE) instead of the overall average treatment effect (ATE).</p>
+<p>This part is labeled “bonus” because I won’t test you on this, it’s just fun to explore :).</p>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=122ace26-4382-44d0-9375-af5300277e00&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+</section>
+<section id="exercises" class="level2" data-number="9.7">
+<h2 data-number="9.7" class="anchored" data-anchor-id="exercises"><span class="header-section-number">9.7</span> Exercises</h2>
+<p>Classwork 15: IV part 1</p>
+<p>Classwork 16: IV part 2</p>
+</section>
+<section id="references" class="level2" data-number="9.8">
+<h2 data-number="9.8" class="anchored" data-anchor-id="references"><span class="header-section-number">9.8</span> References</h2>
+<p><span class="citation" data-cites="cunningham">Cunningham (<a href="references.html#ref-cunningham" role="doc-biblioref">2021</a>)</span> <em>Causal Inference: The Mixtape</em></p>
+<p><span class="citation" data-cites="hill2015">Hill (<a href="references.html#ref-hill2015" role="doc-biblioref">2015</a>)</span> <em>The Girl Next Door: The Effect of Opposite Gender Friends on High School Achievement.</em></p>
+<p><span class="citation" data-cites="effectbook">Huntington-Klein (<a href="references.html#ref-effectbook" role="doc-biblioref">2021</a>)</span> <em>The Effect: An Introduction to Research Design and Causality</em></p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-cunningham" class="csl-entry" role="doc-biblioentry">
+Cunningham, Scott. 2021. <em>The Mixtape</em>. New Haven: Yale University Press. <a href="https://doi.org/doi:10.12987/9780300255881">https://doi.org/doi:10.12987/9780300255881</a>.
+</div>
+<div id="ref-hill2015" class="csl-entry" role="doc-biblioentry">
+Hill, Andrew J. 2015. <span>“The Girl Next Door: The Effect of Opposite Gender Friends on High School Achievement.”</span> <em>American Economic Journal: Applied Economics</em> 7 (3): 147–77. <a href="https://doi.org/10.1257/app.20140030">https://doi.org/10.1257/app.20140030</a>.
+</div>
+<div id="ref-effectbook" class="csl-entry" role="doc-biblioentry">
+Huntington-Klein, Nick. 2021. <em>The Effect: An Introduction to Research Design and Causality</em>. 1st ed. Chapman; Hall/CRC. <a href="https://doi.org/10.1201/9781003226055">https://doi.org/10.1201/9781003226055</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./stationarity.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Stationarity</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./IV_2.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">IV for Simultaneous Equations</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

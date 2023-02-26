@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Econometrics with the Tidyverse - 5&nbsp; Model Specification</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./heteroskedasticity.html" rel="next">
+<link href="./consistency.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Model Specification</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Econometrics with the Tidyverse</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./least_squares.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Least Squares</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./exogeneity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Exogeneity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_inference.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./consistency.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Consistency</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./specification.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Model Specification</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./heteroskedasticity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Heteroskedasticity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./time_series.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Time Series</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./stationarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Stationarity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./instrumental_vars.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Instrumental Variables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./IV_2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">IV for Simultaneous Equations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./diff_in_diff.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differences-in-differences</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classwork.html" class="sidebar-item-text sidebar-link">Classwork</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./koans.html" class="sidebar-item-text sidebar-link">Koans</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math.html" class="sidebar-item-text sidebar-link">Math Rules and Formulas</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#linear" id="toc-linear" class="nav-link active" data-scroll-target="#linear"> <span class="header-section-number">5.1</span> Linear</a></li>
+  <li><a href="#squared-terms" id="toc-squared-terms" class="nav-link" data-scroll-target="#squared-terms"> <span class="header-section-number">5.2</span> Squared terms</a></li>
+  <li><a href="#interactions" id="toc-interactions" class="nav-link" data-scroll-target="#interactions"> <span class="header-section-number">5.3</span> Interactions</a></li>
+  <li><a href="#log-linear" id="toc-log-linear" class="nav-link" data-scroll-target="#log-linear"> <span class="header-section-number">5.4</span> Log-linear</a></li>
+  <li><a href="#log-log" id="toc-log-log" class="nav-link" data-scroll-target="#log-log"> <span class="header-section-number">5.5</span> Log-log</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Model Specification</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>When you’re reading papers in applied economics, you’ll often see models with transformations of variables (squared, interacted with other variables, logs of variables). This chapter offers some explanation about why you’ll see those things. All of these models can be estimated using OLS because while they’re not necessarily linear in variables, they’re linear in the parameters <span class="math inline">\(\beta\)</span>.</p>
+<p>Models that are linear in parameters (and can be estimated with OLS):</p>
+<p><span class="math display">\[\begin{align}
+y_i &amp;= \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + u_i \\
+y_i &amp;= \beta_0 + \beta_1 x_{i} + \beta_2 x_{i}^2 + u_i \\
+y_i &amp;= \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \beta_3 x_{1i} x_{2i} + u_i \\
+log(y_i) &amp;= \beta_0 + \beta_1 log(x_{i}) + u_i \\
+log(y_i) &amp;= \beta_0 + \beta_1 x_{i} + u_i
+\end{align}\]</span></p>
+<p>And an example of a model that’s not linear in parameters (and can’t be estimated with OLS, because <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> can’t be separately identified here):</p>
+<p><span class="math display">\[y_i = \beta_0 + \beta_1 \beta_2 x_{i} + u_i\]</span></p>
+<section id="linear" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="linear"><span class="header-section-number">5.1</span> Linear</h2>
+<p><span class="math inline">\(y_i = \beta_0 + \beta_1 x_i + u_i\)</span></p>
+<ul>
+<li>Intercept: <span class="math inline">\(\beta_0 = E[y | x = 0]\)</span>.</li>
+<li>Slope: <span class="math inline">\(\beta_1\)</span> is the expected change in y given an increase in x of one unit.</li>
+</ul>
+<p>For example:</p>
+<p><span class="math inline">\(weight_i = -80 + 40 height_i + u_i\)</span></p>
+<p>If <span class="math inline">\(weight_i\)</span> is measured in lbs and <span class="math inline">\(height_i\)</span> is measured in feet, then we’d interpret -80 as: “Someone 0 feet tall is expected to weigh -80 lbs”. And we’d interpret 40 as “If you’re told that a person is 1 foot taller than average, you’d expect them to be 40 lbs heavier than average”.</p>
+</section>
+<section id="squared-terms" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="squared-terms"><span class="header-section-number">5.2</span> Squared terms</h2>
+<p><span class="math inline">\(y_i = \beta_0 + \beta_1 x_i + \beta_2 x_i^2 + u_i\)</span></p>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=766c86ba-a020-4da1-9b96-af0e01598739&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+</section>
+<section id="interactions" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="interactions"><span class="header-section-number">5.3</span> Interactions</h2>
+<p>An interaction is two variables multiplied. They would usually appear in the model alone as well:</p>
+<p><span class="math inline">\(y_i = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \beta_3 x_{1i} x_{2i} + u_i\)</span></p>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=266ece9c-66c2-4612-a0b6-af0e016c7b2b&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+</section>
+<section id="log-linear" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="log-linear"><span class="header-section-number">5.4</span> Log-linear</h2>
+<p><span class="math inline">\(log(y_i) = \beta_0 + \beta_1 x_i + u_i\)</span></p>
+<p>The formula for exponential growth or decay:</p>
+<p><span class="math inline">\(y = (initial \ amount) \ e^{rt}\)</span></p>
+<p>Where <span class="math inline">\(r\)</span> is the rate of change and <span class="math inline">\(t\)</span> is the time (perhaps measured in hours, days, months, etc). The interpretation is that when t increases by 1, <span class="math inline">\(y\)</span> increases by r%.</p>
+<p>Let’s take the log of both sides. Recalling that <span class="math inline">\(log(a b) = log(a) + log(b)\)</span>, and <span class="math inline">\(log(a^b) = b \ log(a)\)</span>:</p>
+<p><span class="math inline">\(log(y) = log(initial \ amount) + r t log(e)\)</span></p>
+<p>And since <span class="math inline">\(log(e) = 1\)</span>:</p>
+<p><span class="math inline">\(log(y) = log(initial \ amount) + r t\)</span></p>
+<p>If we let <span class="math inline">\(\beta_0 = log(initial \ amount)\)</span>, <span class="math inline">\(r = \beta_1\)</span>, and <span class="math inline">\(t = x\)</span>, then we get the log-linear simple regression:</p>
+<p><span class="math inline">\(log(y_i) = \beta_0 + \beta_1 x_i + u_i\)</span></p>
+<p>And since <span class="math inline">\(r = \beta_1\)</span>, the interpretation of <span class="math inline">\(\beta_1\)</span> is the same as the interpretation for <span class="math inline">\(r\)</span>: when t increases by 1, <span class="math inline">\(y\)</span> increases by r%.</p>
+</section>
+<section id="log-log" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="log-log"><span class="header-section-number">5.5</span> Log-log</h2>
+<p><span class="math inline">\(log(y_i) = \beta_0 + \beta_1 log(x_i) + u_i\)</span></p>
+<p>Consider a constant elasticity demand curve, where the elasticity <span class="math inline">\(\varepsilon\)</span> is the percent change in <span class="math inline">\(Q_d\)</span> corresponding to a 1 percent change in price:</p>
+<p><span id="eq-1"><span class="math display">\[Q_d = \beta_0 P^{\beta_1} \tag{5.1}\]</span></span></p>
+<p>Which parameter represents the elasticity <span class="math inline">\(\varepsilon\)</span>?</p>
+<p><span class="math display">\[\begin{align*}
+\varepsilon &amp;= \frac{\% \Delta Q_d}{\% \Delta P} \\
+  &amp;= \frac{\frac{\partial Q}{Q}}{\frac{\partial P}{P}} \\
+  &amp;= \frac{\partial Q}{\partial P} \frac{P}{Q} \\
+  &amp;= \frac{\partial (\beta_0 P^{\beta_1})}{\partial P} \frac{P}{Q} \\
+  &amp;= \beta_0 \beta_1 P^{\beta_1 - 1} \frac{P}{Q} \\
+  &amp;= \beta_0 \beta_1 P^{\beta_1 - 1} \frac{P}{\beta_0 P^{\beta_1}} \\
+  &amp;= \beta_1
+\end{align*}\]</span></p>
+<p>So if we take logs of both sides of <a href="instrumental_vars.html#eq-1">Equation&nbsp;<span>9.1</span></a> and change Q to y and P to x:</p>
+<p><span class="math display">\[log(y) = log(\beta_0) + \beta_1 log(x)\]</span></p>
+<p>Then we can estimate this model using OLS because it’s linear in parameters. <span class="math inline">\(\beta_1\)</span> has the same interpretation as an elasticity: it’s the expected percent change in <span class="math inline">\(y\)</span> corresponding to a 1 percent change in <span class="math inline">\(x\)</span>. So if we estimate the model and get:</p>
+<p><span class="math display">\[log(y) = .25 + .72 log(x)\]</span></p>
+<p>We’d say that a 1 percent increase in x is associated with a .72 percent increase in y.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./consistency.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Consistency</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./heteroskedasticity.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Heteroskedasticity</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

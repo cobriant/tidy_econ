@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Econometrics with the Tidyverse - Classwork</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./koans.html" rel="next">
+<link href="./diff_in_diff.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Classwork</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Econometrics with the Tidyverse</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./least_squares.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Least Squares</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./exogeneity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Exogeneity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_inference.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./consistency.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Consistency</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./specification.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Model Specification</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./heteroskedasticity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Heteroskedasticity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./time_series.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Time Series</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./stationarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Stationarity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./instrumental_vars.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Instrumental Variables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./IV_2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">IV for Simultaneous Equations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./diff_in_diff.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differences-in-differences</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classwork.html" class="sidebar-item-text sidebar-link active">Classwork</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./koans.html" class="sidebar-item-text sidebar-link">Koans</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math.html" class="sidebar-item-text sidebar-link">Math Rules and Formulas</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#cw1" id="toc-cw1" class="nav-link active" data-scroll-target="#cw1">CW1</a>
+  <ul class="collapse">
+  <li><a href="#deriving-ols-estimators-analytical" id="toc-deriving-ols-estimators-analytical" class="nav-link" data-scroll-target="#deriving-ols-estimators-analytical">Deriving OLS Estimators (analytical)</a></li>
+  </ul></li>
+  <li><a href="#cw2" id="toc-cw2" class="nav-link" data-scroll-target="#cw2">CW2</a>
+  <ul class="collapse">
+  <li><a href="#lm-and-qplot-r" id="toc-lm-and-qplot-r" class="nav-link" data-scroll-target="#lm-and-qplot-r">lm and qplot (R)</a></li>
+  </ul></li>
+  <li><a href="#cw3" id="toc-cw3" class="nav-link" data-scroll-target="#cw3">CW3</a>
+  <ul class="collapse">
+  <li><a href="#dplyr-murder-mystery-r" id="toc-dplyr-murder-mystery-r" class="nav-link" data-scroll-target="#dplyr-murder-mystery-r">dplyr murder mystery (R)</a></li>
+  </ul></li>
+  <li><a href="#cw4" id="toc-cw4" class="nav-link" data-scroll-target="#cw4">CW4</a>
+  <ul class="collapse">
+  <li><a href="#hypothesis-testing-analytical" id="toc-hypothesis-testing-analytical" class="nav-link" data-scroll-target="#hypothesis-testing-analytical">hypothesis testing (analytical)</a></li>
+  </ul></li>
+  <li><a href="#cw5" id="toc-cw5" class="nav-link" data-scroll-target="#cw5">CW5</a>
+  <ul class="collapse">
+  <li><a href="#causal-inference-analytical" id="toc-causal-inference-analytical" class="nav-link" data-scroll-target="#causal-inference-analytical">causal inference (analytical)</a></li>
+  </ul></li>
+  <li><a href="#cw6" id="toc-cw6" class="nav-link" data-scroll-target="#cw6">CW6</a>
+  <ul class="collapse">
+  <li><a href="#causal-inference-r" id="toc-causal-inference-r" class="nav-link" data-scroll-target="#causal-inference-r">causal inference (R)</a></li>
+  </ul></li>
+  <li><a href="#cw7" id="toc-cw7" class="nav-link" data-scroll-target="#cw7">CW7</a>
+  <ul class="collapse">
+  <li><a href="#consistency-analytical" id="toc-consistency-analytical" class="nav-link" data-scroll-target="#consistency-analytical">consistency (analytical)</a></li>
+  </ul></li>
+  <li><a href="#cw8" id="toc-cw8" class="nav-link" data-scroll-target="#cw8">CW8</a>
+  <ul class="collapse">
+  <li><a href="#heteroskedasticity-analytical" id="toc-heteroskedasticity-analytical" class="nav-link" data-scroll-target="#heteroskedasticity-analytical">heteroskedasticity (analytical)</a></li>
+  </ul></li>
+  <li><a href="#practice-midterm" id="toc-practice-midterm" class="nav-link" data-scroll-target="#practice-midterm">Practice Midterm</a></li>
+  <li><a href="#cw9" id="toc-cw9" class="nav-link" data-scroll-target="#cw9">CW9</a>
+  <ul class="collapse">
+  <li><a href="#heteroskedasticity-r" id="toc-heteroskedasticity-r" class="nav-link" data-scroll-target="#heteroskedasticity-r">heteroskedasticity (R)</a></li>
+  </ul></li>
+  <li><a href="#cw10" id="toc-cw10" class="nav-link" data-scroll-target="#cw10">CW10</a>
+  <ul class="collapse">
+  <li><a href="#simulation-r" id="toc-simulation-r" class="nav-link" data-scroll-target="#simulation-r">simulation (R)</a></li>
+  </ul></li>
+  <li><a href="#cw11" id="toc-cw11" class="nav-link" data-scroll-target="#cw11">CW11</a>
+  <ul class="collapse">
+  <li><a href="#dynamics-analytical" id="toc-dynamics-analytical" class="nav-link" data-scroll-target="#dynamics-analytical">dynamics (analytical)</a></li>
+  </ul></li>
+  <li><a href="#cw12" id="toc-cw12" class="nav-link" data-scroll-target="#cw12">CW12</a>
+  <ul class="collapse">
+  <li><a href="#dynamics-r" id="toc-dynamics-r" class="nav-link" data-scroll-target="#dynamics-r">dynamics (R)</a></li>
+  </ul></li>
+  <li><a href="#cw13" id="toc-cw13" class="nav-link" data-scroll-target="#cw13">CW13</a>
+  <ul class="collapse">
+  <li><a href="#time-trends-analytical" id="toc-time-trends-analytical" class="nav-link" data-scroll-target="#time-trends-analytical">time trends (analytical)</a></li>
+  </ul></li>
+  <li><a href="#cw14" id="toc-cw14" class="nav-link" data-scroll-target="#cw14">CW14</a>
+  <ul class="collapse">
+  <li><a href="#random-walks-half-analytical-half-r" id="toc-random-walks-half-analytical-half-r" class="nav-link" data-scroll-target="#random-walks-half-analytical-half-r">random walks (half analytical, half R)</a></li>
+  </ul></li>
+  <li><a href="#cw15" id="toc-cw15" class="nav-link" data-scroll-target="#cw15">CW15</a>
+  <ul class="collapse">
+  <li><a href="#iv-analtyical" id="toc-iv-analtyical" class="nav-link" data-scroll-target="#iv-analtyical">IV (analtyical)</a></li>
+  </ul></li>
+  <li><a href="#cw16" id="toc-cw16" class="nav-link" data-scroll-target="#cw16">CW16</a>
+  <ul class="collapse">
+  <li><a href="#iv-r" id="toc-iv-r" class="nav-link" data-scroll-target="#iv-r">IV (R)</a></li>
+  </ul></li>
+  <li><a href="#cw17" id="toc-cw17" class="nav-link" data-scroll-target="#cw17">CW17</a>
+  <ul class="collapse">
+  <li><a href="#practice-final-analytical" id="toc-practice-final-analytical" class="nav-link" data-scroll-target="#practice-final-analytical">Practice Final (analytical)</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Classwork</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="cw1" class="level2">
+<h2 class="anchored" data-anchor-id="cw1">CW1</h2>
+<section id="deriving-ols-estimators-analytical" class="level3">
+<h3 class="anchored" data-anchor-id="deriving-ols-estimators-analytical">Deriving OLS Estimators (analytical)</h3>
+
+
+<center>
+<iframe src="classwork/Classwork1.pdf" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+</section>
+<section id="cw2" class="level2">
+<h2 class="anchored" data-anchor-id="cw2">CW2</h2>
+<section id="lm-and-qplot-r" class="level3">
+<h3 class="anchored" data-anchor-id="lm-and-qplot-r">lm and qplot (R)</h3>
+<p><a href="classwork/Classwork2.R">Download the R Script here</a></p>
+
+
+<center>
+<iframe src="classwork/Classwork2.html" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+</section>
+<section id="cw3" class="level2">
+<h2 class="anchored" data-anchor-id="cw3">CW3</h2>
+<section id="dplyr-murder-mystery-r" class="level3">
+<h3 class="anchored" data-anchor-id="dplyr-murder-mystery-r">dplyr murder mystery (R)</h3>
+<p><a href="classwork/CW3.R">Download the R Script here</a></p>
+
+
+<center>
+<iframe src="classwork/CW3.html" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+</section>
+<section id="cw4" class="level2">
+<h2 class="anchored" data-anchor-id="cw4">CW4</h2>
+<section id="hypothesis-testing-analytical" class="level3">
+<h3 class="anchored" data-anchor-id="hypothesis-testing-analytical">hypothesis testing (analytical)</h3>
+
+
+<center>
+<iframe src="classwork/CW4.pdf" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+</section>
+<section id="cw5" class="level2">
+<h2 class="anchored" data-anchor-id="cw5">CW5</h2>
+<section id="causal-inference-analytical" class="level3">
+<h3 class="anchored" data-anchor-id="causal-inference-analytical">causal inference (analytical)</h3>
+
+
+<center>
+<iframe src="classwork/CW5.pdf" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+</section>
+<section id="cw6" class="level2">
+<h2 class="anchored" data-anchor-id="cw6">CW6</h2>
+<section id="causal-inference-r" class="level3">
+<h3 class="anchored" data-anchor-id="causal-inference-r">causal inference (R)</h3>
+<p><a href="classwork/CW6.R">Download the R Script here</a></p>
+
+
+<center>
+<iframe src="classwork/CW6.html" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+</section>
+<section id="cw7" class="level2">
+<h2 class="anchored" data-anchor-id="cw7">CW7</h2>
+<section id="consistency-analytical" class="level3">
+<h3 class="anchored" data-anchor-id="consistency-analytical">consistency (analytical)</h3>
+
+
+<center>
+<iframe src="classwork/CW7.pdf" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+</section>
+<section id="cw8" class="level2">
+<h2 class="anchored" data-anchor-id="cw8">CW8</h2>
+<section id="heteroskedasticity-analytical" class="level3">
+<h3 class="anchored" data-anchor-id="heteroskedasticity-analytical">heteroskedasticity (analytical)</h3>
+
+
+<center>
+<iframe src="classwork/CW8.pdf" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+</section>
+<section id="practice-midterm" class="level2">
+<h2 class="anchored" data-anchor-id="practice-midterm">Practice Midterm</h2>
+
+
+<center>
+<iframe src="classwork/practice_midterm.pdf" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+<section id="cw9" class="level2">
+<h2 class="anchored" data-anchor-id="cw9">CW9</h2>
+<section id="heteroskedasticity-r" class="level3">
+<h3 class="anchored" data-anchor-id="heteroskedasticity-r">heteroskedasticity (R)</h3>
+<p><a href="classwork/Classwork9.R">Download the R Script here</a></p>
+
+
+<center>
+<iframe src="classwork/Classwork9.html" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+</section>
+<section id="cw10" class="level2">
+<h2 class="anchored" data-anchor-id="cw10">CW10</h2>
+<section id="simulation-r" class="level3">
+<h3 class="anchored" data-anchor-id="simulation-r">simulation (R)</h3>
+<p><a href="classwork/Classwork10.R">Download the R Script here</a></p>
+
+
+<center>
+<iframe src="classwork/Classwork10.html" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+</section>
+<section id="cw11" class="level2">
+<h2 class="anchored" data-anchor-id="cw11">CW11</h2>
+<section id="dynamics-analytical" class="level3">
+<h3 class="anchored" data-anchor-id="dynamics-analytical">dynamics (analytical)</h3>
+
+
+<center>
+<iframe src="classwork/Classwork11.pdf" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+</section>
+<section id="cw12" class="level2">
+<h2 class="anchored" data-anchor-id="cw12">CW12</h2>
+<section id="dynamics-r" class="level3">
+<h3 class="anchored" data-anchor-id="dynamics-r">dynamics (R)</h3>
+<p><a href="classwork/Classwork12.R">Download the R Script here</a></p>
+
+
+<center>
+<iframe src="classwork/Classwork12.html" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+</section>
+<section id="cw13" class="level2">
+<h2 class="anchored" data-anchor-id="cw13">CW13</h2>
+<section id="time-trends-analytical" class="level3">
+<h3 class="anchored" data-anchor-id="time-trends-analytical">time trends (analytical)</h3>
+
+
+<center>
+<iframe src="classwork/Classwork13.pdf" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+</section>
+<section id="cw14" class="level2">
+<h2 class="anchored" data-anchor-id="cw14">CW14</h2>
+<section id="random-walks-half-analytical-half-r" class="level3">
+<h3 class="anchored" data-anchor-id="random-walks-half-analytical-half-r">random walks (half analytical, half R)</h3>
+
+
+<center>
+<iframe src="classwork/Classwork14.pdf" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+</section>
+<section id="cw15" class="level2">
+<h2 class="anchored" data-anchor-id="cw15">CW15</h2>
+<section id="iv-analtyical" class="level3">
+<h3 class="anchored" data-anchor-id="iv-analtyical">IV (analtyical)</h3>
+
+
+<center>
+<iframe src="classwork/Classwork15.pdf" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+</section>
+<section id="cw16" class="level2">
+<h2 class="anchored" data-anchor-id="cw16">CW16</h2>
+<section id="iv-r" class="level3">
+<h3 class="anchored" data-anchor-id="iv-r">IV (R)</h3>
+<p><a href="classwork/Classwork16.R">Download the R Script here</a></p>
+
+
+<center>
+<iframe src="classwork/Classwork16.html" width="750" height="400">
+</iframe>
+</center>
+
+
+</section>
+</section>
+<section id="cw17" class="level2">
+<h2 class="anchored" data-anchor-id="cw17">CW17</h2>
+<section id="practice-final-analytical" class="level3">
+<h3 class="anchored" data-anchor-id="practice-final-analytical">Practice Final (analytical)</h3>
+
+
+<center>
+<iframe src="classwork/practice_final.pdf" width="750" height="400">
+</iframe>
+</center>
+
+
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./diff_in_diff.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differences-in-differences</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./koans.html" class="pagination-link">
+        <span class="nav-page-text">Koans</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

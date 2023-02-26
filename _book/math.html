@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Econometrics with the Tidyverse - Math Rules and Formulas</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./references.html" rel="next">
+<link href="./koans.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Math Rules and Formulas</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Econometrics with the Tidyverse</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./least_squares.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Least Squares</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./exogeneity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Exogeneity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_inference.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./consistency.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Consistency</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./specification.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Model Specification</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./heteroskedasticity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Heteroskedasticity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./time_series.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Time Series</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./stationarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Stationarity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./instrumental_vars.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Instrumental Variables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./IV_2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">IV for Simultaneous Equations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./diff_in_diff.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differences-in-differences</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classwork.html" class="sidebar-item-text sidebar-link">Classwork</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./koans.html" class="sidebar-item-text sidebar-link">Koans</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math.html" class="sidebar-item-text sidebar-link active">Math Rules and Formulas</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#summation-rules" id="toc-summation-rules" class="nav-link active" data-scroll-target="#summation-rules">Summation Rules</a></li>
+  <li><a href="#variance-and-covariance" id="toc-variance-and-covariance" class="nav-link" data-scroll-target="#variance-and-covariance">Variance and Covariance</a>
+  <ul class="collapse">
+  <li><a href="#sample-variance" id="toc-sample-variance" class="nav-link" data-scroll-target="#sample-variance">Sample variance:</a></li>
+  <li><a href="#sample-covariance-of-two-variables-x-and-y" id="toc-sample-covariance-of-two-variables-x-and-y" class="nav-link" data-scroll-target="#sample-covariance-of-two-variables-x-and-y">Sample covariance of two variables x and y:</a></li>
+  <li><a href="#population-variance" id="toc-population-variance" class="nav-link" data-scroll-target="#population-variance">Population Variance</a></li>
+  <li><a href="#population-covariance" id="toc-population-covariance" class="nav-link" data-scroll-target="#population-covariance">Population Covariance</a></li>
+  <li><a href="#correlation" id="toc-correlation" class="nav-link" data-scroll-target="#correlation">Correlation</a></li>
+  <li><a href="#variance-rules" id="toc-variance-rules" class="nav-link" data-scroll-target="#variance-rules">Variance Rules</a></li>
+  <li><a href="#covariance-rules" id="toc-covariance-rules" class="nav-link" data-scroll-target="#covariance-rules">Covariance Rules</a></li>
+  </ul></li>
+  <li><a href="#plim-rules" id="toc-plim-rules" class="nav-link" data-scroll-target="#plim-rules"><span class="math inline">\(plim\)</span> rules</a></li>
+  <li><a href="#expectations" id="toc-expectations" class="nav-link" data-scroll-target="#expectations">Expectations</a>
+  <ul class="collapse">
+  <li><a href="#conditional-expectations" id="toc-conditional-expectations" class="nav-link" data-scroll-target="#conditional-expectations">Conditional Expectations</a></li>
+  </ul></li>
+  <li><a href="#log-rules" id="toc-log-rules" class="nav-link" data-scroll-target="#log-rules">Log rules</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Math Rules and Formulas</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>For your convenience, listed below are all the math rules we’ll use in this course.</p>
+<section id="summation-rules" class="level2">
+<h2 class="anchored" data-anchor-id="summation-rules">Summation Rules</h2>
+<p>Let x and y be vectors of length n.</p>
+<ol type="1">
+<li><p>Summation definition: <span class="math inline">\(\sum_{i = 1}^{n} x_i \equiv x_1 + x_2 + ... + x_n\)</span></p></li>
+<li><p>The sum of x + y is the same as the sum of x + the sum of y: <span class="math inline">\(\sum_i (x_i + y_i) = \sum_i x_i + \sum_i y_i\)</span></p></li>
+<li><p>For any constant c, the sum of c * x is the same as c times the sum of x. <span class="math inline">\(\sum_i c x_i = c \sum_i x_i\)</span></p></li>
+<li><p>In general, the sum of x times y is not equal to the sum of x times the sum of y: <span class="math inline">\(\sum_i x_i y_i \neq \sum_i x_i \sum_i y_i\)</span></p></li>
+</ol>
+</section>
+<section id="variance-and-covariance" class="level2">
+<h2 class="anchored" data-anchor-id="variance-and-covariance">Variance and Covariance</h2>
+<section id="sample-variance" class="level3">
+<h3 class="anchored" data-anchor-id="sample-variance">Sample variance:</h3>
+<p><span class="math display">\[sVar(x) \equiv \frac{\sum_i (x_i - \bar{x})^2}{n - 1}\]</span></p>
+<p>The sample variance measures: on average, how far away is each observation from the mean? By squaring the deviance from the mean, it gets rid of negative numbers and makes it so that a few large deviances translate to a much larger variance than many small deviances. Dividing by n - 1 instead of n is called “Bessel’s Correction”: since the mean <span class="math inline">\(\bar{x}\)</span> was calculated by looking at the same sample data, the deviances from <span class="math inline">\(\bar{x}\)</span> in the sample will be smaller than if we knew and instead used the true expectation of the random variable x. So to estimate the population variance given a sample, we make the number a little bigger by dividing by n - 1 instead of n.</p>
+</section>
+<section id="sample-covariance-of-two-variables-x-and-y" class="level3">
+<h3 class="anchored" data-anchor-id="sample-covariance-of-two-variables-x-and-y">Sample covariance of two variables x and y:</h3>
+<p><span class="math display">\[sCov(x, y) \equiv \frac{\sum_i (x_i - \bar{x})(y_i - \bar{y})}{n - 1}\]</span></p>
+<p>Notice that this implies that the sample covariance of x with itself is the same as the sample variance of x: <span class="math inline">\(sCov(x, x) = sVar(x)\)</span>.</p>
+</section>
+<section id="population-variance" class="level3">
+<h3 class="anchored" data-anchor-id="population-variance">Population Variance</h3>
+<p>On average, what is the square deviance of X from its mean? <span class="math inline">\(Var(X) \equiv E[(X - E[X])^2]\)</span></p>
+</section>
+<section id="population-covariance" class="level3">
+<h3 class="anchored" data-anchor-id="population-covariance">Population Covariance</h3>
+<p><span class="math inline">\(Cov(X, Y) \equiv E[(X - E[X])(Y - E[Y])]\)</span></p>
+</section>
+<section id="correlation" class="level3">
+<h3 class="anchored" data-anchor-id="correlation">Correlation</h3>
+<p>Correlation is a function of covariance:</p>
+<p><span class="math inline">\(Correlation(X, Y) = \frac{Cov(X, Y)}{\sqrt{Var(X)} \sqrt{Var(Y)}}\)</span></p>
+<p>If two random variables have 0 covariance, they will have 0 correlation.</p>
+</section>
+<section id="variance-rules" class="level3">
+<h3 class="anchored" data-anchor-id="variance-rules">Variance Rules</h3>
+<ul>
+<li>The variance of a constant is zero: <span class="math inline">\(Var(c) = 0\)</span></li>
+<li>The variance of a constant times a random variable: <span class="math inline">\(Var(cX) = c^2 Var(X)\)</span></li>
+<li>The variance of a constant plus a random variable: <span class="math inline">\(Var(c + X) = Var(X)\)</span></li>
+<li>The variance of the sum of two random variables: <span class="math inline">\(Var(X + Y) = Var(X) + Var(Y) + 2 Cov(X, Y)\)</span></li>
+</ul>
+</section>
+<section id="covariance-rules" class="level3">
+<h3 class="anchored" data-anchor-id="covariance-rules">Covariance Rules</h3>
+<ul>
+<li>The covariance of a random variable with a constant is 0: <span class="math inline">\(Cov(X, c) = 0\)</span></li>
+<li>The covariance of a random variable with itself is its variance: <span class="math inline">\(Cov(X, X) = Var(X)\)</span></li>
+<li>You can bring constants outside of the covariance: <span class="math inline">\(Cov(X, c Y) = c Cov(X, Y)\)</span></li>
+<li>If Z is a third random variable: <span class="math inline">\(Cov(X, Y + Z) = Cov(X, Y) + Cov(X, Z)\)</span></li>
+</ul>
+</section>
+</section>
+<section id="plim-rules" class="level2">
+<h2 class="anchored" data-anchor-id="plim-rules"><span class="math inline">\(plim\)</span> rules</h2>
+<p>Let <span class="math inline">\(c\)</span> be a constant. Let <span class="math inline">\(x_n\)</span> and <span class="math inline">\(y_n\)</span> be sequences of random variables where <span class="math inline">\(plim(x_n) = x\)</span> and <span class="math inline">\(plim(y_n) = y\)</span>. That is, for large x, the probability density function of <span class="math inline">\(x_n\)</span> collapses to a spike on the value x and the same for <span class="math inline">\(y_n\)</span> and y. Then:</p>
+<ol type="1">
+<li>The probability limit of a constant is the constant: <span class="math inline">\(plim(c) = c\)</span></li>
+<li><span class="math inline">\(plim(x_n + y_n) = x + y\)</span></li>
+<li><span class="math inline">\(plim(x_n y_n) = x y\)</span></li>
+<li><span class="math inline">\(plim(\frac{x_n}{y_n}) = \frac{x}{y}\)</span></li>
+<li><span class="math inline">\(plim(g(x_n, y_n)) = g(x, y)\)</span> for any function g.</li>
+</ol>
+</section>
+<section id="expectations" class="level2">
+<h2 class="anchored" data-anchor-id="expectations">Expectations</h2>
+<p>Let A and B be random variables, and let c be a constant.</p>
+<ol type="1">
+<li><p><span class="math inline">\(E[A + B] = E[A] + E[B]\)</span></p></li>
+<li><p>In general, <span class="math inline">\(E[A B] \neq E[A] E[B]\)</span></p></li>
+<li><p>Constants can pass outside of an expectation: <span class="math inline">\(E[c A] = c E[A]\)</span></p></li>
+</ol>
+<p>And continuing from 3), since <span class="math inline">\(E[A]\)</span> is a constant, <span class="math inline">\(E[B \ E[A]] = E[A] E[B]\)</span>.</p>
+<section id="conditional-expectations" class="level3">
+<h3 class="anchored" data-anchor-id="conditional-expectations">Conditional Expectations</h3>
+<p>If the conditional expectation of something is a constant, then the unconditional expectation is that same constant:</p>
+<p>If <span class="math inline">\(E[A | B] = c\)</span>, then <span class="math inline">\(E[A] = c\)</span>.</p>
+<p>Why? The <strong>law of iterated expectations:</strong></p>
+<p><span class="math display">\[\begin{align*}
+E[A] &amp;= E \left [ E[A | B] \right ] \\
+&amp;= E[c] \\
+&amp;= c
+\end{align*}\]</span></p>
+</section>
+</section>
+<section id="log-rules" class="level2">
+<h2 class="anchored" data-anchor-id="log-rules">Log rules</h2>
+<ol type="1">
+<li><span class="math inline">\(log_e(e) = 1\)</span></li>
+<li><span class="math inline">\(log(a b) = log(a) + log(b)\)</span></li>
+<li><span class="math inline">\(log(\frac{a}{b}) = log(a) - log(b)\)</span></li>
+<li><span class="math inline">\(log(a^b) = b \ log(a)\)</span></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./koans.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Koans</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html" class="pagination-link">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Econometrics with the Tidyverse - 7&nbsp; Time Series</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./stationarity.html" rel="next">
+<link href="./heteroskedasticity.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Time Series</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Econometrics with the Tidyverse</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./least_squares.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Least Squares</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./exogeneity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Exogeneity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_inference.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./consistency.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Consistency</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./specification.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Model Specification</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./heteroskedasticity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Heteroskedasticity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./time_series.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Time Series</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./stationarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Stationarity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./instrumental_vars.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Instrumental Variables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./IV_2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">IV for Simultaneous Equations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./diff_in_diff.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differences-in-differences</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classwork.html" class="sidebar-item-text sidebar-link">Classwork</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./koans.html" class="sidebar-item-text sidebar-link">Koans</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math.html" class="sidebar-item-text sidebar-link">Math Rules and Formulas</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">7.1</span> Introduction</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview"> <span class="header-section-number">7.2</span> Overview</a></li>
+  <li><a href="#lags" id="toc-lags" class="nav-link" data-scroll-target="#lags"> <span class="header-section-number">7.3</span> Lags</a></li>
+  <li><a href="#first-differences" id="toc-first-differences" class="nav-link" data-scroll-target="#first-differences"> <span class="header-section-number">7.4</span> First Differences</a></li>
+  <li><a href="#include-y_t-1" id="toc-include-y_t-1" class="nav-link" data-scroll-target="#include-y_t-1"> <span class="header-section-number">7.5</span> Include <span class="math inline">\(y_{t-1}\)</span></a>
+  <ul class="collapse">
+  <li><a href="#geometric-series-assumption" id="toc-geometric-series-assumption" class="nav-link" data-scroll-target="#geometric-series-assumption"> <span class="header-section-number">7.5.1</span> Geometric Series Assumption</a></li>
+  <li><a href="#with-lagged-dependent-variables-estimates-are-biased" id="toc-with-lagged-dependent-variables-estimates-are-biased" class="nav-link" data-scroll-target="#with-lagged-dependent-variables-estimates-are-biased"> <span class="header-section-number">7.5.2</span> With lagged dependent variables, estimates are biased</a></li>
+  <li><a href="#with-lagged-dependent-variables-estimates-may-still-be-consistent" id="toc-with-lagged-dependent-variables-estimates-may-still-be-consistent" class="nav-link" data-scroll-target="#with-lagged-dependent-variables-estimates-may-still-be-consistent"> <span class="header-section-number">7.5.3</span> With lagged dependent variables, estimates may still be consistent</a></li>
+  <li><a href="#caveat-u_t-autocorrelated" id="toc-caveat-u_t-autocorrelated" class="nav-link" data-scroll-target="#caveat-u_t-autocorrelated"> <span class="header-section-number">7.5.4</span> Caveat: <span class="math inline">\(u_t\)</span> autocorrelated</a></li>
+  </ul></li>
+  <li><a href="#consequences-of-autocorrelation-in-u_t" id="toc-consequences-of-autocorrelation-in-u_t" class="nav-link" data-scroll-target="#consequences-of-autocorrelation-in-u_t"> <span class="header-section-number">7.6</span> Consequences of autocorrelation in <span class="math inline">\(u_t\)</span></a>
+  <ul class="collapse">
+  <li><a href="#fgls" id="toc-fgls" class="nav-link" data-scroll-target="#fgls"> <span class="header-section-number">7.6.1</span> FGLS</a></li>
+  <li><a href="#testing-for-autocorrelation-in-u_t" id="toc-testing-for-autocorrelation-in-u_t" class="nav-link" data-scroll-target="#testing-for-autocorrelation-in-u_t"> <span class="header-section-number">7.6.2</span> Testing for autocorrelation in <span class="math inline">\(u_t\)</span></a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"> <span class="header-section-number">7.7</span> Exercises</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"> <span class="header-section-number">7.8</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Time Series</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">7.1</span> Introduction</h2>
+<p>So far, we’ve been thinking in terms of having cross-sectional data.</p>
+<p style="background-color:#dbdbdb; border-width:3px; border-style:solid; border-color:#dbdbdb; padding: 1em;">
+Definition. <strong>Cross-sectional Data</strong>: a type of data where a population is sampled at the same time. For example, 1,000 high schoolers across the country are selected and sent a survey. Or 100 small businesses in the state of Oregon are selected and asked questions about how many people they employed this year. Or 100 counties in the US are asked how many cases of covid they had in the last month.<br>
+
+</p>
+<p>In this chapter and the next, we’ll switch focuses toward time series data.</p>
+<p style="background-color:#dbdbdb; border-width:3px; border-style:solid; border-color:#dbdbdb; padding: 1em;">
+Definition. <strong>Time Series Data</strong>: a type of data where a single subject is observed at different points in time. For example, one student’s mathematics standardized test score is observed every year. Or one small business is asked how many people they employ each year for ten years consecutively. Or Lane County is asked how many cases of covid they had in the last month for 30 months in a row.
+</p>
+<p>Then in chapter 11, we’ll discuss a causal inference strategy called diff-in-diff that can be used on a third data type, panel data.</p>
+<p style="background-color:#dbdbdb; border-width:3px; border-style:solid; border-color:#dbdbdb; padding: 1em;">
+Definition. <strong>Panel Data</strong>: a type of data where several subjects are observed at different points in time. For example, 100 students’ mathematics standardized test scores are observed every year. We’ve actually already become familiar with one example of panel data: the gapminder dataset is panel data because it has observations from different countries across different years.
+</p>
+</section>
+<section id="overview" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="overview"><span class="header-section-number">7.2</span> Overview</h2>
+<p>What to expect in this chapter:</p>
+<ul>
+<li><a href="#lags">7.3</a> Time-series models can be <strong>static</strong> or <strong>dynamic</strong>. A simple example of a dynamic model is a model with lags (previous values) of variables as explanatory variables.</li>
+</ul>
+<p style="background-color:#dbdbdb; border-width:3px; border-style:solid; border-color:#dbdbdb; padding: 1em;">
+Definition. <strong>Static Model</strong>: a time series model where the current value of a variable is modeled by current values of explanatory variables. Example: inflation this month is a function of unemployment this month, <em>and not</em> unemployment last month or inflation last month.
+</p>
+<p style="background-color:#dbdbdb; border-width:3px; border-style:solid; border-color:#dbdbdb; padding: 1em;">
+Definition. <strong>Dynamic Model</strong>: a time series model where the current value of a variable is modeled by previous values of variables (or even expectations of future values of variables). Example: inflation from the last few months may impact inflation this month, along with unemployment from the last few months.
+</p>
+<p style="background-color:#dbdbdb; border-width:3px; border-style:solid; border-color:#dbdbdb; padding: 1em;">
+Definition. <strong>Lag</strong>: a value that a variable took at a previous time period. For example, the lag of GDP per capita in 2022 is the GDP per capita in 2021. There can also be second, third, fourth lags: the second lag of GDP per capita in 2022 is GDP per capita in 2020.
+</p>
+<ul>
+<li>If you omit a lag of a variable when you shouldn’t have, you’ll get omitted variable bias. But when you include many lags, you’ll get multicollinearity. There are 2 solutions to this problem: first differencing the data <a href="#first-differences">7.4</a> and including a lag of the dependent variable <a href="#include-y_t-1">7.5</a>.</li>
+</ul>
+<p style="background-color:#dbdbdb; border-width:3px; border-style:solid; border-color:#dbdbdb; padding: 1em;">
+Definition. <strong>First Difference</strong>: a variable minus the lag of the variable. The first difference is the amount by which the variable has changed going from one period to the next. Example: the first difference of the variable <code>y</code> is <code>y - lag(y)</code>. If y was 50 last month and is 60 this month, the first difference of <code>y</code> this month would be 10 becaue it went up by 10 this month.
+</p>
+<ul>
+<li><p>Including a lag of the dependent variable yields biased but consistent estimates as long as <span class="math inline">\(u_t\)</span> is not autocorrelated.</p></li>
+<li><p><a href="#consequences-of-autocorrelation-in-u_t">7.6</a> When <span class="math inline">\(u_t\)</span> is autocorrelated, consequences are similar to heteroskedasticity consequences: conventional standard errors are wrong, OLS is no longer BLUE (FGLS is more efficient), but estimates <span class="math inline">\(\hat{\beta}\)</span> are unbiased as long as exogeneity holds. To detect autocorrelation in <span class="math inline">\(u_t\)</span>, use the Breusch-Godfrey test.</p></li>
+</ul>
+</section>
+<section id="lags" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="lags"><span class="header-section-number">7.3</span> Lags</h2>
+<p>Consider data for an individual’s monthly consumer expenditure and disposable income, from when the person is age 25 to 35. We might design a static model like this:</p>
+<p><span class="math display">\[consumption_t = \beta_0 + \beta_1 income_t + u_t\]</span></p>
+<p>The first thing you may notice that’s different between time series models and cross-sectional models is the subscript <span class="math inline">\(t\)</span>. This model is saying that the person’s consumption <em>in a certain month</em> is a linear function of their income <em>in that same month</em>. <span class="math inline">\(\beta_0\)</span> is still the intercept, or the expectation of the person’s consumption if their income that month was zero. <span class="math inline">\(\beta_1\)</span> is the person’s marginal propensity to consume: out of every dollar income, the person is expected to spend <span class="math inline">\(\beta_1\)</span> dollars.</p>
+<p>But if we think about people <em>consumption smoothing</em>, or having some habit persistence, the model above doesn’t make sense. If there’s habit persistence, consumption wouldn’t change quickly when income changes. Instead, it might rise or fall slowly over a few months until it reaches a new level corresponding to the new income level. A model that incoorporates some consumption smoothing is a dynamic model with a lag:</p>
+<p><span class="math display">\[consumption_t = \beta_0 + \beta_1 income_t + \beta_2 income_{t-1} + u_t\]</span></p>
+<p>Or even multiple lags:</p>
+<p><span class="math display">\[consumption_t = \beta_0 + \beta_1 income_t + \beta_2 income_{t-1} + \beta_3 income_{t-2} + \beta_4 income_{t-3} + u_t\]</span></p>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=f44344c1-f1aa-4b6b-bea4-aefb018027d1&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<p>Suppose the data generating process for <span class="math inline">\(consumption_t\)</span> is:</p>
+<p><span class="math display">\[consumption_t = \beta_0 + \beta_1 income_t + \beta_2 income_{t - 1} + \varepsilon_t\]</span></p>
+<p>But we omit the lag of income and instead fit the static model:</p>
+<p><span class="math display">\[consumption_t = \beta_0 + \beta_1 income_t + u_t\]</span></p>
+<p>Will <span class="math inline">\(\hat{\beta_1}\)</span> suffer from omitted variable bias?</p>
+<p>Notice that <span class="math inline">\(u_t\)</span> becomes <span class="math inline">\(\beta_2 income_{t - 1} + \varepsilon_t\)</span>. So <span class="math inline">\(\hat{\beta_1}\)</span> suffers from OVB if we can draw the two lines out from <span class="math inline">\(u_t\)</span>, that is, <span class="math inline">\(income_{t-1}\)</span>:</p>
+<p><img src="images/07_ovb.jpg" class="img-fluid"></p>
+<p><span class="math inline">\(income_{t-1}\)</span> and <span class="math inline">\(consumption_t\)</span> covary: the relationship between them is <span class="math inline">\(\beta_2\)</span>. <span class="math inline">\(income_t\)</span> and <span class="math inline">\(income_{t-1}\)</span> also very likely covary: when you get a job, you hold it for multiple time periods and your income in that job is, if not constant, it’s serially correlated.</p>
+<p>So the answer to the question of “will <span class="math inline">\(\hat{\beta_1}\)</span> suffer from omitted variable bias if a lag is omitted” is yes.</p>
+<p>Should you then always include as many lags as possible? No, because multicollinearity becomes an issue and you’ll get large standard errors. I’ll provide 2 potential solutions:</p>
+<ol type="1">
+<li><p>First difference the data</p></li>
+<li><p>Include a lag of the dependent variable as an explanatory variable</p></li>
+</ol>
+</section>
+<section id="first-differences" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="first-differences"><span class="header-section-number">7.4</span> First Differences</h2>
+<p>Take the data generating process from above:</p>
+<p><span id="eq-t"><span class="math display">\[consumption_t = \beta_0 + \beta_1 income_t + \beta_2 income_{t - 1} + u_t \tag{7.1}\]</span></span></p>
+<p>Step the equation up one period, changing <span class="math inline">\(t\)</span> to <span class="math inline">\(t + 1\)</span> and <span class="math inline">\(t - 1\)</span> to <span class="math inline">\(t\)</span>:</p>
+<p><span id="eq-t1"><span class="math display">\[consumption_{t+1} = \beta_0 + \beta_1 income_{t+1} + \beta_2 income_{t} + u_{t+1} \tag{7.2}\]</span></span></p>
+<p>This lets us see the <strong>long-run</strong> effect of a 1 unit increase in <span class="math inline">\(income_t\)</span>. If <span class="math inline">\(income_t\)</span> gets a 1-unit boost, then <a href="#eq-t">Equation&nbsp;<span>7.1</span></a> says <span class="math inline">\(consumption_t\)</span> will get a <span class="math inline">\(\beta_1\)</span> boost. And <a href="#eq-t1">Equation&nbsp;<span>7.2</span></a> says <span class="math inline">\(consumption_{t+1}\)</span> will get a <span class="math inline">\(\beta_2\)</span> boost. Since the process only includes the current period’s income and last period’s income, the bump to <span class="math inline">\(income_t\)</span> won’t affect consumption other than in the <span class="math inline">\(consumption_t\)</span> equation and in the <span class="math inline">\(consumption_{t+1}\)</span> equation. So the “long-run” (total) effect of the 1-unit bump to <span class="math inline">\(income_t\)</span> on consumption is <span class="math inline">\(\beta_1 + \beta_2\)</span>.</p>
+<p>The first-differences model allows you to estimate that long-run effect along with <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> without multicollinearity. Take the <span class="math inline">\(consumption_t\)</span> formula and add and subtract <span class="math inline">\(\beta_2 income_t\)</span>:</p>
+<p><span class="math display">\[\begin{align*}
+consumption_t &amp;= \beta_0 + \beta_1 income_t + \beta_2 income_t + \beta_2 income_{t - 1} - \beta_2 income_t + u_t \\
+&amp;= \beta_0 + (\beta_1 + \beta_2) income_t - \beta_2 (income_t - income_{t - 1}) + u_t
+\end{align*}\]</span></p>
+<p>So instead of running <code>lm(consumption ~ income + lag(income))</code>, you estimate <code>lm(consumption ~ income + I(income - lag(income)))</code>. The variable <code>income - lag(income)</code> is called the <strong>first difference</strong> of income: it’s the amount by which income changes each period. It will be much less correlated with <span class="math inline">\(income_t\)</span> than <span class="math inline">\(income_{t-1}\)</span> was, so the multicollinearity issue is solved. And you can back out <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span> from the original model. Suppose you estimate that:</p>
+<p><span class="math display">\[consumption_t = 3 + 5 income_t - 2 (income_t - income_{t - 1}) + u_t\]</span></p>
+<p>Then the parameters of the original model are 3, 3, and 2.</p>
+</section>
+<section id="include-y_t-1" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="include-y_t-1"><span class="header-section-number">7.5</span> Include <span class="math inline">\(y_{t-1}\)</span></h2>
+<p>Instead of estimating this model (<code>y ~ x + lag(x)</code>):</p>
+<p><span class="math display">\[consumption_t = \beta_0 + \beta_1 income_t + \beta_2 income_{t-1} + u_t\]</span></p>
+<p>Estimate this one (<code>y ~ x + lag(y)</code>):</p>
+<p><span class="math display">\[consumption_t = \beta_0 + \beta_1 income_t + \beta_2 consumption_{t-1} + u_t\]</span></p>
+<p>When you include a lag of the dependent variable as an explanatory variable, you’re implicitly including all lags of the explanatory variable. To see this, you can iteratively substitute:</p>
+<p><span id="eq-3"><span class="math display">\[y_t = \beta_0 + \beta_1 x_t + \beta_2 y_{t-1} + u_t \tag{7.3}\]</span></span></p>
+<p>Step the equation back one period:</p>
+<p><span id="eq-4"><span class="math display">\[y_{t-1} = \beta_0 + \beta_1 x_{t-1} + \beta_2 y_{t-2} + u_{t-1} \tag{7.4}\]</span></span></p>
+<p>And substitute <a href="#eq-4">Equation&nbsp;<span>7.4</span></a> for the <span class="math inline">\(y_{t-1}\)</span> in <a href="#eq-3">Equation&nbsp;<span>7.3</span></a>:</p>
+<p><span class="math display">\[y_t = \beta_0 + \beta_1 x_t + \beta_2 \beta_0 + \beta_2 \beta_1 x_{t-1} + \beta_2^2 y_{t-2} + \beta_2 u_{t-1} + u_t\]</span></p>
+<p>So by including <span class="math inline">\(y_{t-1}\)</span>, we’ve implicitly included <span class="math inline">\(x_{t-1}\)</span>.</p>
+<p>We’ll do this process again to substitute for <span class="math inline">\(y_{t-2}\)</span>:</p>
+<p><span class="math display">\[y_{t-2} = \beta_0 + \beta_1 x_{t-2} + \beta_2 y_{t-3} + u_{t-2}\]</span></p>
+<p><span class="math display">\[y_t = \beta_0 + \beta_1 x_t + \beta_2 (\beta_0 + \beta_1 x_{t-1} + \beta_2 (\beta_0 + \beta_1 x_{t-2} + \beta_2 y_{t-3} + u_{t-2}) + u_{t-1}) + u_t\]</span></p>
+<p>And you can see that by including <span class="math inline">\(y_{t-1}\)</span>, we’ve implicitly included both <span class="math inline">\(x_{t-1}\)</span> and <span class="math inline">\(x_{t-2}\)</span>. We could keep going with this process, and we’d find that by including <span class="math inline">\(y_{t-1}\)</span>, we’ve implicity included all lags of <span class="math inline">\(x_t\)</span>. There’s no multicollinearity issue because we only need to run this regression: <code>lm(y ~ x + lag(y))</code>.</p>
+<p>Including a lag of the dependent variable has the benefit of letting every lag of x effect y without introducing multicollinearity, <em>but</em> it has some costs, which I’ll discuss in turn:</p>
+<ol type="1">
+<li><p>Including <span class="math inline">\(y_{t-1}\)</span> as an explanatory variable makes the restrictive assumption that lags of <span class="math inline">\(x_t\)</span> effect <span class="math inline">\(y_t\)</span> by way of a specific geometric series.</p></li>
+<li><p>Including <span class="math inline">\(y_{t-1}\)</span> as an explanatory variable makes estimates biased, but they may still be consistent as long as the unobservable term is not serially correlated.</p></li>
+</ol>
+<section id="geometric-series-assumption" class="level3" data-number="7.5.1">
+<h3 data-number="7.5.1" class="anchored" data-anchor-id="geometric-series-assumption"><span class="header-section-number">7.5.1</span> Geometric Series Assumption</h3>
+<p>To see that including <span class="math inline">\(y_{t-1}\)</span> as an explanatory variable makes the restrictive assumption that lags of <span class="math inline">\(x_t\)</span> effect <span class="math inline">\(y_t\)</span> by way of a specific geometric series, we’ll consider the long-run (total) effect of a one-unit bump to <span class="math inline">\(x_t\)</span> on the variable <span class="math inline">\(y\)</span>:</p>
+<p><span class="math display">\[y_t = \beta_0 + \beta_1 x_t + \beta_2 y_{t-1} + u_t\]</span></p>
+<p>The one-unit bump to <span class="math inline">\(x_t\)</span> creates a <span class="math inline">\(\beta_1\)</span> bump to <span class="math inline">\(y_t\)</span>. What about <span class="math inline">\(y_{t+1}\)</span>, <span class="math inline">\(y_{t+2}\)</span>, etc? Stepping up the equation one period:</p>
+<p><span class="math display">\[y_{t+1} = \beta_0 + \beta_1 x_{t+1} + \beta_2 y_{t} + u_{t+1}\]</span></p>
+<p>The <span class="math inline">\(\beta_1\)</span> sized bump to <span class="math inline">\(y_t\)</span> will create a <span class="math inline">\(\beta_2 \beta_1\)</span> sized bump to <span class="math inline">\(y_{t+1}\)</span>. So the total effect so far is <span class="math inline">\(\beta_1 + \beta_2 \beta_1\)</span>. Stepping up the equation to see the effect on <span class="math inline">\(y_{t+2}\)</span>:</p>
+<p><span class="math display">\[y_{t+2} = \beta_0 + \beta_1 x_{t+2} + \beta_2 y_{t + 1} + u_{t+2}\]</span></p>
+<p>The <span class="math inline">\(\beta_2 \beta_1\)</span> jump to <span class="math inline">\(y_{t+1}\)</span> creates a <span class="math inline">\(\beta_2^2 \beta_1\)</span> jump to <span class="math inline">\(y_{t+2}\)</span>. The total effect so far: <span class="math inline">\(\beta_1 + \beta_2 \beta_1 + \beta_2^2 \beta_1\)</span>. If you continue stepping the equation up, you’ll see the pattern continues: the effect of a one-unit bump to <span class="math inline">\(x_t\)</span> on <span class="math inline">\(y\)</span> is:</p>
+<p><span class="math inline">\(\beta_1 + \beta_2 \beta_1 + \beta_2^2 \beta_1 + \beta_2^3 \beta_1 + \beta_2^4 \beta_1 + ...\)</span></p>
+<p>This is an infinite geometric series, which converges as long as <span class="math inline">\(|\beta_2| &lt; 1\)</span>. You can find the sum of this series using this trick:</p>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=3a38994f-7f85-4e89-a644-af0f00095507&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<p>I say that the geometric series assumption is restrictive because including a lag of the dependent variable may not be a good fit if you have reason to believe <span class="math inline">\(x_t\)</span> does not impact <span class="math inline">\(y_t\)</span> in this specific infinite geometric sequence sort of way.</p>
+</section>
+<section id="with-lagged-dependent-variables-estimates-are-biased" class="level3" data-number="7.5.2">
+<h3 data-number="7.5.2" class="anchored" data-anchor-id="with-lagged-dependent-variables-estimates-are-biased"><span class="header-section-number">7.5.2</span> With lagged dependent variables, estimates are biased</h3>
+<p>Take an even simpler data generating process:</p>
+<p><span class="math display">\[y_t = \beta_1 y_{t-1} + u_t\]</span></p>
+<p>With <span class="math inline">\(|\beta_1| &lt; 1\)</span> (a condition we need for stationarity, the subject of the next chapter) and <span class="math inline">\(u_t\)</span> ~ <span class="math inline">\(N(0, \sigma^2)\)</span>. We know from <a href="exogeneity.html#classwork-1-3">chapter 2</a> that:</p>
+<p><span class="math display">\[\hat{\beta_1} = \beta_1 + \sum_t w_t u_t\]</span></p>
+<p>Where <span class="math inline">\(w_t = \frac{y_{t-1} - \bar{y}}{\sum_t (y_{t-1} - \bar{y})^2}\)</span></p>
+<p>The unbiasedness proof proceeds as follows: condition on all the explanatory variables across all observations X:</p>
+<p><span class="math display">\[E[\hat{\beta_1}] = \beta_1 + E\left [\sum_t w_t u_t\right ]\]</span></p>
+<p><span class="math display">\[\sum_t E[w_t u_t | X] = \sum_t w_t E[u_t | X]\]</span></p>
+<p>But in this case, <span class="math inline">\(y_t\)</span> is included in <span class="math inline">\(X\)</span>, and <span class="math inline">\(E[u_t | y_t]\)</span> is not a constant. Since <span class="math inline">\(u_t\)</span> effects <span class="math inline">\(y_t\)</span> directly, the expectation of <span class="math inline">\(u_t\)</span> depends on <span class="math inline">\(y_t\)</span>. In other words, a lagged dependent variable in X creates endogeneity and therefore OLS estimates are biased.</p>
+<p>To develop more intuition about the bias from this dynamic effect, we’ll continue: for further simplification, recognize that <span class="math inline">\(\bar{y}\)</span> will be near 0 because <span class="math inline">\(E[y] = 0\)</span>:</p>
+<p><span class="math display">\[E[y_t] = \beta_1 E[y_{t-1}] + u_t\]</span></p>
+<p><span class="math display">\[E[y] = \beta_1 E[y] + E[u]\]</span></p>
+<p><span class="math display">\[E[y] (1 - \beta_1) = 0\]</span></p>
+<p><span class="math display">\[E[y] = 0\]</span></p>
+<p>So</p>
+<p><span class="math display">\[\hat{\beta_1} = \beta_1 + \frac{\sum_t(y_{t-1} - \bar{y}) u_t}{\sum_t (y_{t-1} - \bar{y})^2}\]</span></p>
+<p>Simplifies to:</p>
+<p><span class="math display">\[\hat{\beta_1} = \beta_1 + \frac{\sum_t y_{t-1} u_t}{\sum_t y_{t-1}^2}\]</span></p>
+<p><span class="math display">\[E[\hat{\beta_1}] = \beta_1 + E \left [\left (\sum_t y_{t-1} u_t \right ) \left (\sum_t y_{t-1}^2\right)^{-1}\right ]\]</span></p>
+<p>Evaluating the expectation on the right hand side further is beyond us, but I’ll argue that the term is negative because <span class="math inline">\(Cov(\sum_t y_{t-1}u_t, (\sum_t y_{t-1}^2)^{-1}) &lt; 0\)</span>: when <span class="math inline">\(y_{t-1}\)</span> and <span class="math inline">\(u_t\)</span> are large, we can expect large <span class="math inline">\(y_t\)</span> (and small <span class="math inline">\(y_t^{-1}\)</span>). And when <span class="math inline">\(y_{t-1}\)</span> and <span class="math inline">\(u_t\)</span> are small, we can expect small <span class="math inline">\(y_t\)</span> (and large <span class="math inline">\(y_t^{-1}\)</span>). So when a lagged dependent variable is included, estimates will be biased <em>downward</em>. We’ll simulate this result in class.</p>
+</section>
+<section id="with-lagged-dependent-variables-estimates-may-still-be-consistent" class="level3" data-number="7.5.3">
+<h3 data-number="7.5.3" class="anchored" data-anchor-id="with-lagged-dependent-variables-estimates-may-still-be-consistent"><span class="header-section-number">7.5.3</span> With lagged dependent variables, estimates may still be consistent</h3>
+<p>We learned that when a lagged dependent variable is included like this:</p>
+<p><span class="math display">\[y_t = \beta_1 y_{t-1} + u_t\]</span></p>
+<p>estimates for <span class="math inline">\(\beta_1\)</span> will be biased downward. But they still might be consistent: the key assumption for the consistency of OLS here is that <strong>the unobserved term is not serially correlated</strong>.</p>
+<p>Consistency proof:</p>
+<p><span class="math display">\[plim(\hat{\beta_1}) = \beta_1 + plim\left(\frac{\sum_t (y_{t-1} - \bar{y}) u_t}{\sum_t (y_{t-1} - \bar{y})^2}\right)\]</span></p>
+<p>Multiply the numerator and denomenator of the fraction by <span class="math inline">\(\frac{1}{n-1}\)</span>:</p>
+<p><span class="math display">\[plim(\hat{\beta_1}) = \beta_1 + plim\left(\frac{\frac{1}{n-1}\sum_t (y_{t-1} - \bar{y}) u_t}{\frac{1}{n}\sum_t (y_{t-1} - \bar{y})^2}\right)\]</span></p>
+<p><span class="math display">\[plim(\hat{\beta_1}) = \beta_1 + \frac{Cov(y_{t-1}, u_t)}{Var(y_{t-1})}\]</span></p>
+<p>And since <span class="math inline">\(u_t\)</span> is the fresh disturbance, it should not covary with <span class="math inline">\(y_{t-1}\)</span>, which makes the estimator consistent:</p>
+<p><span class="math display">\[plim(\hat{\beta_1}) = \beta_1\]</span></p>
+</section>
+<section id="caveat-u_t-autocorrelated" class="level3" data-number="7.5.4">
+<h3 data-number="7.5.4" class="anchored" data-anchor-id="caveat-u_t-autocorrelated"><span class="header-section-number">7.5.4</span> Caveat: <span class="math inline">\(u_t\)</span> autocorrelated</h3>
+<p>We just learned that when a lagged dependent variable is used as an explanatory variable, estimates will be biased, but consistent. But there’s a caveat here: this will only be true as long as there’s no autocorrelation in <span class="math inline">\(u_t\)</span>.</p>
+<p>If <span class="math inline">\(u_t\)</span> is autocorrelated, estimates will be biased and inconsistent. Here’s why:</p>
+<p>Suppose <span class="math inline">\(u_t\)</span> is autocorrelated in this way:</p>
+<p><span class="math display">\[u_t = \rho u_{t-1} + \varepsilon_t\]</span></p>
+<p>For some nonzero <span class="math inline">\(\rho\)</span> and iid disturbance <span class="math inline">\(\varepsilon\)</span>.</p>
+<p>If we’re trying to fit the model: <span class="math display">\[y_t = \beta_0 + \beta_1 y_{t-1} + u_t\]</span></p>
+<p>Then estimates will be biased just as before. But here, they’ll also be inconsistent:</p>
+<p><span class="math display">\[\begin{align*}
+plim(\hat{\beta_1}) &amp;= \beta_1 + \frac{Cov(y_{t-1}, u_t)}{Var(y_{t-1})} \\
+&amp;= \beta_1 + \frac{Cov(y_{t-1}, \rho u_{t-1} + \varepsilon)}{Var(y_{t-1})} \\
+&amp;= \beta_1 + \frac{\rho Cov(y_{t-1}, u_{t-1})}{Var(y_{t-1})} \\
+&amp;= \beta_1 + \frac{\rho}{Var(y_{t-1})} \\
+&amp;\neq \beta_1
+\end{align*}\]</span></p>
+</section>
+</section>
+<section id="consequences-of-autocorrelation-in-u_t" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="consequences-of-autocorrelation-in-u_t"><span class="header-section-number">7.6</span> Consequences of autocorrelation in <span class="math inline">\(u_t\)</span></h2>
+<ol type="1">
+<li><p><strong>Conventional standard errors are wrong.</strong> Recall that no autocorrelation in <span class="math inline">\(u_t\)</span> was a major assumption we used when we <a href="exogeneity.html#standard-errors">derived OLS standard errors in chapter 2</a>. In the presence of autocorrelation in <span class="math inline">\(u_t\)</span>, conventional standard errors will be incorrect. There’s an adjustment you can make to them called Newey-West standard errors, which we won’t go into detail about.</p></li>
+<li><p><strong><span class="math inline">\(\hat{\beta_1}\)</span> is unbiased along as we have exogeneity (no lagged dependent variables, no omitted variable bias, etc).</strong> No autocorrelation in <span class="math inline">\(u_t\)</span> was not something we needed to assume to get <span class="math inline">\(\hat{\beta_1}\)</span> to be unbiased.</p></li>
+<li><p><strong>OLS is no longer BLUE because there exists a more efficient estimator FGLS (feasible generalized least squares).</strong> We’ll explore FGLS in the next section.</p></li>
+</ol>
+<blockquote class="blockquote">
+<p>Note: These 3 consequences should remind you of the <a href="heteroskedasticity.html#overview">consequences of heteroskedasticity</a>!</p>
+</blockquote>
+<section id="fgls" class="level3" data-number="7.6.1">
+<h3 data-number="7.6.1" class="anchored" data-anchor-id="fgls"><span class="header-section-number">7.6.1</span> FGLS</h3>
+<p>Feasible Generalized Least Squares (FGLS) is a more efficient estimator than OLS when <span class="math inline">\(u_t\)</span> is autocorrelated, but you need to make an assumption about the type of autocorrelation <span class="math inline">\(u_t\)</span> has. This should remind you about how <a href="heteroskedasticity.html#weighted-least-squares">WLS</a> is a more efficient estimator than OLS under heteroskedasticity, but to use WLS, we had to make an assumption about <span class="math inline">\(Var(u | X)\)</span>.</p>
+<p>Suppose the model you’re trying to fit is this:</p>
+<p><span class="math display">\[y_t = \beta_0 + \beta_1 x_t + u_t\]</span></p>
+<p>And <span class="math inline">\(u_t\)</span> is autocorrelated. If you’re willing to assume <span class="math inline">\(u_t\)</span> is autocorrelated in this way, for example:</p>
+<p><span class="math display">\[u_t = \rho u_{t-1} + \varepsilon_t\]</span></p>
+<p>for some unknown value <span class="math inline">\(\rho\)</span> and iid <span class="math inline">\(\varepsilon_t\)</span>, then you can take your model and subtract <span class="math inline">\(\rho y_{t-1}\)</span> from both sides:</p>
+<p><span class="math display">\[y_t - \rho y_{t-1} = \beta_0 + \beta_1 x_t + u_t - \rho y_{t-1}\]</span></p>
+<p>Substitute on the right hand side <span class="math inline">\(y_{t-1} = \beta_0 + \beta_1 x_{t-1} | u_{t-1}\)</span>:</p>
+<p><span class="math display">\[y_t - \rho y_{t-1} = \beta_0 + \beta_1 x_t + u_t - \rho (\beta_0 + \beta_1 x_{t-1} + u_{t-1})\]</span></p>
+<p>Moving <span class="math inline">\(\rho y_{t-1}\)</span> to the right hand side, collecting terms, and substituting <span class="math inline">\(\varepsilon_t\)</span> for <span class="math inline">\(u_t - \rho u_{t-1}\)</span>:</p>
+<p><span class="math display">\[y_t = (\beta_0 - \rho \beta_0) + \rho y_{t-1} + \beta_1 x_t - \rho \beta_1 x_{t-1} + \varepsilon_t\]</span></p>
+<p>So by running the regression <code>y ~ lag(y) + x + lag(x)</code>, you can in theory identify <span class="math inline">\(\rho\)</span>, <span class="math inline">\(\beta_0\)</span>, and <span class="math inline">\(\beta_1\)</span>. And notice that the error term is only <span class="math inline">\(\varepsilon\)</span>, which was assumed iid and therefore not autocorrelated.</p>
+</section>
+<section id="testing-for-autocorrelation-in-u_t" class="level3" data-number="7.6.2">
+<h3 data-number="7.6.2" class="anchored" data-anchor-id="testing-for-autocorrelation-in-u_t"><span class="header-section-number">7.6.2</span> Testing for autocorrelation in <span class="math inline">\(u_t\)</span></h3>
+<p>When we studied heteroskedasticity, we learned about 2 tests: the Goldfeld-Quandt test and the White test.</p>
+<p>There is also a test you could use to detect autocorrelation in <span class="math inline">\(u_t\)</span>:</p>
+<p>The intuition is that if <span class="math inline">\(u_t\)</span> is autocorrelated, it’s likely that <span class="math inline">\(e_t\)</span> will also be autocorrelated. So after fitting your original model, you could take the residuals and you could fit this model:</p>
+<p><span class="math display">\[e_t = \beta_0 + \beta_1 e_{t-1} + \varepsilon_t\]</span></p>
+<p>And do a hypothesis test where the null is <span class="math inline">\(\beta_1 = 0\)</span>. That will tell you if the lag of e seems to have an effect on e (“first-order autocorrelation”).</p>
+<p>But there’s a problem: if there’s a lagged dependent variable in your original model, or another source of endogeneity, then biased estimates mean that <span class="math inline">\(e_t\)</span> may not be a good enough estimate of <span class="math inline">\(u_t\)</span>. The solution is to add all explanatory variables from the original model <span class="math inline">\(x_t\)</span> to the test to correct for the endogeneity:</p>
+<p><span class="math display">\[e_t = \beta_0 + \beta_1 e_{t-1} + \beta_2 x_t + \varepsilon_t\]</span></p>
+<p>This is called the <strong>Breusch-Godfrey test</strong> for autocorrelation. The test statistic is <span class="math inline">\(n R^2\)</span>, where <span class="math inline">\(n\)</span> is the number of observations in the second regression and <span class="math inline">\(R^2\)</span> is the R-squared from the second regression. Under the null of no autocorrelation, the test statistic is distributed <span class="math inline">\(\chi^2\)</span> with 1 degree of freedom if you’re testing for first-order autocorrelation.</p>
+</section>
+</section>
+<section id="exercises" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="exercises"><span class="header-section-number">7.7</span> Exercises</h2>
+<p>Classwork 11: Dynamics (analytical)</p>
+<p>Koans 17-18: lags and first differences</p>
+<p>Classwork 12: Dynamics (R)</p>
+</section>
+<section id="references" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="references"><span class="header-section-number">7.8</span> References</h2>
+<p><span class="citation" data-cites="dougherty2016">Dougherty (<a href="references.html#ref-dougherty2016" role="doc-biblioref">2016</a>)</span> Chapter 11: Models Using Time Series Data</p>
+<p><span class="citation" data-cites="dougherty2016">Dougherty (<a href="references.html#ref-dougherty2016" role="doc-biblioref">2016</a>)</span> Chapter 12: Autocorrelation</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-dougherty2016" class="csl-entry" role="doc-biblioentry">
+Dougherty, C. 2016. <em>Introduction to Econometrics</em>. Oxford University Press. <a href="https://books.google.com/books?id=Q5cMEAAAQBAJ">https://books.google.com/books?id=Q5cMEAAAQBAJ</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./heteroskedasticity.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Heteroskedasticity</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./stationarity.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Stationarity</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

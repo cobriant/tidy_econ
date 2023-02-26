@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: dc29c362-3ee4-4263-8c20-bb8273b907df
+      url: 'https://quartopub.com/sites/colleen/the-tidy-econometrics-workbook'

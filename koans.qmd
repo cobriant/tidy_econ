@@ -1,0 +1,72 @@
+# Koans {.unnumbered}
+
+Here's a preview of the 20 koans developed for this class. To download them and the corresponding tests, follow the instructions in the preface to this workbook.
+
+## vectors, tibbles, and pipes
+
+<iframe src="koans/K01_vector.html" width="700" height="400"></iframe>
+
+<iframe src="koans/K02_tibble.html" width="700" height="400"></iframe>
+
+<iframe src="koans/K03_pipe.html" width="700" height="400"></iframe>
+
+## dplyr
+
+<iframe src="koans/K04_dplyr1.html" width="700" height="400"></iframe>
+
+<iframe src="koans/K05_dplyr2.html" width="700" height="400"></iframe>
+
+<iframe src="koans/K06_dplyr3.html" width="700" height="400"></iframe>
+
+<iframe src="koans/K07_left_join.html" width="700" height="400"></iframe>
+
+## ggplot2
+
+<iframe src="koans/K08_qplot_to_ggplot.html" width="700" height="400"></iframe>
+
+<iframe src="koans/K09_ggplot_aes.html" width="700" height="400"></iframe>
+
+<iframe src="koans/K10_ggplot_geom.html" width="700" height="400"></iframe>
+
+## lm() and statistical distributions
+
+<iframe src="koans/K11_lm.html" width="700" height="400"></iframe>
+
+<iframe src="koans/K12_stats.html" width="700" height="400"></iframe>
+
+## functions
+
+<iframe src="koans/K13_functions.html" width="700" height="400"></iframe>
+
+<iframe src="koans/K14_functions_dplyr.html" width="700" height="400"></iframe>
+
+## map()
+
+<iframe src="koans/K15_map.html" width="700" height="400"></iframe>
+
+<iframe src="koans/K16_more_map.html" width="700" height="400"></iframe>
+
+## lags and first differences
+
+<iframe src="koans/K17_lag.html" width="700" height="400"></iframe>
+
+<iframe src="koans/K18_first_differences.html" width="700" height="400"></iframe>
+
+## reduce and accumulate
+
+<iframe src="koans/K19_reduce.html" width="700" height="400"></iframe>
+
+<iframe src="koans/K20_accumulate.html" width="700" height="400"></iframe>
+
+## References
+
+@gapminder
+
+@r4ds
+
+@advR
+
+@dplyrmurdermystery
+
+
+

@@ -1,0 +1,138 @@
+# Instrumental Variables
+
+## Introduction
+
+Recall back to chapter 3: Causal Inference. In that chapter we learned that if our explanatory variables are **exogenous**, then OLS provides unbiased estimates of the causal effect of X on Y. 
+
+But if X is **endogenous** (the opposite of exogenous), OLS will be biased. We learned that our options in that case include running an RCT: randomize X and observe differences in Y. But the ideal RCT is often unethical, it might take years or even decades, and it might be way too expensive:
+
+  - Randomizing education level and observing earnings down the road
+  - Randomizing whether someone can migrate to a different city and observing earnings after some time
+  - Randomizing how many friends of the opposite sex a high schooler can have and observing their GPA after a year or two
+  
+In this chapter, we'll learn about a possible alternative to the ideal experiment called **instrumental variables**. You'll learn in this chapter that if a valid instrument Z exists for the endogenous variable X, then we can make an unbiased and consistent estimate of the causal relationship between X and Y using a method called two-stage least squares (2SLS).
+
+## Instrument Validity
+
+There are three conditions for an instrument $Z$ to be valid:
+
+1) $z_i$ is exogenous: $E[u_i | Z] = 0$
+
+2) $z_i$ is relevant: $z_i$ has a causal effect on $x_i$
+
+3) $z_i$ is excludable: $z_i$ effects $y_i$ only through how it effects $x_i$
+
+A valid instrument $z_i$ isolates some of the good, exogenous variation in $x_i$, and lets us ignore the bad, endogenous variation in $x_i$ that leads to omitted variable bias.
+
+For example, the bad, endogenous variation in $education$ is the fact that there are high (low) ability people who get more (less) education and go on to get high (low) paying jobs. The good, exogenous variation in education would be the extra education a person gets by pure chance: maybe they happen to live near a university so they are more likely to go to college. Or perhaps the person got more education than a similar person because, while they both dropped out of school when they turned 16, the first person was born in a month that meant they had completed 10.7 years of education where the second person had only completed 10.2 years.
+
+[Whether someone lives near a university](https://davidcard.berkeley.edu/papers/geo_var_schooling.pdf) could be used as an instrument for education to understand the causal effect of education on earnings. So could [birth month among 16 year old high school dropouts](https://www.jstor.org/stable/2937954). 
+
+A valid instrument lets us isolate the good, exogenous variation in $education$ that comes from the people who, by pure chance, got a little more or a little less education.
+
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=cbc93f42-17b5-40e5-82c4-af520058c8a7&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&start=0&interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+[//]: <> (VIDEO 1: 20:05 - 23:36)
+
+## Two Stage Least Squares (2SLS)
+
+To find an IV estimate, we use a method called two-stage least squares (2SLS). It has two stages. The first one checks the relevance of the instrument Z and finds the exogenous variation in X. The second one finds the effect of the exogenous variation in X on the outcome variable Y.
+
+### First Stage
+
+In the first stage, we'll use OLS to estimate this model:
+
+$$x_i = \gamma_0 + \gamma_1 z_i + v_i$$
+
+Note that if $\hat{\gamma_1}$ is not statistically different from 0, then Z doesn't effect X strongly enough: it fails the **relevance** assumption and Z is not a valid instrument for X.
+
+But if $\hat{\gamma_1}$ is statistically different from 0, we'll get the **fitted values** from this first stage regression, which we can think of as the good, exogenous variation in X.
+
+$$x_i = x_i^{exog} + x_i^{endog}$$
+
+Where $x_i^{exog} = \hat{x_i} = \hat{\gamma_0} + \hat{\gamma_1} z_i$
+
+And $x_i^{endog} = v_i$.
+
+### Second Stage
+
+Then in the second stage, we'll take the fitted values $\hat{x_i}$ from the first stage and we'll use OLS to fit this model:
+
+$$y_i = \beta_0 + \beta_1 \hat{x_i} + w_i$$
+
+And $\hat{\beta_1}$ is our estimate of the causal effect of X on Y.
+
+## Consistency of the IV Estimator
+
+Recall that the OLS estimate of $\hat{\beta_1}$ is the sample covariance of x and y divided by the sample variance of x:
+
+$$\hat{\beta_1}^{OLS} = \frac{sCov(x_i, y_i)}{sVar(x_i)}$$
+
+So it should follow that, from the second stage, $\hat{\beta_1}^{IV} = \frac{sCov(\hat{x_i}, y_i)}{sVar(\hat{x_i})}$.
+
+And taking probability limits:
+
+$$plim(\hat{\beta_1}^{IV}) = \frac{Cov(\hat{x_i}, y_i)}{Var(\hat{x_i})}$$ {#eq-1}
+
+<p style="background-color:#a7c7c5; border-width:3px; border-style:solid; border-color:#a7c7c5; padding: 1em;">
+**Classwork #15.1:**
+Using @eq-1 and the fact that $\hat{x_i} = \gamma_0 + \gamma_1 z_i$, show that $plim(\hat{\beta_1}^{IV}) = \frac{Cov(z_i, y_i)}{\gamma_1 Var(z_i)}$.
+</p>
+
+<p style="background-color:#a7c7c5; border-width:3px; border-style:solid; border-color:#a7c7c5; padding: 1em;">
+**Classwork #15.2:**
+Next show that: $plim(\hat{\beta_1}^{IV}) = \beta_1 + \frac{Cov(z_i, u_i)}{Cov(z_i, x_i)}$. It may be helpful to use the formula derived in the previous problem, the fact that $y_i = \beta_0 + \beta_1 x_i + u_i$ (as long as the exclusion restriction holds, $y_i$ is not directly a function of $z_i$), and this formula for $\gamma_1$ from the first stage: $\gamma_1 = \frac{Cov(x_i, z_i)}{Var(z_i)}$.
+</p>
+
+<p style="background-color:#a7c7c5; border-width:3px; border-style:solid; border-color:#a7c7c5; padding: 1em;">
+**Classwork #15.3:**
+Using the formula derived above: $plim(\hat{\beta_1}^{IV}) = \beta_1 + \frac{Cov(z_i, u_i)}{Cov(z_i, x_i)}$, argue why the conditions for an instrument Z to be valid are the same as the conditions for $\hat{\beta_1}^{IV}$ to be consistent. We've used the exclusion restriction condition in the previous problem, but you should talk about the other two here.
+</p>
+
+## IV Examples
+
+### Effect of Private School on Earnings using a Lottery Instrument
+
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=8ee4cb9b-6534-4fb5-b0f9-af53000e4919&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&start=0&interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+> Note: If you're also doing the extra credit workbook on DDC, you may be wondering at this point why, in the first stage, we're using a linear probability model when we could be using the much superior/internally consistent logit or probit. The answer, in short: econometricians have termed this approach the "forbidden regression" because it seems like a good idea, but it's not actually correct and can yield biased results. "The reason it doesn’t work has to do with the fact that in a nonlinear regression, each variable’s effect depends on the values of the other variables. So while the instrument Z and the second-stage error term u are unrelated, the fitted values $\hat{X}$ no longer get to borrow that nice unrelatedness from Z." -- @effectbook
+
+### Effect of Friends of the Opposite Sex on High School GPA
+
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=b3132264-7035-42ce-9757-af5300267ee0&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&start=0&interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+@hill2015 *The Girl Next Door: The Effect of Opposite Gender Friends on High School Achievement.*
+
+### Effect of Military Service on Earnings
+
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=80596296-84cd-4ff9-9cff-af530026f1cd&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&start=0&interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+### Effect of Meth on Foster Care Admissions
+
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=3c4aa4f2-15d1-45bd-890a-af520058c8f3&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&start=0&interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+More details about this study  [here.](https://mixtape.scunning.com/07-instrumental_variables#parental-methamphetamine-abuse-and-foster-care)
+
+## Bonus: IV estimates the LATE, not the ATE
+
+In this bonus video, I work out a numerical example about the puzzle presented in the previous video: how IV estimates the causal effect for the complier subpopulation only: the *local* average treatment effect (LATE) instead of the overall average treatment effect (ATE).
+
+This part is labeled "bonus" because I won't test you on this, it's just fun to explore :).
+
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=122ace26-4382-44d0-9375-af5300277e00&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&start=0&interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+## Exercises
+
+Classwork 15: IV part 1
+
+Classwork 16: IV part 2
+
+## References
+
+@cunningham *Causal Inference: The Mixtape*
+
+@hill2015 *The Girl Next Door: The Effect of Opposite Gender Friends on High School Achievement.*
+
+@effectbook *The Effect: An Introduction to Research Design and Causality*
+
+

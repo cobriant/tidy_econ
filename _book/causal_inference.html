@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Econometrics with the Tidyverse - 3&nbsp; Causal Inference</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./consistency.html" rel="next">
+<link href="./exogeneity.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal Inference</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Econometrics with the Tidyverse</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./least_squares.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Least Squares</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./exogeneity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Exogeneity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_inference.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./consistency.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Consistency</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./specification.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Model Specification</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./heteroskedasticity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Heteroskedasticity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./time_series.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Time Series</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./stationarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Stationarity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./instrumental_vars.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Instrumental Variables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./IV_2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">IV for Simultaneous Equations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./diff_in_diff.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differences-in-differences</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classwork.html" class="sidebar-item-text sidebar-link">Classwork</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./koans.html" class="sidebar-item-text sidebar-link">Koans</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math.html" class="sidebar-item-text sidebar-link">Math Rules and Formulas</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"> <span class="header-section-number">3.1</span> Overview</a></li>
+  <li><a href="#effect-of-health-insurance-on-health" id="toc-effect-of-health-insurance-on-health" class="nav-link" data-scroll-target="#effect-of-health-insurance-on-health"> <span class="header-section-number">3.2</span> Effect of Health Insurance on Health</a></li>
+  <li><a href="#same-person-at-different-times" id="toc-same-person-at-different-times" class="nav-link" data-scroll-target="#same-person-at-different-times"> <span class="header-section-number">3.3</span> Same person at different times</a></li>
+  <li><a href="#different-people-at-the-same-time" id="toc-different-people-at-the-same-time" class="nav-link" data-scroll-target="#different-people-at-the-same-time"> <span class="header-section-number">3.4</span> Different people at the same time</a></li>
+  <li><a href="#twins-at-the-same-time" id="toc-twins-at-the-same-time" class="nav-link" data-scroll-target="#twins-at-the-same-time"> <span class="header-section-number">3.5</span> Twins at the same time</a></li>
+  <li><a href="#quantifying-selection-bias-with-the-rubin-causal-model" id="toc-quantifying-selection-bias-with-the-rubin-causal-model" class="nav-link" data-scroll-target="#quantifying-selection-bias-with-the-rubin-causal-model"> <span class="header-section-number">3.6</span> Quantifying Selection Bias with the Rubin Causal Model</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"> <span class="header-section-number">3.7</span> Exercises</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"> <span class="header-section-number">3.8</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal Inference</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="overview" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">3.1</span> Overview</h2>
+<p>In this chapter, we’ll learn how exogeneity makes a causal interpretation of <span class="math inline">\(\hat{\beta_1}\)</span> possible. We know that correlation does not equal causation, but in this chapter, I’ll explain why correlation + exogeneity equals causation.</p>
+<p>In section <a href="#effect-of-health-insurance-on-health">3.2</a>, I’ll introduce the fundamental problem of causal inference.</p>
+<p style="background-color:#dbdbdb; border-width:3px; border-style:solid; border-color:#dbdbdb; padding: 1em;">
+Definition. <strong>The Fundamental Problem of Causal Inference:</strong> an <em>individual treatment effect</em> can never be identified because two parallel universes can never be observed at the same time. Example: you’ll never know how much your poor sleep effected your performance on an exam you took today because you can never observe your score on the exam in a universe where you got better sleep. The best we can do is to approximate that individual treatment effect with an <em>average treatment effect</em> by running an experiment.
+</p>
+<p>In the absence of parallel universes, you might think that looking at the same person at different times will yield an estimate of the average treatment effect. That is, can you look at all the exams you’ve taken in the past year and the sleep you got the night before those exams, run the regression <code>score ~ sleep</code>, and interpret <span class="math inline">\(\hat{\beta_1}\)</span> as causal? In section <a href="#same-person-at-different-times">3.3</a>, I argue that no, omitted variable bias could be a big problem (maybe you got better sleep <em>and</em> scored higher when you were more confident about the material).</p>
+<p>In section <a href="#different-people-at-the-same-time">3.4</a>, I ask: could you instead compare different people at the same time? That is, take your whole class, ask each person what their score was on the exam, and how much sleep they got the night before. Then run the regression <code>score ~ sleep</code>. Does <span class="math inline">\(\hat{\beta_1}\)</span> have a causal interpretation then? The answer is still no, there could be selection bias (the students who decided to get more sleep were the ones who were confident they’d get a good score).</p>
+<p style="background-color:#dbdbdb; border-width:3px; border-style:solid; border-color:#dbdbdb; padding: 1em;">
+Definition. <strong>Selection Bias:</strong> a type of omitted variable bias where the omitted variable is the person’s propensity to have certain values for X.
+</p>
+<p>In section <a href="http://localhost:5210/causal_inference.html#different-people-at-the-same-time">3.5</a>, I explain that even if you have data about twins at the exact same time (one twin got poor sleep before the exam; the other twin got good sleep), the interpretation is still not causal because of selection bias. The only way to make sure your <span class="math inline">\(\hat{\beta_1}\)</span> is causal is to run a randomized controlled trial (RCT).</p>
+<p style="background-color:#dbdbdb; border-width:3px; border-style:solid; border-color:#dbdbdb; padding: 1em;">
+Definition. <strong>Randomized Controlled Trial:</strong> a study that assigns participants randomly between control and treatment groups, administers the treatment X, and observes outcome Y.
+</p>
+<p>The chapter ends with section <a href="#quantifying-selection-bias-with-the-rubin-causal-model">3.6</a>, which develops the theory of selection bias a little bit more with the Rubin Causal Model.</p>
+</section>
+<section id="effect-of-health-insurance-on-health" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="effect-of-health-insurance-on-health"><span class="header-section-number">3.2</span> Effect of Health Insurance on Health</h2>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=37b9bbaa-d325-4e59-9f28-aef4015f88fd&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<p>In the previous video, you calculated <span class="math inline">\(\hat{\beta_1}\)</span>, a measure of the correlation between x and y (recall that <span class="math inline">\(\hat{\beta_1} = \frac{sCov(x, y)}{sVar(x)})\)</span>.</p>
+<p>To be sure that we’ve estimated a causal effect with <span class="math inline">\(\hat{\beta_1}\)</span>, we would need to observe you (with health insurance), and measure your health. Then we would need to travel back in time, changing only one thing - your decision to buy health insurance. We would then press fast forward and observe your health in this moment, without health insurance.</p>
+<p>We can only see the effects of health insurance by observing people in parallel universes. In one universe, people have decided to buy health insurance. In the other universe, they have not. But we can’t observe two parallel universes at once. This is the <strong>fundamental problem of causal inference</strong>: how much a variable truly effects a person is fundamentally unknowable because outcomes in two parallel universes can never be observed at the same time.</p>
+<p>So what’s the second-best thing? Instead of trying to identify an <em>individual</em> treatment effect, we may be able to identify an <em>average</em> treatment effect: the amount that a treatment X effects some outcome Y for a larger population on average.</p>
+<p>How? In this chapter we’ll explore a couple of different possibilities. We’ve ruled out observing the <strong>same person</strong> at the <strong>same time</strong> with different levels of insurance because of the fundamental problem of causal inference.</p>
+<p>Let’s explore whether <span class="math inline">\(\hat{\beta_1}\)</span> has a causal interpretation in each of these scenarios:</p>
+<ol type="1">
+<li><p>The <strong>same person</strong> at <strong>different times</strong>, where sometimes they have insurance and sometimes they don’t.</p></li>
+<li><p><strong>Different people</strong> at the <strong>same time</strong>, where some people have insurance and some people don’t.</p></li>
+<li><p><strong>Twins</strong> at the <strong>same time</strong>, where one twin has health insurance and one twin doesn’t.</p></li>
+</ol>
+</section>
+<section id="same-person-at-different-times" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="same-person-at-different-times"><span class="header-section-number">3.3</span> Same person at different times</h2>
+<p>I’ll tackle 1) first. Suppose you don’t have health insurance between the ages of 26 and 30, and then you do have health insurance between the ages of 30 and 34. In your late 20’s your average health was a 7 and in your late 30’s, your average health was a 8.5. So did having health insurance cause the 1.5 point increase in health?</p>
+<p>Maybe, but maybe not: what if you had no health insurance in your late 20s because you were underemployed? And because you didn’t have a fulfilling job, you also found yourself anxious and depressed? But then at 30, you finally landed the job of your dreams, you got health insurance because you were employed full time, and you were much happier and healthier? It could look like health insurance boosted your health, but in reality it was just that you tend to have health insurance at times in your life when you also have steady employment, and you enjoy better health because of your employment.</p>
+</section>
+<section id="different-people-at-the-same-time" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="different-people-at-the-same-time"><span class="header-section-number">3.4</span> Different people at the same time</h2>
+<p>Can we instead take the average healths of the insured, subtract the average healths of the uninsured, and consider this a causal effect?</p>
+<p>Probably not, because just like in the previous paragraph, there’s selection bias: those who have insurance may be different on unobservables from those who don’t. If the uninsured group is more likely to be underemployed (and perhaps more anxious and depressed), again it may look like health insurance makes people healthier, but actually it’s just the effect of steady employment.</p>
+<p>You may be wondering: does this have anything to do with exogeneity? Of course it does!</p>
+<p><img src="images/03_image.jpg" class="img-fluid"></p>
+<p>Selection bias is a type of omitted variable bias where the omitted variable is the person’s propensity to get treated (“buy health insurance”). A selection bias diagram: if “propensity to be insured” correlates both with “being insured” and someone’s “health”, then <span class="math inline">\(\hat{\beta_1}\)</span> is biased.</p>
+<p><img src="images/03_image2.jpg" class="img-fluid"></p>
+<p>Clearly, someone’s propensity to be insured correlates with whether they are insured or not. Does “propensity to be insured” correlate with a person’s health? Yes, through multiple channels:</p>
+<ul>
+<li>Stable employment boosts people’s propensity to be insured <em>and</em> their health, as we’ve discussed before</li>
+<li>Careful, responsible people are more likely to be insured <em>and</em> they’re probably healthier because they take care of themselves in other ways as well</li>
+<li>But these variables may be correlated in another way as well: consider a person with a chronic health condition that requires them to frequent the doctor’s office or hospital. They would have a higher propensity to be insured because they know they need to visit the doctor frequently. And they also would have a lower health than a person without such a condition.</li>
+</ul>
+<p>All of these are reasons why <span class="math inline">\(\hat{\beta_1}\)</span> might be biased due to selection.</p>
+</section>
+<section id="twins-at-the-same-time" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="twins-at-the-same-time"><span class="header-section-number">3.5</span> Twins at the same time</h2>
+<p>Finally, let’s consider 3) “Twins at the same time, one of whom has health insurance while the other doesn’t”. If the twin who has health insurance has a health of 9 while the twin that doesn’t has a health of 7, does that mean health insurance boosts people’s healths by 2 points? No: we’re still worried about selection bias. What other things are different between these twins besides the fact that one has health insurance and one doesn’t? <strong>But what if we gave out health insurance randomly to one twin, and not to the other?</strong> That is, what if we did some kind of randomized experiment on these twins, and then observed their healths after a little while? And what if we got a bunch of twins and did the same thing? This would be one way to find the causal effect of health insurance on health because by randomizing who gets health insurance, we’re enforcing exogeneity. Why?</p>
+<p>Imagine the two twins walk in to the room and you’re only told which one has health insurance and which one doesn’t. Does that give you any information about which one might have steadier employment, which one might be more responsible, or which one might have a chronic health condition? No! Because we <em>randomized</em> which of the twins got the insurance. So <span class="math display">\[E[unemployed,\ responsible,\ chronic\ condition\ |\ health\ insurance] = 0\]</span> in a randomized experiment, exogeneity holds and <span class="math inline">\(\hat{\beta_1}\)</span> will be an unbiased estimator of the causal effect of health insurance on health.</p>
+<p>And actually we don’t need twins after all: we just need a big group of people who we can divide randomly into a treatment and a control group. As long as the treatment and control groups look enough like each other on average, exogeneity will hold. This is why we say <span class="math inline">\(correlation + exogeneity = causation\)</span>. And this is why <strong>a randomized controlled trial (RCT) is the gold standard for causal inference</strong>. At the end of this course, we’ll talk about a few second-best approaches for causal inference using instrumental variables and then differences-in-differences, but it’s good to keep in mind that if an experiment is ethical and cost-effective, it’s the best approach.</p>
+<p>So what’s the ideal experiment to find the causal effect of some variable X on some variable Y? It’s an RCT where you randomize X and compare average differences in Y between treatment and control groups.</p>
+</section>
+<section id="quantifying-selection-bias-with-the-rubin-causal-model" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="quantifying-selection-bias-with-the-rubin-causal-model"><span class="header-section-number">3.6</span> Quantifying Selection Bias with the Rubin Causal Model</h2>
+<p>The Rubin Causal Model helps us think a little more rigorously about selection bias. Here it is:</p>
+<p>There are two types of people: people that choose to get health insurance and people that don’t. The people who choose to not get health insurance have some health level which we’ll call <span class="math inline">\(health_{0i}\)</span>: the 0 indicates that’s their health in the universe that they are not insured.</p>
+<p>Let’s suppose health insurance has some causal effect on a person’s health, and we’ll call that effect <span class="math inline">\(\tau_i\)</span>. Then for the types of people who choose to get health insurance, their health, <span class="math inline">\(health_{1i}\)</span> is equal to their health if they hadn’t gotten insured plus the treatment effect: <span class="math inline">\(health_{0i} + \tau_i\)</span>. So:</p>
+<p><span class="math display">\[health_{1i} = health_{0i} + \tau_i\]</span></p>
+<p>When we estimate the model:</p>
+<p><span class="math display">\[health_i = \beta_0 + \beta_1 insurance_i + u_i\]</span></p>
+<p><span class="math inline">\(\hat{\beta_1}\)</span> will be the average difference in the insured people’s healths and the uninsured people’s healths:</p>
+<p><span class="math display">\[\begin{align*}
+\hat{\beta_1} = &amp; E[health_{1i}\ |\ type\ of\ people\ who\ get\ insured] - \\
+&amp; E[health_{0i}\ |\ type\ of\ people\ who\ don't\ get\ insured]
+\end{align*}\]</span></p>
+<p>$$$$</p>
+<p>And since <span class="math inline">\(health_{1i} = \tau_i + health_{0i}\)</span>,</p>
+<p><span class="math display">\[\begin{align*}
+\hat{\beta_1} = &amp; E[\tau_i + health_{0i}\ |\ type\ of\ people\ who\ get\ insured] - \\
+&amp; E[health_{0i}\ |\ type\ of\ people\ who\ don't\ get\ insured]
+\end{align*}\]</span></p>
+<p>Distributing the expectation across <span class="math inline">\(\tau_i + health_{0i}\)</span> and recognizing <span class="math inline">\(E[\tau_i] = \bar{\tau}\)</span>:</p>
+<p><span class="math display">\[\begin{align*}
+\hat{\beta_1} = &amp; \bar{\tau} + E[health_{0i}\ |\ type\ of\ people\ who\ get\ insured] - \\
+&amp; E[health_{0i}\ |\ type\ of\ people\ who\ don't\ get\ insured]
+\end{align*}\]</span></p>
+<p>Then define <span class="math inline">\(selection \ bias\)</span> as:</p>
+<p><span class="math display">\[\begin{align*}
+selection \ bias = &amp; E[health_{0i}\ |\ type\ of\ people\ who\ get\ insured] - \\
+&amp; E[health_{0i}\ |\ type\ of\ people\ who\ don't\ get\ insured]
+\end{align*}\]</span></p>
+<p>That is, <strong>selection bias is the average difference in y for the two types of people (people who will choose x = 1 and people who will choose x = 0), insurance level held constant.</strong> It actually doesn’t matter if we hold insurance level constant at 0 or at 1: we’ll get the same answer. Finally:</p>
+<p><span class="math display">\[\begin{align*}
+\hat{\beta_1} = \bar{\tau} + selection \ bias
+\end{align*}\]</span></p>
+<blockquote class="blockquote">
+<p>Numerical Example: <span class="citation" data-cites="angrist2014">Angrist and Pischke (<a href="references.html#ref-angrist2014" role="doc-biblioref">2014</a>)</span></p>
+</blockquote>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=1cba63d1-2a49-4bd7-90e5-aef50162aa00&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+</section>
+<section id="exercises" class="level2" data-number="3.7">
+<h2 data-number="3.7" class="anchored" data-anchor-id="exercises"><span class="header-section-number">3.7</span> Exercises</h2>
+<p><a href="classwork.html#cw5-causal-inference-analytical">Classwork 5: Causal Inference (analytical)</a></p>
+<p>Koans 8-10: ggplot2</p>
+<p><a href="classwork.html#cw6-causal-inference-r">Classwork 6: Causal Inference (R)</a></p>
+</section>
+<section id="references" class="level2" data-number="3.8">
+<h2 data-number="3.8" class="anchored" data-anchor-id="references"><span class="header-section-number">3.8</span> References</h2>
+<p><span class="citation" data-cites="angrist2014">Angrist and Pischke (<a href="references.html#ref-angrist2014" role="doc-biblioref">2014</a>)</span> Chapter 1</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-angrist2014" class="csl-entry" role="doc-biblioentry">
+Angrist, J. D., and J. S. Pischke. 2014. <em>Mastering ’Metrics: The Path from Cause to Effect</em>. Princeton University Press. <a href="https://books.google.com/books?id=dEh-BAAAQBAJ">https://books.google.com/books?id=dEh-BAAAQBAJ</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./exogeneity.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Exogeneity</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./consistency.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Consistency</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

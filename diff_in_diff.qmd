@@ -1,0 +1,39 @@
+# Differences-in-differences
+
+## Introduction
+
+In this final chapter, we'll learn about one more causal inference research design: the *diff-in-diff* estimator.
+
+To quickly review, if you want to find how much some variable X effects another variable Y, running an RCT (randomized controlled trial) is the gold standard. The problem is that an RCT is often unethical and expensive, especially for many of the questions we're interested in researching as economists. For example, learning about the returns to education through an RCT would mean collecting a group of children and randomizing how much education they get to have, and then observing their earnings throughout their life.
+
+An alternative research design is to use instrumental variables: if a valid instrument exists, a natural experiment happened. What's difficult about IV is that oftentimes, no valid instrument exists.
+
+So in this final chapter, we'll discuss one more alternative: **diff-in-diff**. The special thing about this estimator is that we don't need strict exogeneity in order to get an unbiased estimator; we only need **panel data** and the **parallel trends assumption**.
+
+## Panel Data
+
+Recall [chapter 7](time_series.html#introduction) when we began studying time series. We learned that our focus for the first 6 chapters was on *cross-sectional* data, where we sampled many subjects at one time. For example, when you take a large group of people and ask them about their earnings, years of education, their sex, their race, and whether they are married, that builds a cross-sectional dataset.
+
+*Time series*, on the other hand, observes one subject across time. So if you have data about the US (like gas prices in the US and the presidential approval rating) over a period of time, that's a time series.
+
+The third and final type of data we'll discuss in this class is *panel data*, where you observe many subjects across time. We've actually been working with a panel dataset since the beginning of the class: it's `gapminder`. The gapminder dataset has 142 subjects (countries) and makes observations about those countries in 12 different years.
+
+## Dr. John Snow
+
+Dr. John Snow invented the diff-in-diff estimator in 1855 to prove that cholera spreads not through air, but through water. That was 85 years before RCT's were invented.
+
+::: {layout-ncol=2}
+![Originally from en.wikipedia; Public Domain, https://commons.wikimedia.org/w/index.php?curid=403227](images/john_snow.jpg){width=50%}
+
+![By Tony Hisgett from Birmingham, UK - Dr John Snow, CC BY 2.0, https://commons.wikimedia.org/w/index.php?curid=64137087](images/john_snow_plaque.jpg){width=50%}
+:::
+
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=224724d9-23c6-4bf6-92cd-af5a01839046&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&start=0&interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=4a202faa-78d3-467c-a061-af5a0186d53c&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&start=0&interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=32a34f8f-1936-4ada-88e1-af5a0186eaad&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&start=0&interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen allow="autoplay"></iframe>
+
+## References
+
+@cunningham *Causal Inference: the Mixtape*

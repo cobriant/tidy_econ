@@ -1,0 +1,37 @@
+project:
+  type: book
+
+book:
+  title: "Econometrics with the Tidyverse"
+  subtitle: "A Flipped Classroom Experience"
+  author: "Colleen O'Briant"
+  date: "8/14/2022"
+  chapters:
+    - index.qmd
+    - least_squares.qmd
+    - exogeneity.qmd
+    - causal_inference.qmd
+    - consistency.qmd
+    - specification.qmd
+    - heteroskedasticity.qmd
+    - time_series.qmd
+    - stationarity.qmd
+    - instrumental_vars.qmd
+    - IV_2.qmd
+    - diff_in_diff.qmd
+    - classwork.qmd
+    - koans.qmd
+    - math.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+    codecopy: true
+  pdf:
+    documentclass: scrreprt
+
+
+

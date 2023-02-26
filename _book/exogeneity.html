@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Econometrics with the Tidyverse - 2&nbsp; Exogeneity</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./causal_inference.html" rel="next">
+<link href="./least_squares.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Exogeneity</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Econometrics with the Tidyverse</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Introduction</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./least_squares.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Least Squares</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./exogeneity.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Exogeneity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./causal_inference.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./consistency.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Consistency</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./specification.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Model Specification</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./heteroskedasticity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Heteroskedasticity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./time_series.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Time Series</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./stationarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Stationarity</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./instrumental_vars.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Instrumental Variables</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./IV_2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">IV for Simultaneous Equations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./diff_in_diff.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differences-in-differences</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./classwork.html" class="sidebar-item-text sidebar-link">Classwork</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./koans.html" class="sidebar-item-text sidebar-link">Koans</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./math.html" class="sidebar-item-text sidebar-link">Math Rules and Formulas</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"> <span class="header-section-number">2.1</span> Overview</a></li>
+  <li><a href="#classwork-1-1" id="toc-classwork-1-1" class="nav-link" data-scroll-target="#classwork-1-1"> <span class="header-section-number">2.2</span> Classwork 1 #1</a></li>
+  <li><a href="#classwork-1-2" id="toc-classwork-1-2" class="nav-link" data-scroll-target="#classwork-1-2"> <span class="header-section-number">2.3</span> Classwork 1 #2</a></li>
+  <li><a href="#classwork-1-3" id="toc-classwork-1-3" class="nav-link" data-scroll-target="#classwork-1-3"> <span class="header-section-number">2.4</span> Classwork 1 #3</a></li>
+  <li><a href="#conditional-expectations" id="toc-conditional-expectations" class="nav-link" data-scroll-target="#conditional-expectations"> <span class="header-section-number">2.5</span> Conditional Expectations</a></li>
+  <li><a href="#proof-of-the-unbiasedness-of-hatbeta_1-under-exogeneity" id="toc-proof-of-the-unbiasedness-of-hatbeta_1-under-exogeneity" class="nav-link" data-scroll-target="#proof-of-the-unbiasedness-of-hatbeta_1-under-exogeneity"> <span class="header-section-number">2.6</span> Proof of the unbiasedness of <span class="math inline">\(\hat{\beta_1}\)</span> under exogeneity</a></li>
+  <li><a href="#exogeneity" id="toc-exogeneity" class="nav-link" data-scroll-target="#exogeneity"> <span class="header-section-number">2.7</span> Exogeneity</a></li>
+  <li><a href="#standard-errors" id="toc-standard-errors" class="nav-link" data-scroll-target="#standard-errors"> <span class="header-section-number">2.8</span> Standard Errors</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary"> <span class="header-section-number">2.9</span> Summary</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"> <span class="header-section-number">2.10</span> Exercises</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"> <span class="header-section-number">2.11</span> References</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Exogeneity</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="overview" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">2.1</span> Overview</h2>
+<p>What to expect in this chapter:</p>
+<ul>
+<li><p>We’ll build more intuition about what OLS does in sections <a href="#classwork-1-1">2.2</a> and <a href="#classwork-1-2">2.3</a>. In 2.2, we’ll see that <span class="math inline">\(\hat{\beta_1}\)</span> is just the sample covariance of x and y divided by the sample variance of x. In 2.3 we’ll see that <span class="math inline">\(\hat{\beta_1}\)</span> is also a weighted sum of the <span class="math inline">\(y_i\)</span>’s, where observations far from <span class="math inline">\(\bar{x}\)</span> have the largest weights.</p></li>
+<li><p>In sections <a href="#classwork-1-3">2.4</a>-<a href="#exogeneity">2.7</a>, we’ll discuss the key assumption for estimates <span class="math inline">\(\hat{\beta}\)</span> to be unbiased (the assumption is called “exogeneity”).</p></li>
+<li><p>OLS standard error derivation in section <a href="#standard-errors">2.8</a>.</p></li>
+</ul>
+<p style="background-color:#dbdbdb; border-width:3px; border-style:solid; border-color:#dbdbdb; padding: 1em;">
+Definition. <strong>Exogeneity</strong> - the assumption that <span class="math inline">\(E[u_i | X] = 0\)</span>, where <span class="math inline">\(u_i\)</span> is the unobserved term and <span class="math inline">\(X\)</span> is all the explanatory variables in all observations. Exogeneity is not as strong an assumption as independence, but it’s stronger than zero covariance. The intuition is that when exogeneity holds, <span class="math inline">\(u\)</span> is as good as random, conditioned on observables <span class="math inline">\(X\)</span>.
+</p>
+<p style="background-color:#dbdbdb; border-width:3px; border-style:solid; border-color:#dbdbdb; padding: 1em;">
+Definition. <strong>Standard Error</strong> - our estimate of the standard deviation of <span class="math inline">\(\hat{\beta}\)</span>. Under exogeneity, homoskedasticity, and no autocorrelation, the standard error for the slope parameter of a simple regression is: <span class="math inline">\(se(\hat{\beta_1}) = \sqrt{\frac{\sum_i e_i^2}{(n - 2) \sum_i (x_i - \bar{x})^2}}\)</span>.
+</p>
+</section>
+<section id="classwork-1-1" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="classwork-1-1"><span class="header-section-number">2.2</span> Classwork 1 #1</h2>
+<p>We’ll pick up where we left off from chapter 1 with a formula for <span class="math inline">\(\hat{\beta_1}\)</span> from a simple regression <span class="math inline">\(y_i = \beta_0 + \beta_1 x_i + u_i\)</span>:</p>
+<p><span class="math display">\[\hat{\beta_1} = \frac{\sum_i (x_i y_i) - n \bar{x}\bar{y}}{\sum_i (x_i^2) - n \bar{x}^2}\]</span></p>
+<p>In <a href="classwork.html#cw1">classwork 1</a>, I asked you to take the formula above and show that:</p>
+<p><span class="math display">\[\hat{\beta_1} = \frac{\sum_i (x_i - \bar{x}) (y_i - \bar{y}) }{\sum_i (x_i - \bar{x})^2}\]</span></p>
+<p>Why did we do that? What insight about OLS does this give us?</p>
+<p>Recall that the <a href="./math.html#variance-and-covariance">sample variance</a> (I’ll invent some notation and use <span class="math inline">\(sVar\)</span>) of the variable x is: <span class="math inline">\(sVar(x_i) = \frac{\sum_i (x_i - \bar{x})^2}{n - 1}\)</span>. And the <a href="./math.html#variance-and-covariance">sample covariance</a> of x and y is <span class="math inline">\(sCov(x_i, y_i) = \frac{\sum_i (x_i - \bar{x})(y_i - \bar{y})}{n - 1}\)</span>.</p>
+<p>So you can see that: <span class="math display">\[\hat{\beta_1} = \frac{sCov(x_i, y_i)}{sVar(x_i)}\]</span></p>
+<p>A couple of interesting things to point out about this formula:</p>
+<ul>
+<li><p>If x and y don’t covary (that is, their sample covariance is 0), then we’d estimate the slope of the linear model to be 0 (see the drawing on the left in the image below).</p></li>
+<li><p>If they covary negatively (when x is large, y is small and when x is small, y is large), then we’d estimate the slope of the linear model to be negative because the denominator is positive (variances are always positive). And if they covary positively, we’d estimate the slope of the lienar model to be positive. See the drawing in the middle in the image below.</p></li>
+<li><p>The larger in magnitude the covariance of x and y is compared to the variance of x, the steeper the line of best fit is. See the drawing on the right in the image below.</p></li>
+</ul>
+<p><img src="images/beta1.jpg" class="img-fluid"></p>
+</section>
+<section id="classwork-1-2" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="classwork-1-2"><span class="header-section-number">2.3</span> Classwork 1 #2</h2>
+<p>The next thing we did in classwork 1 was to show:</p>
+<p><span class="math display">\[\hat{\beta_1} = \frac{\sum_i (x_i - \bar{x}) y_i}{\sum_i (x_i - \bar{x})^2}\]</span></p>
+<p>What intuition does this formula give us?</p>
+<blockquote class="blockquote">
+<p>1: <span class="math inline">\(\hat{\beta_1}\)</span> is a weighted sum of the yi’s</p>
+</blockquote>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=9e9cb24f-14df-41e2-9421-aef3013dbde6&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<blockquote class="blockquote">
+<p>2: Numerical Example: calculate <span class="math inline">\(w_i\)</span></p>
+</blockquote>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=df5e9395-1557-4254-8931-aef3013e2de1&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<blockquote class="blockquote">
+<p>3: Numerical Example: calculate <span class="math inline">\(\hat{\beta_1}\)</span></p>
+</blockquote>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=2665db77-b1ff-4bdc-af11-aef3013e94f1&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<blockquote class="blockquote">
+<p>4: Numerical Example: calculate <span class="math inline">\(\hat{\beta_1}\)</span> with some different values for <span class="math inline">\(y_i\)</span></p>
+</blockquote>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=3139c216-0d86-4bdf-bad1-aef3013fdcd2&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+</section>
+<section id="classwork-1-3" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="classwork-1-3"><span class="header-section-number">2.4</span> Classwork 1 #3</h2>
+<p>Finally in question 3, I had you derive a final formula for <span class="math inline">\(\hat{\beta_1}\)</span>:</p>
+<p><span class="math display">\[\hat{\beta_1} = \beta_1 + \frac{\sum_i (x_i - \bar{x}) u_i}{\sum_i (x_i - \bar{x})^2}\]</span></p>
+<p>Or if we let <span class="math inline">\(w_i = \frac{x_i - \bar{x}}{\sum_i (x_i - \bar{x})^2}\)</span>, then</p>
+<p><span class="math display">\[\hat{\beta_1} = \beta_1 + \sum_i w_i u_i\]</span></p>
+<p>Note that the <span class="math inline">\(\hat{\beta_1}\)</span> on the left hand side refers to the <strong>estimate</strong> and the <span class="math inline">\(\beta_1\)</span> on the right hand side refers to the <strong>true value</strong> of the effect of x on y. So this equation will give us some intuition about when the estimate may not be equal to the true value.</p>
+<p>In particular, we’ll use this formula to show what assumptions are necessary for <span class="math inline">\(\hat{\beta_1}\)</span> to be an unbiased estimator of <span class="math inline">\(\beta_1\)</span>: that is, <span class="math inline">\(E[\hat{\beta_1}] = \beta_1\)</span>. Taking the expectation of both sides of the equation above and recognizing that the true value of <span class="math inline">\(\beta_1\)</span> is a constant:</p>
+<p><span class="math display">\[E[\hat{\beta_1}] = \beta_1 + E[\sum_i w_i u_i]\]</span></p>
+<p>And since the expectation of a sum is the same as the sum of the expectations <a href="math.html#expectations">because <span class="math inline">\(E[A + B] = E[A] + E[B]\)</span></a>:</p>
+<p><span class="math display">\[E[\hat{\beta_1}] = \beta_1 + \sum_i E[w_i u_i]\]</span></p>
+<p>In EC 320, you assumed that explanatory variables <span class="math inline">\(x\)</span> were “predetermined”, “nonstochastic”, or “randomly assigned” like in a scientific experiment. For instance, <span class="math inline">\(x_i\)</span> would take on 1 if the person was given the medication and <span class="math inline">\(x_i\)</span> would take on 0 if the person was given a placebo. Then <span class="math inline">\(u_i\)</span> absorbs the effect of any unobserved variable like “healthy habits”. Because <span class="math inline">\(x_i\)</span> is randomized, we can assume x (medication or placebo) is independent of u (healthy habits). And since <span class="math inline">\(w_i\)</span> is just a function of <span class="math inline">\(x\)</span>, then <span class="math inline">\(w\)</span> would also be independent of <span class="math inline">\(u\)</span>. So by independence,</p>
+<p><span class="math display">\[E[w_i u_i] = E[w_i] E[u_i]\]</span></p>
+<p>And if we assume <span class="math inline">\(E[u_i] = 0\)</span> (which is actually a freebie if our model contains an intercept because the intercept will absorb a nonzero expectation for u), then we get:</p>
+<p><span class="math display">\[E[\hat{\beta_1}] = \beta_1 + \sum_i E[w_i] (0)\]</span></p>
+<p>And <span class="math inline">\(\hat{\beta_1}\)</span> is an unbiased estimator for <span class="math inline">\(\beta_1\)</span>:</p>
+<p><span class="math display">\[E[\hat{\beta_1}] = \beta_1\]</span></p>
+<p>But we don’t actually need to make such a strong assumption: x doesn’t have to be randomly assigned for OLS to unbiased. A slightly weaker assumption is all that is required: that assumption is called <strong>exogeneity</strong>: <span class="math inline">\(E[u_i | X] = 0\)</span>. Exogeneity is that the conditional expectation of <span class="math inline">\(u_i\)</span> given all the explanatory variables across all the observations is zero. The intuition is that when exogeneity holds, <span class="math inline">\(u\)</span> is as good as random, conditioned on observables <span class="math inline">\(X\)</span>.</p>
+<p>Before we do the proof of the unbiasedness of <span class="math inline">\(\hat{\beta_1}\)</span> under exogeneity, let’s talk a little about conditional expectations.</p>
+</section>
+<section id="conditional-expectations" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="conditional-expectations"><span class="header-section-number">2.5</span> Conditional Expectations</h2>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=a1d5ff20-85d6-43e5-b28b-aef3016aaae3&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=49d1cf5f-6e98-462f-83b7-aef3016aaae9&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+</section>
+<section id="proof-of-the-unbiasedness-of-hatbeta_1-under-exogeneity" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="proof-of-the-unbiasedness-of-hatbeta_1-under-exogeneity"><span class="header-section-number">2.6</span> Proof of the unbiasedness of <span class="math inline">\(\hat{\beta_1}\)</span> under exogeneity</h2>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=03e21be0-8da8-4b50-8477-aef3016aaae4&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+</section>
+<section id="exogeneity" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="exogeneity"><span class="header-section-number">2.7</span> Exogeneity</h2>
+<blockquote class="blockquote">
+<p>Endogeneity of education in the education-wage model</p>
+</blockquote>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=b73bbbed-b2b7-400a-a15d-aef3017d7a91&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=c0fd7c2e-b3ec-4b36-9f06-aef3017d7a97&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+<blockquote class="blockquote">
+<p>Exogeneity of treatment in a randomized controlled trial</p>
+</blockquote>
+<iframe src="https://uoregon.hosted.panopto.com/Panopto/Pages/Embed.aspx?id=81dca92e-c815-4184-9a39-aef3017d7a92&amp;autoplay=false&amp;offerviewer=true&amp;showtitle=true&amp;showbrand=true&amp;captions=false&amp;start=0&amp;interactivity=all" height="405" width="720" style="border: 1px solid #464646;" allowfullscreen="" allow="autoplay">
+</iframe>
+</section>
+<section id="standard-errors" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="standard-errors"><span class="header-section-number">2.8</span> Standard Errors</h2>
+<p>So far, we’ve established that <span class="math inline">\(\hat{\beta_1}\)</span> is a random variable where <span class="math inline">\(E[\hat{\beta_1}] = \beta_1\)</span> when we have exogeneity: <span class="math inline">\(E[u_i | X] = 0\)</span>. What else can we say about the distribution of <span class="math inline">\(\hat{\beta_1}\)</span>?</p>
+<ol type="1">
+<li><span class="math inline">\(\hat{\beta_1}\)</span> is distributed normally if <span class="math inline">\(u_i\)</span> is distributed normally. Why? <span class="math inline">\(\hat{\beta_1}\)</span> is a weighted sum of <span class="math inline">\(u_i\)</span>:</li>
+</ol>
+<p><span class="math display">\[\hat{\beta_1} = \beta_1 + \sum_i w_i u_i\]</span></p>
+<p>And according to the Central Limit Theorem, that makes <span class="math inline">\(\hat{\beta_1}\)</span> distributed normally.</p>
+<ol start="2" type="1">
+<li>Under exogeneity, homoskedasticity, and no autocorrelation, the standard error of <span class="math inline">\(\hat{\beta_1}\)</span> (our approximation of the standard deviation of <span class="math inline">\(\hat{\beta_1}\)</span>) is <span class="math inline">\(\sqrt{\frac{\sum_i e_i^2}{(n-2)\sum_i (x_i - \bar{x})^2}}\)</span>. Here’s the proof of that:</li>
+</ol>
+<p><span class="math display">\[\hat{\beta_1} = \beta_1 + \sum_i w_i u_i\]</span></p>
+<p>Take the variance of both sides and recognize that <span class="math inline">\(\beta_1\)</span> is a constant that has zero variance:</p>
+<p><span class="math display">\[Var(\hat{\beta_1}) = Var\left(\sum_i w_i u_i\right)\]</span></p>
+<p>Recall the <a href="math.html#variance-and-covariance">definition of the variance of a random variable</a>: <span class="math inline">\(Var(Z) = E\left[ \left (Z - E[Z] \right )^2 \right]\)</span>.</p>
+<p><span class="math display">\[Var(\hat{\beta_1}) = E\left[(\sum_i w_i u_i - E[\sum_i w_i u_i])^2\right]\]</span></p>
+<p>By exogeneity, we’ve already shown that <span class="math inline">\(E\left[\sum_i w_i u_i\right] = 0\)</span>.</p>
+<p><span class="math display">\[Var(\hat{\beta_1}) = E\left[(\sum_i w_i u_i)^2\right]\]</span></p>
+<p>Which “foils” to be:</p>
+<p><span class="math display">\[Var(\hat{\beta_1}) = E\left[\sum_i w_i^2 u_i^2 + 2 \sum_i \sum_j w_i w_j u_i u_j\right]\]</span></p>
+<p>An expected value of a sum is the same as the sum of the expected values:</p>
+<p><span class="math display">\[Var(\hat{\beta_1}) = \sum_i E\left[w_i^2 u_i^2\right] + 2 \sum_i \sum_j E\left[w_i w_j u_i u_j\right]\]</span></p>
+<p>We’re stuck unless we consider the conditional expectations instead of the unconditional ones. If we can show that the conditional expectations are constants, then the unconditional expectations are the same constants:</p>
+<p><span class="math display">\[\sum_i E\left[w_i^2 u_i^2 | X\right] = \sum_i w_i^2 E[u_i^2 | X]\]</span></p>
+<p><span class="math display">\[2 \sum_i \sum_j E\left[w_i w_j u_i u_j | X\right] = 2 \sum_i \sum_j w_i w_j E[u_i u_j | X]\]</span></p>
+<p>Note: <span class="math inline">\(Var(u_i | X) = E\left[(u_i - E(u_i | X))^2 | X\right]\)</span>, and since we’re assuming exogeneity holds, <span class="math inline">\(Var(u_i | X) = E[u_i^2 | X]\)</span>. Here we make our next assumption called <strong>homoskedasticity</strong>: that <span class="math inline">\(Var(u_i | X)\)</span> is a constant.</p>
+<p>The same way, note that <span class="math inline">\(Cov(u_i, u_j | X) = E\left[(u_i - E[u_i | X])(u_j - E[u_j|X])|X\right]\)</span>, and with exogeneity, <span class="math inline">\(Cov(u_i, u_j | X) = E[u_i u_j]\)</span>. If we assume that <span class="math inline">\(u_i\)</span> is not autocorrelated, we can assume <span class="math inline">\(Cov(u_i, u_j | X) = 0\)</span>. That will be our next big assumption.</p>
+<p>So under these two assumptions of homoskedasticity and no autocorrelation,</p>
+<p><span class="math display">\[Var(\hat{\beta_1}) = Var(u) \sum_i w_i^2 + 0\]</span></p>
+<p>Since <span class="math inline">\(w_i = \frac{x_i - \bar{x}}{\sum_i (x_i - \bar{x})^2}\)</span>, we have <span class="math inline">\(\sum_i w_i^2 = \frac{1}{\sum_i (x_i - \bar{x})^2}\)</span>.</p>
+<p><span class="math display">\[Var(\hat{\beta_1}) = \frac{Var(u)}{\sum_i (x_i - \bar{x})^2}\]</span></p>
+<p>And the standard deviation of <span class="math inline">\(\hat{\beta_1}\)</span> is the square root:</p>
+<p><span class="math display">\[sd(\hat{\beta_1}) = \sqrt{\frac{Var(u)}{\sum_i (x_i - \bar{x})^2}}\]</span></p>
+<p>There’s just one last problem: <span class="math inline">\(u\)</span> is unobservable, so we can’t calculate <span class="math inline">\(Var(u)\)</span> or <span class="math inline">\(sd(\hat{\beta_1})\)</span> directly. Instead, we <em>estimate</em> <span class="math inline">\(sd(\hat{\beta_1})\)</span> using <span class="math inline">\(sVar(e_i)\)</span> as an approximation for <span class="math inline">\(Var(u)\)</span>, and the estimation of the standard deviation of <span class="math inline">\(\hat{\beta_1}\)</span> is what we call the standard error of <span class="math inline">\(\hat{\beta_1}\)</span>.</p>
+<p>The sample variance of residuals <span class="math inline">\(e_i\)</span> is <span class="math inline">\(sVar(e_i) = \frac{\sum_i (e_i - \bar{e})^2}{n-1}\)</span>. Recall that <span class="math inline">\(\bar{e} = 0\)</span>. To estimate <span class="math inline">\(Var(u)\)</span> using <span class="math inline">\(sVar(e_i)\)</span>, we lose another degree of freedom and divide by <span class="math inline">\(n-2\)</span> instead of <span class="math inline">\(n-1\)</span>. So <span class="math inline">\(Var(u)\)</span> is estimated by <span class="math inline">\(\frac{\sum_i e_i^2}{n - 2}\)</span>. Thus:</p>
+<p><span class="math display">\[se(\hat{\beta_1}) = \sqrt{\frac{\sum_i e_i^2}{(n - 2) \sum_i (x_i - \bar{x})^2}}\]</span></p>
+</section>
+<section id="summary" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="summary"><span class="header-section-number">2.9</span> Summary</h2>
+<p>In this chapter we learned:</p>
+<ul>
+<li><span class="math inline">\(\hat{\beta_1} = \frac{sCov(x_i, y_i)}{sVar(x_i)}\)</span></li>
+<li><span class="math inline">\(\hat{\beta_1} = \sum_i w_i y_i\)</span>: observations far from <span class="math inline">\(\bar{x}\)</span> are the ones that determine the estimate of the effect of x on y.</li>
+<li><span class="math inline">\(\hat{\beta_1} = \beta_1 + \sum_i w_i u_i\)</span>: exogeneity (<span class="math inline">\(E[u_i | X] = 0\)</span>) is the key assumption for <span class="math inline">\(\hat{\beta_1}\)</span> to be unbiased. Exogeneity is met in randomized experiments, but it’s violated when there is omitted variable bias.</li>
+<li>Finally, <span class="math inline">\(se(\hat{\beta_1}) = \sqrt{\frac{\sum_i e_i^2}{(n - 2) \sum_i (x_i - \bar{x})^2}}\)</span> under exogeneity, homoskedasticity, and no autocorrelation.</li>
+</ul>
+</section>
+<section id="exercises" class="level2" data-number="2.10">
+<h2 data-number="2.10" class="anchored" data-anchor-id="exercises"><span class="header-section-number">2.10</span> Exercises</h2>
+<p>Now that we can calculate standard errors, we can do hypothesis tests:</p>
+<p><a href="classwork.html#cw4">Classwork 4: hypothesis testing</a></p>
+</section>
+<section id="references" class="level2" data-number="2.11">
+<h2 data-number="2.11" class="anchored" data-anchor-id="references"><span class="header-section-number">2.11</span> References</h2>
+<p><span class="citation" data-cites="dougherty2016">Dougherty (<a href="references.html#ref-dougherty2016" role="doc-biblioref">2016</a>)</span> Chapter 1: Simple Regression Analysis</p>
+<p><span class="citation" data-cites="dougherty2016">Dougherty (<a href="references.html#ref-dougherty2016" role="doc-biblioref">2016</a>)</span> Chapter 8: Stochastic Regressors and Measurement Errors</p>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-dougherty2016" class="csl-entry" role="doc-biblioentry">
+Dougherty, C. 2016. <em>Introduction to Econometrics</em>. Oxford University Press. <a href="https://books.google.com/books?id=Q5cMEAAAQBAJ">https://books.google.com/books?id=Q5cMEAAAQBAJ</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./least_squares.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Least Squares</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./causal_inference.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Causal Inference</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
