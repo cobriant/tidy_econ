@@ -1,0 +1,183 @@
+% Created 2023-02-27 Mon 14:41
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{Colleen O'Briant}
+\date{\today}
+\title{EC 421: Introduction to Econometrics}
+\hypersetup{
+ pdfauthor={Colleen O'Briant},
+ pdftitle={EC 421: Introduction to Econometrics},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 27.1 (Org mode 9.3)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\noindent\rule{\textwidth}{0.5pt}
+
+\begin{center}
+\begin{tabular}{l}
+E-mail: cobriant@uoregon.edu\\
+Class: MW 2-3:20 pm, Gerlinger 242\\
+Office hours: Mon 8-9am (Zoom) and Wed 4-5pm  (PLC 521)\\
+\end{tabular}
+\end{center}
+
+\noindent\rule{\textwidth}{0.5pt}
+
+\section*{Course Website}
+\label{sec:orgb956bd0}
+
+Use Canvas to find the lab Zoom links, to turn in assignments, and to view your grades. Other class materials can be found here:
+
+\url{https://colleen.quarto.pub/the-tidy-econometrics-workbook/}
+
+\section*{Course Objectives}
+\label{sec:orge4642a0}
+
+This course will cover a variety of topics in econometrics that will allow students to better understand and critically analyze applied research in economics, including:
+
+\begin{itemize}
+\item How the crucial assumption of exogeneity affects OLS estimators
+\item How exogeneity allows estimators to have a causal interpretation
+\item The property of consistency and how it can be used to sign the bias of estimators suffering from omitted variable bias
+\item Different model specifications and their interpretations
+\item Heteroskedasticity
+\item Topics in Time series models
+\item Strategies for causal inference when exogeneity cannot be assumed, including instrumental variables and the differences-in-differences estimator
+\end{itemize}
+
+The course will also teach you how to write programs in R to solve your problems, with a focus on clarity and readability. You will learn to program in a functional, declarative style.
+
+\section*{Textbooks}
+\label{sec:orgbdabc0f}
+
+No textbooks are required for this class, but some students may find these helpful for reference:
+
+\begin{itemize}
+\item \textbf{Mastering 'Metrics: The Path from Cause to Effect} by Joshua Angrist and Jörn-Steffen Pischke
+
+\item \textbf{Introduction to Econometrics}, 5th ed. by Christopher Dougherty
+\end{itemize}
+
+\section*{Course Policies}
+\label{sec:orgb96d568}
+
+\subsection*{Classwork (20\%)}
+\label{sec:orgf31bf6e}
+
+During each class, you will be divided into groups of 3 (rarely, 2 or 4) to collaborate on classwork.
+All the classwork for the week will be due Fridays at 5pm, at which point the answer key will be made available. You'll hand in only one classwork per group. Groups will be shuffled three times over the course of the quarter. I'll try to accommodate requests for groupmates for the final few weeks of class.
+
+\noindent\rule{\textwidth}{0.5pt}
+
+\subsection*{Koans (10\%)}
+\label{sec:org1232329}
+
+The tidyverse koans are homework exercises designed to give you exposure to new concepts and practice using correct syntax. They are usually directly applicable to the upcoming R classwork. You'll be able to access all twenty koans at the beginning of the term, so you don't need to wait until they are due to spend some time working on them. There's even a way to check your work to make sure you're on the right track. The koans should be done individually outside of class. If you have questions about the koans, come see me in office hours or during class.
+
+\noindent\rule{\textwidth}{0.5pt}
+
+\subsection*{Midterm Exam (20\%) and Final Exam (30\%)}
+\label{sec:org6fdec88}
+
+The midterm and final exams will be closed-note and in-person. The midterm will be on Wednesday, November 2nd. The final will be from 2:45-4:45pm on Thursday, December 8th. Exams will have a mixture of multiple-choice and short answer questions. The final exam will be cumulative, but heavily weighted toward the topics in the second half of the course.
+
+\noindent\rule{\textwidth}{0.5pt}
+
+\subsection*{Attendance (10\%)}
+\label{sec:org60bed6b}
+
+It is important that you attend each class and arrive on time every day. Otherwise, your group may be rearranged so that they can finish the classwork on time. For that reason, I'll have a very strict attendance policy: I will excuse your first absence no questions asked, but any absence after that will bring your "participation" grade from 10 to 0 (and your final grade will decrease by a letter). Being more than 10 minutes late also qualifies as an absence.
+
+That being said, obviously do not come to class if you're sick: let your groupmates know ahead of time and if you're able to, you can try to collaborate remotely. To recover your participation grade, you can complete make-up work. Please e-mail me for the make-up assignment if/when that happens.
+
+If you miss class for a reason like a religious observance, university-sponsored event, or an accessible education reason, please send me documentation within a week of the absence and the absence will be excused.
+
+This class has substantial participation requirements, so if you know you'll be away for large portions of the term, this course may not be a good fit for you right now.
+
+\noindent\rule{\textwidth}{0.5pt}
+
+\subsection*{Reading (10\%)}
+\label{sec:org7460d8f}
+
+Homework assignments will alternate between a set of koans or a chapter of reading from the \href{https://colleen.quarto.pub/the-tidy-econometrics-workbook/}{workbook}. Your reading grade will be determined by the quizzes embedded in the videos. You can retake the quizzes any number of times before the due date to improve your reading grade.
+
+\noindent\rule{\textwidth}{0.5pt}
+
+\subsection*{Late Work}
+\label{sec:org9d21434}
+
+It is crucial that you're in the habit of completing each assignment on time, because homework often contains hints and tips about how to do the classwork that follows. So the late work policy is strict: if you turn an assignment in late, you will lose 40\% of the points for that assignment. Then for every 6 hours that an assignment is late, I will take off an additional 15\%. You will therefore receive no credit if you turn in an assignment more than 24 hours late.
+
+\noindent\rule{\textwidth}{0.5pt}
+
+\subsection*{Email/Office Hour Policy}
+\label{sec:org8ccf1ba}
+
+There will be homework due before almost every class. If you have a question about the homework, please come talk to me in person rather than sending an email. I find it's always more efficient to talk face-to-face about the econometrics material.
+
+If you have a question about getting Monday's homework done, come to my Monday morning Zoom office hour (8-9am). If you have a question about getting Wednesday's homework done, ask me about it during lab on Tuesday afternoon.
+
+If you've procrastinated and you've completely finished a koan, but you just can't get it to knit because there's an error somewhere, clear your environment with the little broom icon or with the command \texttt{rm(list = ls())}, start at the top of the document, and execute each line of code. That usually works to find where the error is. If you still can't get it to knit, show it to me during class and we can figure it out together. If you completed 99\% of the koan on time, I will waive the late work penalty: no need to panic and send those homework emails right before class starts.
+
+When should you email? It's the best way to contact me about absences, any personal issue, or a grade dispute.
+
+\noindent\rule{\textwidth}{0.5pt}
+
+\section*{Academic Dishonesty Policy}
+\label{sec:org0ebe6a9}
+
+It is very important that the work you turn in is truly yours. Group work is \textbf{only for classwork} in this class. Plagiarizing and cheating will result in a failing grade for the term and a report of the offense to the university.
+
+\section*{Disabilities Policy}
+\label{sec:orgcb35d50}
+
+The University of Oregon is working to create inclusive learning environments. Please notify me if there are aspects of the instruction or design of this course that result in disability-related barriers to your participation. You are also encouraged to contact the Accessible Education Center in 360 Oregon Hall at 541-346-1155 or uoaec@uoregon.edu.
+
+\section*{Course Outline}
+\label{sec:orgea59917}
+
+\begin{center}
+\begin{tabular}{lll}
+Date & Classwork & Homework\\
+\hline
+Wed 9/28 & Syllabus & Ch 1: Least Squares\\
+Mon 10/3 & CW1: Deriving OLS Estimators (analytical) & Koans 1-3\\
+Wed 10/5 & CW2: lm and qplot (R) & Koans 4-7\\
+Mon 10/10 & CW3: dplyr murder mystery (R) & Ch 2: Exogeneity\\
+Wed 10/12 & CW4: hypothesis testing (analytical) & Ch 3: Causal Inference\\
+Mon 10/17 & CW5: causal inference (analytical) & Koans 8-10\\
+Wed 10/19 & CW6: causal inference (R) & Ch 4: Consistency and Ch 5: Model Specification\\
+ &  & Groups are shuffled\\
+Mon 10/24 & CW7: consistency (analytical) & Ch 6: Heteroskedasticity\\
+Wed 10/26 & CW8: heteroskedasticity (analytical) & Koans 11-14\\
+Mon 10/31 & CW9: heteroskedasticity (R) & practice midterm\\
+Wed 11/2 & \textbf{\textbf{Midterm Exam}} & Koans 15-16\\
+Mon 11/7 & CW10: simulation (R) & Ch 7: Time Series\\
+Wed 11/9 & CW11: dynamics (analytical) & Koans 17-18\\
+ &  & Groups are shuffled\\
+Mon 11/14 & CW12: dynamics (R) & Ch 8: Stationarity\\
+Wed 11/16 & CW13: time trends (analytical) & Koans 19-20\\
+Mon 11/21 & CW14: random walks (half analytical, half R) & Ch 9: IV for causal inference\\
+Wed 11/23 & CW15: IV (analtyical) & Ch 10: IV for simultaneous equations\\
+Mon 11/28 & CW16: IV (R) & Ch 11: Diff-in-diff\\
+Wed 11/30 & CW17: Diff-in-diff (anayltical) & practice final\\
+TBA & \textbf{\textbf{Final Exam}} & \\
+\end{tabular}
+\end{center}
+\end{document}
