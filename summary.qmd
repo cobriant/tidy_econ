@@ -1,3 +1,17 @@
-# Summary
+# Summary {.unnumbered}
 
+So there you have it: you're really starting to get the hang of the tidyverse, you probably feel a lot more confident with statistics, and if you pick up a research paper in applied economics, you'll be able to understand most of what they're talking about.
 
+Where do you go from here? That depends on what you're interested in.
+
+**If you want to learn more about econometrics:**
+
+- I wrote a short workbook on [Dynamic Discrete Choice in R](https://colleen.quarto.pub/ddc_workbook/)
+- The standard textbooks in grad school are these: [Fumio Hayashi's Econometrics](https://press.princeton.edu/books/hardcover/9780691010182/econometrics) and [William H. Greene's Econometric Analysis](https://pages.stern.nyu.edu/~wgreene/Text/econometricanalysis.htm)
+
+**If you want to learn more about the tidyverse:**
+
+- Take a look at the [ggplot2 book](https://ggplot2-book.org/): understanding this tool deeply is marketable and fun.
+- But mostly, find a data project you're interested in and do it! Practice makes perfect. Just make sure you stay aligned with the principles of the tidyverse that you learned in this course.
+
+**If you want to become a better programmer in general:** this is a great goal to have, even if you don't plan to become a software engineer. Computers are a major part of our lives, so learning to use them more effectively really pays off. Some people mistakenly seem to believe that becoming a better programmer means learning more programming languages, but this is not true. To be a good programmer, you just need to know how to do a good job solving the problems you're interested in. That means you should understand the nuances of the languages you love and their strengths and weaknesses. But mostly, it means figuring out what problems you’re interested in and going out and doing them.

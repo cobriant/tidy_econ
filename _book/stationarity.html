@@ -233,6 +233,11 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link">Summary</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./classwork.html" class="sidebar-item-text sidebar-link">Classwork</a>
   </div>
 </li>
@@ -376,18 +381,18 @@ Definition. <strong>Stationarity</strong>: If a time series process meets all th
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 2
-        u     y
-    &lt;dbl&gt; &lt;dbl&gt;
- 1  0.363 0.363
- 2  0.108 0.471
- 3  0.535 1.01 
- 4  0.988 1.99 
- 5  0.391 2.39 
- 6  0.503 2.89 
- 7 -1.49  1.40 
- 8  0.184 1.58 
- 9  4.15  5.73 
-10 -0.806 4.92 </code></pre>
+         u       y
+     &lt;dbl&gt;   &lt;dbl&gt;
+ 1  0.238   0.238 
+ 2 -0.644  -0.405 
+ 3  1.46    1.05  
+ 4 -1.14   -0.0842
+ 5  0.100   0.0159
+ 6  0.528   0.544 
+ 7 -0.0604  0.483 
+ 8 -2.40   -1.92  
+ 9  0.384  -1.53  
+10 -0.332  -1.86  </code></pre>
 </div>
 </div>
 <section id="first-difference-a-random-walk-to-recover-u" class="level3" data-number="8.3.1">
@@ -401,18 +406,18 @@ Definition. <strong>Stationarity</strong>: If a time series process meets all th
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 3
-         u        y  y_diff
-     &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
- 1  0.440   0.440   NA     
- 2  0.755   1.20     0.755 
- 3 -1.66   -0.461   -1.66  
- 4  0.469   0.00801  0.469 
- 5  0.579   0.587    0.579 
- 6  0.0153  0.602    0.0153
- 7  0.979   1.58     0.979 
- 8 -0.890   0.692   -0.890 
- 9 -1.39   -0.695   -1.39  
-10 -0.797  -1.49    -0.797 </code></pre>
+        u     y y_diff
+    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+ 1  0.376 0.376 NA    
+ 2  0.619 0.995  0.619
+ 3  0.841 1.84   0.841
+ 4 -0.299 1.54  -0.299
+ 5  1.39  2.92   1.39 
+ 6 -1.44  1.48  -1.44 
+ 7  0.634 2.12   0.634
+ 8 -0.796 1.32  -0.796
+ 9 -0.199 1.12  -0.199
+10  0.270 1.39   0.270</code></pre>
 </div>
 </div>
 <p>Notice that <code>y_diff</code> is identical to <code>u</code> (except <code>u[1]</code> can’t be identified)! Why?</p>

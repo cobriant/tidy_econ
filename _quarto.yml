@@ -19,6 +19,7 @@ book:
     - instrumental_vars.qmd
     - IV_2.qmd
     - diff_in_diff.qmd
+    - summary.qmd
     - classwork.qmd
     - koans.qmd
     - math.qmd

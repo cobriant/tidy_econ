@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Econometrics with the Tidyverse - Koans</title>
+<title>Econometrics with the Tidyverse - Summary</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -15,25 +15,6 @@ span.underline{text-decoration: underline;}
 div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
 </style>
 
 
@@ -44,8 +25,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./math.html" rel="next">
-<link href="./classwork.html" rel="prev">
+<link href="./classwork.html" rel="next">
+<link href="./diff_in_diff.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -84,7 +65,7 @@ div.csl-indent {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title">Koans</h1>
+      <h1 class="quarto-secondary-nav-title">Summary</h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -169,7 +150,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link">Summary</a>
+  <a href="./summary.html" class="sidebar-item-text sidebar-link active">Summary</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -179,7 +160,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./koans.html" class="sidebar-item-text sidebar-link active">Koans</a>
+  <a href="./koans.html" class="sidebar-item-text sidebar-link">Koans</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -197,28 +178,14 @@ div.csl-indent {
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#vectors-tibbles-and-pipes" id="toc-vectors-tibbles-and-pipes" class="nav-link active" data-scroll-target="#vectors-tibbles-and-pipes">vectors, tibbles, and pipes</a></li>
-  <li><a href="#dplyr" id="toc-dplyr" class="nav-link" data-scroll-target="#dplyr">dplyr</a></li>
-  <li><a href="#ggplot2" id="toc-ggplot2" class="nav-link" data-scroll-target="#ggplot2">ggplot2</a></li>
-  <li><a href="#lm-and-statistical-distributions" id="toc-lm-and-statistical-distributions" class="nav-link" data-scroll-target="#lm-and-statistical-distributions">lm() and statistical distributions</a></li>
-  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">functions</a></li>
-  <li><a href="#map" id="toc-map" class="nav-link" data-scroll-target="#map">map()</a></li>
-  <li><a href="#lags-and-first-differences" id="toc-lags-and-first-differences" class="nav-link" data-scroll-target="#lags-and-first-differences">lags and first differences</a></li>
-  <li><a href="#reduce-and-accumulate" id="toc-reduce-and-accumulate" class="nav-link" data-scroll-target="#reduce-and-accumulate">reduce and accumulate</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
-  </ul>
-</nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block">Koans</h1>
+<h1 class="title d-none d-lg-block">Summary</h1>
 </div>
 
 
@@ -232,94 +199,21 @@ div.csl-indent {
 
 </header>
 
-<p>Here’s a preview of the 20 koans developed for this class. To download them and the corresponding tests, follow the instructions in the preface to this workbook.</p>
-<section id="vectors-tibbles-and-pipes" class="level2">
-<h2 class="anchored" data-anchor-id="vectors-tibbles-and-pipes">vectors, tibbles, and pipes</h2>
-<iframe src="koans/K01_vector.html" width="700" height="400">
-</iframe>
-<iframe src="koans/K02_tibble.html" width="700" height="400">
-</iframe>
-<iframe src="koans/K03_pipe.html" width="700" height="400">
-</iframe>
-</section>
-<section id="dplyr" class="level2">
-<h2 class="anchored" data-anchor-id="dplyr">dplyr</h2>
-<iframe src="koans/K04_dplyr1.html" width="700" height="400">
-</iframe>
-<iframe src="koans/K05_dplyr2.html" width="700" height="400">
-</iframe>
-<iframe src="koans/K06_dplyr3.html" width="700" height="400">
-</iframe>
-<iframe src="koans/K07_left_join.html" width="700" height="400">
-</iframe>
-</section>
-<section id="ggplot2" class="level2">
-<h2 class="anchored" data-anchor-id="ggplot2">ggplot2</h2>
-<iframe src="koans/K08_qplot_to_ggplot.html" width="700" height="400">
-</iframe>
-<iframe src="koans/K09_ggplot_aes.html" width="700" height="400">
-</iframe>
-<iframe src="koans/K10_ggplot_geom.html" width="700" height="400">
-</iframe>
-</section>
-<section id="lm-and-statistical-distributions" class="level2">
-<h2 class="anchored" data-anchor-id="lm-and-statistical-distributions">lm() and statistical distributions</h2>
-<iframe src="koans/K11_lm.html" width="700" height="400">
-</iframe>
-<iframe src="koans/K12_stats.html" width="700" height="400">
-</iframe>
-</section>
-<section id="functions" class="level2">
-<h2 class="anchored" data-anchor-id="functions">functions</h2>
-<iframe src="koans/K13_functions.html" width="700" height="400">
-</iframe>
-<iframe src="koans/K14_functions_dplyr.html" width="700" height="400">
-</iframe>
-</section>
-<section id="map" class="level2">
-<h2 class="anchored" data-anchor-id="map">map()</h2>
-<iframe src="koans/K15_map.html" width="700" height="400">
-</iframe>
-<iframe src="koans/K16_more_map.html" width="700" height="400">
-</iframe>
-</section>
-<section id="lags-and-first-differences" class="level2">
-<h2 class="anchored" data-anchor-id="lags-and-first-differences">lags and first differences</h2>
-<iframe src="koans/K17_lag.html" width="700" height="400">
-</iframe>
-<iframe src="koans/K18_first_differences.html" width="700" height="400">
-</iframe>
-</section>
-<section id="reduce-and-accumulate" class="level2">
-<h2 class="anchored" data-anchor-id="reduce-and-accumulate">reduce and accumulate</h2>
-<iframe src="koans/K19_reduce.html" width="700" height="400">
-</iframe>
-<iframe src="koans/K20_accumulate.html" width="700" height="400">
-</iframe>
-</section>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
-<p><span class="citation" data-cites="gapminder">Bryan (<a href="references.html#ref-gapminder" role="doc-biblioref">n.d.</a>)</span></p>
-<p><span class="citation" data-cites="r4ds">Hadley Wickham and Grolemund (<a href="references.html#ref-r4ds" role="doc-biblioref">2017</a>)</span></p>
-<p><span class="citation" data-cites="advR">H. Wickham (<a href="references.html#ref-advR" role="doc-biblioref">2014</a>)</span></p>
-<p><span class="citation" data-cites="dplyrmurdermystery">Speegle and Clair (<a href="references.html#ref-dplyrmurdermystery" role="doc-biblioref">2021</a>)</span></p>
+<p>So there you have it: you’re really starting to get the hang of the tidyverse, you probably feel a lot more confident with statistics, and if you pick up a research paper in applied economics, you’ll be able to understand most of what they’re talking about.</p>
+<p>Where do you go from here? That depends on what you’re interested in.</p>
+<p><strong>If you want to learn more about econometrics:</strong></p>
+<ul>
+<li>I wrote a short workbook on <a href="https://colleen.quarto.pub/ddc_workbook/">Dynamic Discrete Choice in R</a></li>
+<li>The standard textbooks in grad school are these: <a href="https://press.princeton.edu/books/hardcover/9780691010182/econometrics">Fumio Hayashi’s Econometrics</a> and <a href="https://pages.stern.nyu.edu/~wgreene/Text/econometricanalysis.htm">William H. Greene’s Econometric Analysis</a></li>
+</ul>
+<p><strong>If you want to learn more about the tidyverse:</strong></p>
+<ul>
+<li>Take a look at the <a href="https://ggplot2-book.org/">ggplot2 book</a>: understanding this tool deeply is marketable and fun.</li>
+<li>But mostly, find a data project you’re interested in and do it! Practice makes perfect. Just make sure you stay aligned with the principles of the tidyverse that you learned in this course.</li>
+</ul>
+<p><strong>If you want to become a better programmer in general:</strong> this is a great goal to have, even if you don’t plan to become a software engineer. Computers are a major part of our lives, so learning to use them more effectively really pays off. Some people mistakenly seem to believe that becoming a better programmer means learning more programming languages, but this is not true. To be a good programmer, you just need to know how to do a good job solving the problems you’re interested in. That means you should understand the nuances of the languages you love and their strengths and weaknesses. But mostly, it means figuring out what problems you’re interested in and going out and doing them.</p>
 
 
-<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
-<div id="ref-gapminder" class="csl-entry" role="doc-biblioentry">
-Bryan, Jennifer. n.d. <em>Gapminder: Data from Gapminder</em>.
-</div>
-<div id="ref-dplyrmurdermystery" class="csl-entry" role="doc-biblioentry">
-Speegle, Darrin, and Bryan Clair. 2021. <span>“Data for the Dplyr Murder Mystery.”</span> <a href="https://rdrr.io/github/speegled/dplyrmurdermystery/">https://rdrr.io/github/speegled/dplyrmurdermystery/</a>.
-</div>
-<div id="ref-advR" class="csl-entry" role="doc-biblioentry">
-Wickham, H. 2014. <em>Advanced r</em>. Chapman &amp; Hall/CRC the r Series. Taylor &amp; Francis. <a href="https://adv-r.hadley.nz/">https://adv-r.hadley.nz/</a>.
-</div>
-<div id="ref-r4ds" class="csl-entry" role="doc-biblioentry">
-Wickham, Hadley, and Garrett Grolemund. 2017. <em>R for Data Science: Import, Tidy, Transform, Visualize, and Model Data</em>. 1st ed. O’Reilly Media, Inc. <a href="https://r4ds.had.co.nz/">https://r4ds.had.co.nz/</a>.
-</div>
-</div>
-</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -421,13 +315,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./classwork.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Classwork</span>
+      <a href="./diff_in_diff.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Differences-in-differences</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./math.html" class="pagination-link">
-        <span class="nav-page-text">Math Rules and Formulas</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./classwork.html" class="pagination-link">
+        <span class="nav-page-text">Classwork</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
