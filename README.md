@@ -4,6 +4,9 @@
 
 Published here: https://colleen.quarto.pub/the-tidy-econometrics-workbook/
 
+Sample syllabus:
+https://github.com/cobriant/tidy_econ/blob/main/syllabus.pdf
+
 ## Overview
 
 This repository contains all of the public course materials for EC421 *Intro to Econometrics*, which I taught at the University of Oregon as a PhD student four times between Summer 2021 and Fall 2022. I did a few things that are a little out of the ordinary, which I think helped create a really engaging and fun class:
