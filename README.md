@@ -48,6 +48,10 @@ I begin the course by randomizing students into groups of 3 and they keep the sa
 
 Then for the next 1/3 of the course, I randomize them into new groups. For the final 1/3 of the course, I let them make requests about who they want to work with: they write down names for me and I try to satisfy as many of those requests as possible. Most people end up requesting to work with the first groups they were randomized into. They became friends!
 
+Even though all 17 classworks are currently published in the back of the workbook, I recommend only making them available one at a time as they're assigned. You don't want a few students to work ahead and leave their group behind. I also recommend printing out copies of the classwork for students so they have something physical to look at.
+
+I like to make the classworks due 2 at a time at the end of the week. That way there's pressure in class to get it done, but it's not too urgent because they know they can think about it more after class. Then at the end of the week I post answer keys somewhere private like on Canvas. You won't find answer keys in this repo: those are up to you to create, but obviously please don't publish those publicly.
+
 ### Class Size
 
 I've found that this class works well with 30 or fewer students. Beyond 30, you may not have enough time to work with each group every class session. One solution might be to bring TA's into class. If you experiment with this, please add your notes to this document.
