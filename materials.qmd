@@ -1,0 +1,7 @@
+# Course Materials {.unnumbered}
+
+**The chapters of this workbook**: introduce you to the econometrics topics, give you some examples and quiz questions in videos, and point you toward references for further reading.
+
+**Koans**: short programming exercises to learn the tidyverse. There are 20 of them in total, which you'll complete over the course of the term as homework. Once you've downloaded the project from github, there's a way to check that your answers are correct.
+
+**Classwork**: will be completed in class in small groups. The classwork alternates between analytic exercises (math proofs and discussion questions) and programming exercises (an applied econometrics project using the tidyverse).

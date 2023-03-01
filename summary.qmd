@@ -1,4 +1,4 @@
-# Summary {.unnumbered}
+# Summary and Resources
 
 So there you have it: you're really starting to get the hang of the tidyverse, you probably feel a lot more confident with statistics, and if you pick up a research paper in applied economics, you'll be able to understand most of what they're talking about.
 

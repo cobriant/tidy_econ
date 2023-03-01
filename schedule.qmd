@@ -1,0 +1,26 @@
+# Course Schedule  {.unnumbered}
+
+Classwork for the week is always due on Fridays at 5pm. Homework is always due before the next class period.
+
+| Date | Classwork | Homework |
+|----|----|-----------|----------|
+| W 9/28 | Syllabus  | [CH1: Least Squares](/least_squares.html) |
+| M 10/3 | [CW1: Deriving OLS Estimators (analytical)](classwork.html#cw1)  | [Koans 1-3](koans.html#vectors-tibbles-and-pipes) |
+| W 10/5 | [CW2: lm and qplot (R)](classwork.html#cw2) | [Koans 4-7](koans.html#dplyr) |
+| M 10/10 | [CW3: dplyr murder mystery (R)](classwork.html#cw3) | [CH2: Exogeneity](exogeneity.html) |
+| W 10/12 | [CW4: hypothesis testing (analytical)](classwork.html#cw4) | [CH3: Causal Inference](causal_inference.html)|
+| M 10/17 | [CW5: causal inference (analytical)](classwork.html#cw5) | [Koans 8-10](koans.html#ggplot2) |
+| W 10/19 | [CW6: causal inference (R)](classwork.html#cw6) | [CH4: Consistency](consistency.html) and [CH5: Model Specification](specification.html) |
+| M 10/24 | [CW7: consistency (analytical)](classwork.html#cw7) | [Ch 6: Heteroskedasticity](heteroskedasticity.html) |
+| W 10/26 | [CW8: heteroskedasticity (analytical)](classwork.html#cw8) | [Koans 11-14](koans.html#lm-and-statistical-distributions) |
+| M 10/31 | [CW9: heteroskedasticity (R)](classwork.html#cw9) | practice midterm |
+| W 11/2 | **Midterm Exam** | [Koans 15-16](koans.html#map) |
+| M 11/7 | [CW10: simulation (R)](classwork.html#cw10) | [CH7: Time Series](time_series.html) |
+| W 11/9 | [CW11: dynamics (analytical)](classwork.html#cw11) | [Koans 17-18](koans.html#lags-and-first-differences) |
+| M 11/14 | [CW12: dynamics (R)](classwork.html#cw12) | [CH8: Stationarity](stationarity.html) |
+| W 11/16 | [CW13: time trends (analytical)](classwork.html#cw13) | [Koans 19-20](koans.html#reduce-and-accumulate) |
+| M 11/21 | [CW14: random walks (half analytical, half R)](classwork.html#cw14) | [CH9: IV for causal inference](instrumental_vars.html)|
+| W 11/23 | [CW15: IV (analtyical)](classwork.html#cw15) | CH10: IV for simultaneous equations |
+| M 11/28 | [CW16: IV (R)](classwork.html#cw16) | [CH11: Diff-in-diff](diff_in_diff.html) |
+| W 11/30 | [CW17: Practice Final (anayltical)](classwork.html#cw17) | |
+| R 12/8 | **Final Exam** | |

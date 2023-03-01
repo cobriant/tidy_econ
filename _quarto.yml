@@ -7,23 +7,35 @@ book:
   author: "Colleen O'Briant"
   date: "8/14/2022"
   chapters:
-    - index.qmd
-    - least_squares.qmd
-    - exogeneity.qmd
-    - causal_inference.qmd
-    - consistency.qmd
-    - specification.qmd
-    - heteroskedasticity.qmd
-    - time_series.qmd
-    - stationarity.qmd
-    - instrumental_vars.qmd
-    - IV_2.qmd
-    - diff_in_diff.qmd
-    - summary.qmd
-    - classwork.qmd
-    - koans.qmd
-    - math.qmd
-    - references.qmd
+    - part: index.qmd
+      chapters:
+        - materials.qmd
+        - schedule.qmd
+        - programming_philosophy.qmd
+        - workspace_setup.qmd
+    - part: OLS Basics
+      chapters:
+        - least_squares.qmd
+        - exogeneity.qmd
+        - causal_inference.qmd
+        - consistency.qmd
+        - specification.qmd
+        - heteroskedasticity.qmd
+    - part: Topics in Time Series
+      chapters:
+        - time_series.qmd
+        - stationarity.qmd
+    - part: Extensions
+      chapters:
+        - instrumental_vars.qmd
+        - IV_2.qmd
+        - diff_in_diff.qmd
+    - part: summary.qmd
+      chapters:
+        - classwork.qmd
+        - koans.qmd
+        - math.qmd
+        - references.qmd
 
 bibliography: references.bib
 
