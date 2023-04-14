@@ -248,8 +248,8 @@ ul.task-list{list-style: none;}
   <ul class="collapse">
   <li><a href="#sample-variance" id="toc-sample-variance" class="nav-link" data-scroll-target="#sample-variance">Sample variance:</a></li>
   <li><a href="#sample-covariance-of-two-variables-x-and-y" id="toc-sample-covariance-of-two-variables-x-and-y" class="nav-link" data-scroll-target="#sample-covariance-of-two-variables-x-and-y">Sample covariance of two variables x and y:</a></li>
-  <li><a href="#population-variance" id="toc-population-variance" class="nav-link" data-scroll-target="#population-variance">Population Variance</a></li>
-  <li><a href="#population-covariance" id="toc-population-covariance" class="nav-link" data-scroll-target="#population-covariance">Population Covariance</a></li>
+  <li><a href="#variance-of-a-random-variable" id="toc-variance-of-a-random-variable" class="nav-link" data-scroll-target="#variance-of-a-random-variable">Variance of a random variable</a></li>
+  <li><a href="#covariance-of-two-random-variables" id="toc-covariance-of-two-random-variables" class="nav-link" data-scroll-target="#covariance-of-two-random-variables">Covariance of two random variables</a></li>
   <li><a href="#correlation" id="toc-correlation" class="nav-link" data-scroll-target="#correlation">Correlation</a></li>
   <li><a href="#variance-rules" id="toc-variance-rules" class="nav-link" data-scroll-target="#variance-rules">Variance Rules</a></li>
   <li><a href="#covariance-rules" id="toc-covariance-rules" class="nav-link" data-scroll-target="#covariance-rules">Covariance Rules</a></li>
@@ -288,9 +288,9 @@ ul.task-list{list-style: none;}
 <p>Let x and y be vectors of length n.</p>
 <ol type="1">
 <li><p>Summation definition: <span class="math inline">\(\sum_{i = 1}^{n} x_i \equiv x_1 + x_2 + ... + x_n\)</span></p></li>
-<li><p>The sum of x + y is the same as the sum of x + the sum of y: <span class="math inline">\(\sum_i (x_i + y_i) = \sum_i x_i + \sum_i y_i\)</span></p></li>
-<li><p>For any constant c, the sum of c * x is the same as c times the sum of x. <span class="math inline">\(\sum_i c x_i = c \sum_i x_i\)</span></p></li>
-<li><p>In general, the sum of x times y is not equal to the sum of x times the sum of y: <span class="math inline">\(\sum_i x_i y_i \neq \sum_i x_i \sum_i y_i\)</span></p></li>
+<li><p>Using the summation definition, it’s possible to prove that the sum of x + y will always be the same as the sum of x + the sum of y: <span class="math inline">\(\sum_i (x_i + y_i) = \sum_i x_i + \sum_i y_i\)</span></p></li>
+<li><p>You could also prove that for any constant c, the sum of c * x is the same as c times the sum of x. <span class="math inline">\(\sum_i c x_i = c \sum_i x_i\)</span></p></li>
+<li><p>But in general, the sum of x times y is not equal to the sum of x times the sum of y: <span class="math inline">\(\sum_i x_i y_i \neq \sum_i x_i \sum_i y_i\)</span></p></li>
 </ol>
 </section>
 <section id="variance-and-covariance" class="level2">
@@ -305,19 +305,19 @@ ul.task-list{list-style: none;}
 <p><span class="math display">\[sCov(x, y) \equiv \frac{\sum_i (x_i - \bar{x})(y_i - \bar{y})}{n - 1}\]</span></p>
 <p>Notice that this implies that the sample covariance of x with itself is the same as the sample variance of x: <span class="math inline">\(sCov(x, x) = sVar(x)\)</span>.</p>
 </section>
-<section id="population-variance" class="level3">
-<h3 class="anchored" data-anchor-id="population-variance">Population Variance</h3>
+<section id="variance-of-a-random-variable" class="level3">
+<h3 class="anchored" data-anchor-id="variance-of-a-random-variable">Variance of a random variable</h3>
 <p>On average, what is the square deviance of X from its mean? <span class="math inline">\(Var(X) \equiv E[(X - E[X])^2]\)</span></p>
 </section>
-<section id="population-covariance" class="level3">
-<h3 class="anchored" data-anchor-id="population-covariance">Population Covariance</h3>
+<section id="covariance-of-two-random-variables" class="level3">
+<h3 class="anchored" data-anchor-id="covariance-of-two-random-variables">Covariance of two random variables</h3>
 <p><span class="math inline">\(Cov(X, Y) \equiv E[(X - E[X])(Y - E[Y])]\)</span></p>
 </section>
 <section id="correlation" class="level3">
 <h3 class="anchored" data-anchor-id="correlation">Correlation</h3>
 <p>Correlation is a function of covariance:</p>
 <p><span class="math inline">\(Correlation(X, Y) = \frac{Cov(X, Y)}{\sqrt{Var(X)} \sqrt{Var(Y)}}\)</span></p>
-<p>If two random variables have 0 covariance, they will have 0 correlation.</p>
+<p>Notice that if two random variables have 0 covariance, they will have 0 correlation.</p>
 </section>
 <section id="variance-rules" class="level3">
 <h3 class="anchored" data-anchor-id="variance-rules">Variance Rules</h3>
@@ -368,6 +368,9 @@ E[A] &amp;= E \left [ E[A | B] \right ] \\
 &amp;= E[c] \\
 &amp;= c
 \end{align*}\]</span></p>
+<p>Or more intuitively, think of my E[height | sex] vs E[IQ | sex] example:</p>
+<p>E[height | sex]: suppose two people walk into a room and you’re only given one piece of information: one is male and the other is female. Which one would you guess is taller? The man: men are (in expectation) taller than women. E[height | sex] is not a constant c: it depends on which sex we’re talking about. So E[height | sex] is not equal to E[height], the average height among people.</p>
+<p>But consider E[IQ | sex]. The average IQ for men is 100 and the average IQ for women is 100. So if two people walk into a room and you’re only told that one is female and the other is male, you can’t make a very good guess about which one might have a higher IQ. E[IQ | sex] = 100, a constant, because it doesn’t matter which sex we’re talking about, the average IQ is 100. Since the conditional expectation is a constant, it’s the same as the unconditional expectation: E[IQ | sex] = 100 = E[IQ]. Thus if E[A | B] = c, then E[A] = c.</p>
 </section>
 </section>
 <section id="log-rules" class="level2">

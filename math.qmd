@@ -8,11 +8,11 @@ Let x and y be vectors of length n.
 
 1. Summation definition: $\sum_{i = 1}^{n} x_i \equiv x_1 + x_2 + ... + x_n$
 
-2. The sum of x + y is the same as the sum of x + the sum of y: $\sum_i (x_i + y_i) = \sum_i x_i + \sum_i y_i$
+2. Using the summation definition, it's possible to prove that the sum of x + y will always be the same as the sum of x + the sum of y: $\sum_i (x_i + y_i) = \sum_i x_i + \sum_i y_i$
 
-3. For any constant c, the sum of c * x is the same as c times the sum of x. $\sum_i c x_i = c \sum_i x_i$
+3. You could also prove that for any constant c, the sum of c * x is the same as c times the sum of x. $\sum_i c x_i = c \sum_i x_i$
 
-4. In general, the sum of x times y is not equal to the sum of x times the sum of y: $\sum_i x_i  y_i \neq \sum_i x_i  \sum_i y_i$
+4. But in general, the sum of x times y is not equal to the sum of x times the sum of y: $\sum_i x_i  y_i \neq \sum_i x_i  \sum_i y_i$
 
 ## Variance and Covariance
 
@@ -28,11 +28,11 @@ Let x and y be vectors of length n.
 
   Notice that this implies that the sample covariance of x with itself is the same as the sample variance of x: $sCov(x, x) = sVar(x)$.
 
-### Population Variance
+### Variance of a random variable
 
 On average, what is the square deviance of X from its mean? $Var(X) \equiv E[(X - E[X])^2]$
 
-### Population Covariance
+### Covariance of two random variables
 
 $Cov(X, Y) \equiv E[(X - E[X])(Y - E[Y])]$
 
@@ -42,7 +42,7 @@ Correlation is a function of covariance:
 
 $Correlation(X, Y) = \frac{Cov(X, Y)}{\sqrt{Var(X)} \sqrt{Var(Y)}}$
 
-If two random variables have 0 covariance, they will have 0 correlation.
+Notice that if two random variables have 0 covariance, they will have 0 correlation.
 
 ### Variance Rules
   - The variance of a constant is zero: $Var(c) = 0$
@@ -91,6 +91,12 @@ E[A] &= E \left [ E[A | B] \right ] \\
 &= E[c] \\
 &= c
 \end{align*}
+
+Or more intuitively, think of my E[height | sex] vs E[IQ | sex] example:
+
+E[height | sex]: suppose two people walk into a room and you're only given one piece of information: one is male and the other is female. Which one would you guess is taller? The man: men are (in expectation) taller than women. E[height | sex] is not a constant c: it depends on which sex we're talking about. So E[height | sex] is not equal to E[height], the average height among people.
+
+But consider E[IQ | sex]. The average IQ for men is 100 and the average IQ for women is 100. So if two people walk into a room and you're only told that one is female and the other is male, you can't make a very good guess about which one might have a higher IQ. E[IQ | sex] = 100, a constant, because it doesn't matter which sex we're talking about, the average IQ is 100. Since the conditional expectation is a constant, it's the same as the unconditional expectation: E[IQ | sex] = 100 = E[IQ]. Thus if E[A | B] = c, then E[A] = c.
 
 ## Log rules
 
