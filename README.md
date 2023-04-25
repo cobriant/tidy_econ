@@ -76,6 +76,10 @@ The whiteboards are great for the analytical math classworks, but for the progra
 
 I've taught this course both in person and online over Zoom (synchronously). When I taught it online, I used the Zoom breakout room functionality during class and it worked well. I think over Zoom, it was easier for the students to collaborate on code, but a little harder for the students to collaborate with math. I recommend encouraging students to use ipads or document cameras for this.
 
+### New Developments
+
+Recently I TA'd for EC320 for the first time, which is the first part of the econometrics sequence. I wanted to put together a beginner version of my koans focusing on quality. I ended up creating videos and a zine read-along for that new koan set: links here to [videos](https://www.youtube.com/playlist?list=PLIhbdlomL4cMalwRq5zNWFxHidSwDEPdZ), [zine](https://github.com/cobriant/tidyverse_illustrated), and [koans](https://github.com/stars/cobriant/lists/ec320-labs). Having several different teaching media had great results: koan grades increased from an average of around 88% to around 93% and students seem more confident and have better habits while coding (a result of the 15-20m screencasts I think).
+
 ## Issues
 
 Here are some areas of weakness: contributions here would be profoundly appreciated.
